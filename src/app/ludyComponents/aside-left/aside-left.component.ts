@@ -6,5 +6,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./aside-left.component.css']
 })
 export class AsideLeftComponent {
+about: any;
 
 }

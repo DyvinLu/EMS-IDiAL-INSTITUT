@@ -1906,7 +1906,7 @@ pre code {
 .table-active,
 .table-active > th,
 .table-active > td {
-  background-color: rgba(0, 0, 0, 0.075);
+  background-color: rgba(173, 46, 173, 0.075);
 }
 
 .table-hover .table-active:hover {
