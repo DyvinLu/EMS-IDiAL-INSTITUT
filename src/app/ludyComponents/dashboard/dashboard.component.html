@@ -1,0 +1,349 @@
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0">Dashboard</h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Dashboard</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <div class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="card">
+              <div class="card-header border-0">
+                <div class="d-flex justify-content-between">
+                  <h3 class="card-title">Visualisierung</h3>
+                  <a href="javascript:void(0);">View Report</a>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="d-flex">
+                  <p class="d-flex flex-column">
+                    <!-- <span class="text-bold text-lg">820</span> -->
+                    <span>Energie Over Time</span>
+                  </p>
+                  <p class="ml-auto d-flex flex-column text-right">
+                    <span class="text-success">
+                      <i class="fas fa-arrow-up"></i> 12.5%
+                    </span>
+                    <span class="text-muted">Since last week</span>
+                  </p>
+                </div>
+                <!-- /.d-flex -->
+
+                <div class="position-relative mb-4">
+                  <canvas id="visitors-chart" height="200"></canvas>
+                </div>
+
+                <div class="d-flex flex-row justify-content-end">
+                  <span class="mr-2">
+                    <i class="fas fa-square text-primary"></i> This Week
+                  </span>
+
+                  <span>
+                    <i class="fas fa-square text-gray"></i> Last Week
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- buttons compteur-->
+            <div class="card">
+              <div class="card-header border-0">
+                <h3 class="card-title">Compteurs</h3>
+              
+              </div>
+              <div class="card-body table-responsive p-0">
+                <table class="table table-striped table-valign-middle">
+                  <!-- <thead>
+                  <tr>
+                    <th>Zeller 1</th>
+                    <th>Zeller 2</th>
+                    <th>Zeller 3</th>
+                    <th>Zeller 4</th>
+                    <th>Zeller 5</th>
+                    <th>Zeller 6</th>
+                  </tr>
+                  </thead> -->
+                  <tbody>
+                  <tr>
+                    <td>
+                      <button type="button" class="btn btn-block btn-info">Zähler 1</button>
+                    </td>
+                    <td>
+                      <button type="button" class="btn btn-block btn-info">Zähler 2</button>
+                    </td>
+                    <td>
+                      <button type="button" class="btn btn-block btn-info">Zähler 3</button>
+                    </td>
+                    <td>
+                      <button type="button" class="btn btn-block btn-info">Zähler 4</button>
+                    </td>
+                    <td>
+                      <button type="button" class="btn btn-block btn-info">Zähler 5</button>
+                    </td>
+                    <td>
+                      <button type="button" class="btn btn-block btn-info">Zähler 6</button>
+                    </td>
+                  </tr>
+                  
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          <div class="row">
+              <div class="col-md-6">
+                
+                <!-- Line chart -->
+                <div class="card card-primary card-outline">
+                  <div class="card-header">
+                    <h3 class="card-title">
+                      <i class="far fa-chart-bar"></i>
+                      Line Chart
+                    </h3>
+    
+                    <div class="card-tools">
+                      <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                      </button>
+                      <button type="button" class="btn btn-tool" data-card-widget="remove">
+                        <i class="fas fa-times"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div id="line-chart" style="height: 300px; padding: 0px; position: relative;"><canvas class="flot-base" width="665" height="450" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 443.667px; height: 300px;"></canvas><canvas class="flot-overlay" width="665" height="450" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 443.667px; height: 300px;"></canvas><div class="flot-svg" style="position: absolute; top: 0px; left: 0px; height: 100%; width: 100%; pointer-events: none;"><svg style="width: 100%; height: 100%;"><g class="flot-x-axis flot-x1-axis xAxis x1Axis" style="position: absolute; inset: 0px;"><text x="37" y="293.8333330154419" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;">0</text><text x="95.46918518518518" y="293.8333330154419" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;">2</text><text x="153.93837037037036" y="293.8333330154419" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;">4</text><text x="212.40755555555555" y="293.8333330154419" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;">6</text><text x="325.3700143086469" y="293.8333330154419" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;">10</text><text x="383.83919949383204" y="293.8333330154419" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;">12</text><text x="270.87674074074073" y="293.8333330154419" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;">8</text></g><g class="flot-y-axis flot-y1-axis yAxis y1Axis" style="position: absolute; inset: 0px;"><text x="1" y="268.1666669845581" class="flot-tick-label tickLabel" style="position: absolute; text-align: right;">-1.5</text><text x="1" y="226.1666669845581" class="flot-tick-label tickLabel" style="position: absolute; text-align: right;">-1.0</text><text x="1" y="184.1666669845581" class="flot-tick-label tickLabel" style="position: absolute; text-align: right;">-0.5</text><text x="5.975910186767578" y="16.166666984558105" class="flot-tick-label tickLabel" style="position: absolute; text-align: right;">1.5</text><text x="5.975910186767578" y="142.1666669845581" class="flot-tick-label tickLabel" style="position: absolute; text-align: right;">0.0</text><text x="5.975910186767578" y="100.1666669845581" class="flot-tick-label tickLabel" style="position: absolute; text-align: right;">0.5</text><text x="5.975910186767578" y="58.166666984558105" class="flot-tick-label tickLabel" style="position: absolute; text-align: right;">1.0</text></g></svg></div></div>
+                  </div>
+                  <!-- /.card-body-->
+                </div>
+    
+                <!-- Area chart -->
+                <div class="card card-primary card-outline">
+                  <div class="card-header">
+                    <h3 class="card-title">
+                      <i class="far fa-chart-bar"></i>
+                      Area Chart
+                    </h3>
+    
+                    <div class="card-tools">
+                      <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                      </button>
+                      <button type="button" class="btn btn-tool" data-card-widget="remove">
+                        <i class="fas fa-times"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div id="area-chart" style="height: 338px; padding: 0px; position: relative;" class="full-width-chart"><canvas class="flot-base" width="722" height="507" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 481.5px; height: 338px;"></canvas><canvas class="flot-overlay" width="722" height="507" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 481.5px; height: 338px;"></canvas></div>
+                  </div>
+                </div>
+              </div>
+    
+              <div class="col-md-6">
+                <!-- Bar chart -->
+                <div class="card card-primary card-outline">
+                  <div class="card-header">
+                    <h3 class="card-title">
+                      <i class="far fa-chart-bar"></i>
+                      Bar Chart
+                    </h3>
+    
+                    <div class="card-tools">
+                      <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                      </button>
+                      <button type="button" class="btn btn-tool" data-card-widget="remove">
+                        <i class="fas fa-times"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div id="bar-chart" style="height: 300px; padding: 0px; position: relative;"><canvas class="flot-base" width="665" height="450" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 443.667px; height: 300px;"></canvas><canvas class="flot-overlay" width="665" height="450" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 443.667px; height: 300px;"></canvas><div class="flot-svg" style="position: absolute; top: 0px; left: 0px; height: 100%; width: 100%; pointer-events: none;"><svg style="width: 100%; height: 100%;"><g class="flot-x-axis flot-x1-axis xAxis x1Axis" style="position: absolute; inset: 0px;"><text x="167.18053409090908" y="293.8333330154419" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;">March</text><text x="241.02813193997468" y="293.8333330154419" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;">April</text><text x="312.3037903206565" y="293.8333330154419" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;">May</text><text x="21.694971266313033" y="293.8333330154419" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;">January</text><text x="378.7959194197221" y="293.8333330154419" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;">June</text><text x="88.14738745949485" y="293.8333330154419" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;">February</text></g><g class="flot-y-axis flot-y1-axis yAxis y1Axis" style="position: absolute; inset: 0px;"><text x="8.951823234558105" y="268.1666669845581" class="flot-tick-label tickLabel" style="position: absolute; text-align: right;">0</text><text x="8.951823234558105" y="205.1666669845581" class="flot-tick-label tickLabel" style="position: absolute; text-align: right;">5</text><text x="1" y="16.166666984558105" class="flot-tick-label tickLabel" style="position: absolute; text-align: right;">20</text><text x="1" y="142.1666669845581" class="flot-tick-label tickLabel" style="position: absolute; text-align: right;">10</text><text x="1" y="79.1666669845581" class="flot-tick-label tickLabel" style="position: absolute; text-align: right;">15</text></g></svg></div></div>
+                  </div>
+                  <!-- /.card-body-->
+                </div>
+    
+                <!-- Donut chart -->
+                <div class="card card-primary card-outline">
+                  <div class="card-header">
+                    <h3 class="card-title">
+                      <i class="far fa-chart-bar"></i>
+                      Donut Chart
+                    </h3>
+    
+                    <div class="card-tools">
+                      <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                      </button>
+                      <button type="button" class="btn btn-tool" data-card-widget="remove">
+                        <i class="fas fa-times"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div id="donut-chart" style="height: 300px; padding: 0px; position: relative;"><canvas class="flot-base" width="665" height="450" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 443.667px; height: 300px;"></canvas><canvas class="flot-overlay" width="665" height="450" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 443.667px; height: 300px;"></canvas><span class="pieLabel" id="pieLabel0" style="position: absolute; top: 69.5px; left: 279.792px;"><div style="font-size:13px; text-align:center; padding:2px; color: #fff; font-weight: 600;">Series2<br>30%</div></span><span class="pieLabel" id="pieLabel1" style="position: absolute; top: 209.5px; left: 257.792px;"><div style="font-size:13px; text-align:center; padding:2px; color: #fff; font-weight: 600;">Series3<br>20%</div></span><span class="pieLabel" id="pieLabel2" style="position: absolute; top: 128.5px; left: 98.7918px;"><div style="font-size:13px; text-align:center; padding:2px; color: #fff; font-weight: 600;">Series4<br>50%</div></span></div>
+                  </div>
+                  <!-- /.card-body-->
+                </div>
+              </div>
+          </div>
+            <!-- Verbrauch -->
+            <div class="card">
+              <div class="card-header border-0">
+                <h3 class="card-title">Verbrauch</h3>
+                <div class="card-tools">
+                 <!--  <a href="#" class="btn btn-tool btn-sm">
+                    <i class="fas fa-download"></i>
+                  </a> -->
+              <!--     <a href="#" class="btn btn-tool btn-sm">
+                    <i class="fas fa-bars"></i>
+                  </a> -->
+                </div>
+              </div>
+              <div class="card-body table-responsive p-0">
+                <table class="table table-striped table-valign-middle">
+                  <thead>
+                  <tr>
+                    <th>Zähler</th>
+                    <th>Verbrauch 1</th>
+                    <th>Verbrauch 2</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr>
+                    <td>
+                      <!-- <img src="assets/dist/img/default-150x150.png" alt="Product 1" class="img-circle img-size-32 mr-2"> -->
+                      Zähler 1
+                    </td>
+                    <td>13kwh</td>
+                    <td>
+                     <!--  <small class="text-success mr-1">
+                        <i class="fas fa-arrow-up"></i>
+                        12%
+                      </small> -->
+                      1200 kwh
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <!-- <img src="assets/dist/img/default-150x150.png" alt="Product 1" class="img-circle img-size-32 mr-2"> -->
+                      Zähler 2
+                    </td>
+                    <td>29 kwh</td>
+                    <td>
+                      <!-- <small class="text-warning mr-1">
+                        <i class="fas fa-arrow-down"></i>
+                        0.5%
+                      </small> -->
+                      123 kwh
+                    </td>
+<!--                     <td>
+                      <a href="#" class="text-muted">
+                        <i class="fas fa-search"></i>
+                      </a>
+                    </td> -->
+                  </tr>
+                  <tr>
+                    <td>
+                      <!-- <img src="assets/dist/img/default-150x150.png" alt="Product 1" class="img-circle img-size-32 mr-2"> -->
+                      Zähler 3
+                    </td>
+                    <td>1230 kwh</td>
+                    <td>
+                     <!--  <small class="text-danger mr-1">
+                        <i class="fas fa-arrow-down"></i>
+                        3%
+                      </small> -->
+                      198 kwh
+                    </td>
+                    <!-- <td>
+                      <a href="#" class="text-muted">
+                        <i class="fas fa-search"></i>
+                      </a>
+                    </td> -->
+                  </tr>
+                  <tr>
+                    <td>
+                      <!-- <img src="assets/dist/img/default-150x150.png" alt="Product 1" class="img-circle img-size-32 mr-2"> -->
+                      Zähler 4
+                    </td>
+                    <td>199 kwh</td>
+                    <td>
+                      <!-- <small class="text-success mr-1">
+                        <i class="fas fa-arrow-up"></i>
+                        63%
+                      </small> -->
+                      87 kwh
+                    </td>
+ <!--                    <td>
+                      <a href="#" class="text-muted">
+                        <i class="fas fa-search"></i>
+                      </a>
+                    </td> -->
+                  </tr>
+                  <tr>
+                    <td>
+                      <!-- <img src="assets/dist/img/default-150x150.png" alt="Product 1" class="img-circle img-size-32 mr-2"> -->
+                      Zähler 5
+                    </td>
+                    <td>109 kwh</td>
+                    <td>
+                      <!-- <small class="text-success mr-1">
+                        <i class="fas fa-arrow-up"></i>
+                        63%
+                      </small> -->
+                      158 kwh
+                    </td>
+ <!--                    <td>
+                      <a href="#" class="text-muted">
+                        <i class="fas fa-search"></i>
+                      </a>
+                    </td> -->
+                  </tr>
+                  <tr>
+                    <td>
+                      <!-- <img src="assets/dist/img/default-150x150.png" alt="Product 1" class="img-circle img-size-32 mr-2"> -->
+                      Zähler 6
+                    </td>
+                    <td>569 kwh</td>
+                    <td>
+                      <!-- <small class="text-success mr-1">
+                        <i class="fas fa-arrow-up"></i>
+                        63%
+                      </small> -->
+                      800 kwh
+                    </td>
+ <!--                    <td>
+                      <a href="#" class="text-muted">
+                        <i class="fas fa-search"></i>
+                      </a>
+                    </td> -->
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <!-- /.card -->
+          </div>
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </div>
+    <!-- /.content -->
+  </div>
