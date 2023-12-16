@@ -1,7 +1,12 @@
 
-<div class="wrapper">
+
+<div class="wrapper" *ngIf="true">
   <ludy-nav></ludy-nav>
   <ludy-aside-left></ludy-aside-left>
   <router-outlet></router-outlet>
   <ludy-footer></ludy-footer>
 </div>
+
+<ng-container *ngIf="false">
+  <router-outlet></router-outlet>
+</ng-container>

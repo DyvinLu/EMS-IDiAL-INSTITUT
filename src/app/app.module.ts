@@ -11,6 +11,9 @@ import { FooterComponent } from './ludyComponents/footer/footer.component';
 import { TableComponent } from './ludyComponents/table/table.component';
 import { CalenderComponent } from './ludyComponents/calender/calender.component';
 import { ChartComponent } from './ludyComponents/chart/chart.component';
+import { LoginComponent } from './ludyComponents/login/login.component';
+import { FormsModule } from '@angular/forms';
+import { HomeComponent } from './ludyComponents/home/home.component';
 
 @NgModule({
   declarations: [
@@ -21,12 +24,15 @@ import { ChartComponent } from './ludyComponents/chart/chart.component';
     FooterComponent,
     TableComponent,
     CalenderComponent,
-    ChartComponent
+    ChartComponent,
+    LoginComponent,
+    HomeComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -11,9 +11,8 @@ const routes: Routes = [
   {path:'', component:DashboardComponent},
   {path:'app-table', component:TableComponent},
   {path:'calender',component:CalenderComponent},
-  {path:'chart',component:ChartComponent}
-
-  // {path:'',component:LoginComponent},
+  {path:'chart',component:ChartComponent},
+  {path:'login',component:LoginComponent},
 
   
   

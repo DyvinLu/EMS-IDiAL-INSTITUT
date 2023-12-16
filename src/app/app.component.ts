@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,11 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'front-visualisierung';
+
+  constructor(private route:ActivatedRoute){}
+
+  checkRoute():boolean{
+    console.log(this.route.pathFromRoot[1].snapshot.url[0].path);
+    return true;
+  }
 }
