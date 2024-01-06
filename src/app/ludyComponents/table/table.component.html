@@ -1,10 +1,11 @@
+
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>DataTables: {{messageTest}}</h1>
+            <h1>DataTables</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -30,56 +31,24 @@
                 <table id="example2" class="table table-bordered table-hover">
                   <thead>
                   <tr>
-                    <th>Zähler</th>
-                    <th> min verbrauch</th>
-                    <th>Max Verbrauch</th>
-                    <th>Vergleich</th>
-                    <th>-</th>
+                    <th>Device</th>
+                    <th>time</th>
+                    <th>Value</th>
+                    <th>Measurement Type</th>
+                    <th>Start</th>
+                    <th>Stop</th>
                   </tr>
                   </thead>
                   <tbody>
-                  <tr>
-                    <td>Zähler 1</td>
-                    <td>100 kwh</td>
-                    <td>200 kwh</td>
-                    <td> 100</td>
-                    <td>X</td>
-                  </tr>
-                  <tr>
-                    <td>Zähler 2</td>
-                    <td>600 kwh</td>
-                    <td>800 kwh</td>
-                    <td> 200</td>
-                    <td>X</td>
-                  </tr>
-                  <tr>
-                    <td>Zähler 3</td>
-                    <td>100 kwh</td>
-                    <td>200 kwh</td>
-                    <td> 100</td>
-                    <td>X</td>
-                  </tr>
-                  <tr>
-                    <td>Zähler 4</td>
-                    <td>100 kwh</td>
-                    <td>200 kwh</td>
-                    <td> 100</td>
-                    <td>X</td>
-                  </tr>
-                  <tr>
-                    <td>Zähler 5</td>
-                    <td>100 kwh</td>
-                    <td>200 kwh</td>
-                    <td> 100</td>
-                    <td>X</td>
-                  </tr>
-                  <tr>
-                    <td>Zähler 6</td>
-                    <td>100 kwh</td>
-                    <td>200 kwh</td>
-                    <td> 100</td>
-                    <td>X</td>
-                  </tr>
+                    <tr *ngFor="let item of data">
+                      <td>{{item.device}}</td>
+                      <td>{{item._time}}</td>
+                      <td>{{item._value}}</td>
+                      <td>{{item.measurement_type}}</td>
+                      <td>{{item._start}}</td>
+                      <td> {{item._stop}}</td>
+                    </tr>
+                 
                   </tbody>
                 </table>
               </div>

@@ -83,7 +83,7 @@ $(function () {
     data: {
       labels: ['18th', '20th', '22nd', '24th', '26th', '28th', '30th'],
       datasets: [{
-        type: 'line',
+        type: 'line', 
         data: [100, 120, 170, 167, 180, 177, 160],
         backgroundColor: 'transparent',
         borderColor: '#007bff',

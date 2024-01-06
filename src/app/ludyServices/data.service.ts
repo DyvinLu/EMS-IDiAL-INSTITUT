@@ -10,10 +10,14 @@ export class DataService {
   apiUrl = environment.apiURL;
   mesDonnees = this.apiUrl + 'data/mes-donnees';
 
-  constructor(private http: HttpClient) { }
-
-
-  getAllData(){
-    return this.http.get("http://127.0.0.1:5000/api/data/mes-donnees");
+  constructor(private http: HttpClient) { 
+    //this.getAllData();
   }
+
+
+  getAllDataFromCompteur1(){
+    return this.http.get("http://127.0.0.1:5000/api/data/compteur1");
+  }
+
+  
 }

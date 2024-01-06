@@ -1,4 +1,6 @@
+import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { DataModel } from 'src/app/ludyModel/data-model';
 import { DataService } from 'src/app/ludyServices/data.service';
 
 @Component({
@@ -8,18 +10,14 @@ import { DataService } from 'src/app/ludyServices/data.service';
 })
 export class TableComponent {
 
-  messageTest!: string;
+  public data: DataModel[] = [];
 
-  constructor(private dataService: DataService){
-
+  constructor(private dataServ: DataService){
+    this.dataServ.getAllDataFromCompteur1().subscribe((fromAPI:any)=>{
+      this.data = fromAPI;
+      console.log(this.data);
+    });
   }
 
-
-  ngOnInit(){
-    this.dataService.getAllData().subscribe((res:any)=>{
-      console.log(res);
-      this.messageTest = res?.content;
-    })
-  }
 
 }
