@@ -8,15 +8,15 @@ import { environment } from 'src/environments/environment';
 export class DataService {
 
   apiUrl = environment.apiURL;
-  mesDonnees = this.apiUrl + 'data/mes-donnees';
+  mesDonnees = this.apiUrl + 'data/compteurs';
 
   constructor(private http: HttpClient) { 
     //this.getAllData();
   }
 
 
-  getAllDataFromCompteur1(){
-    return this.http.get("http://127.0.0.1:5000/api/data/compteur1");
+  getAllDataFromCompteurs(){
+    return this.http.get("http://localhost:5000/api/data/compteurs/live"); // cette ligne permet d'appeler le backend
   }
 
   

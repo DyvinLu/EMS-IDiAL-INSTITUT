@@ -13,7 +13,7 @@ export class TableComponent {
   public data: DataModel[] = [];
 
   constructor(private dataServ: DataService){
-    this.dataServ.getAllDataFromCompteur1().subscribe((fromAPI:any)=>{
+    this.dataServ.getAllDataFromCompteurs().subscribe((fromAPI:any)=>{
       this.data = fromAPI;
       console.log(this.data);
     });
