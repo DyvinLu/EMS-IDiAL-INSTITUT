@@ -1,18 +1,29 @@
-import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { disableDebugTools } from '@angular/platform-browser';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'front-visualisierung';
 
-  constructor(private route:ActivatedRoute){}
+  currentUrl: any;
 
-  checkRoute():boolean{
-    console.log(this.route.pathFromRoot[1].snapshot.url[0].path);
-    return true;
+  constructor(private router:Router){}
+
+  ngOnInit(): void {
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+       ).subscribe(event => {
+          console.log(event);
+          this.currentUrl = event;
+      });
+
   }
+
+  
 }

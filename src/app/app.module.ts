@@ -10,7 +10,6 @@ import { DashboardComponent } from './ludyComponents/dashboard/dashboard.compone
 import { FooterComponent } from './ludyComponents/footer/footer.component';
 import { TableComponent } from './ludyComponents/table/table.component';
 import { CalenderComponent } from './ludyComponents/calender/calender.component';
-import { ChartComponent } from './ludyComponents/chart/chart.component';
 import { LoginComponent } from './ludyComponents/login/login.component';
 import { FormsModule } from '@angular/forms';
 import { HomeComponent } from './ludyComponents/home/home.component';
@@ -24,7 +23,6 @@ import { HomeComponent } from './ludyComponents/home/home.component';
     FooterComponent,
     TableComponent,
     CalenderComponent,
-    ChartComponent,
     LoginComponent,
     HomeComponent,
   ],
