@@ -13,6 +13,10 @@ import { CalenderComponent } from './ludyComponents/calender/calender.component'
 import { LoginComponent } from './ludyComponents/login/login.component';
 import { FormsModule } from '@angular/forms';
 import { HomeComponent } from './ludyComponents/home/home.component';
+import { AuthCallbackComponent } from './ludyComponents/auth-callback/auth-callback.component';
+
+// Import the module from the SDK
+import { AuthModule } from '@auth0/auth0-angular';
 
 @NgModule({
   declarations: [
@@ -25,9 +29,18 @@ import { HomeComponent } from './ludyComponents/home/home.component';
     CalenderComponent,
     LoginComponent,
     HomeComponent,
+    AuthCallbackComponent,
   ],
   imports: [
     BrowserModule,
+    // Import the module into the application, with configuration
+    AuthModule.forRoot({
+      domain: 'http://sems.vms.idial.fh:8086/signin', //{yourDomain}',
+      clientId: '0bdb2da3dec5e000', //'{yourClientId}',
+      authorizationParams: {
+        redirect_uri: 'http://localhost:4200' // window.location.origin
+      }
+    }),
     AppRoutingModule,
     HttpClientModule,
     FormsModule

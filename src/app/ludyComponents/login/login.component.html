@@ -1,6 +1,6 @@
 <div class="login-box mx-auto">
       <!-- /.login-logo -->
-      <div class="card card-outline card-primary">
+      <div class="card card-outline card-primary col-12 d-flex">
         <div class="card-header text-center">
           <a href="../../index2.html" class="h1"><b>Login</b></a>
         </div>
@@ -11,8 +11,8 @@
 
             <div class="row">
               <!-- /.col -->
-              <div class="col-6">
-                <button (click)="onLogin()" class="btn btn-primary btn-block">Log in</button>
+              <div class="col-4 btn mx-auto">
+                <button (click)="this.auth.loginWithRedirect()" class="btn btn-primary btn-block">Log in</button>
               </div>
               <!-- /.col -->
             </div>

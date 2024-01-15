@@ -8,7 +8,12 @@ import { AuthGuard } from './_guards/auth.guard';
 
 
 const routes: Routes = [
-  {path:'', component:DashboardComponent, canActivate: [AuthGuard]}, // http://localhost:4200
+  {
+    path:'', 
+    component:DashboardComponent, 
+    //canActivate: [AuthGuard]
+  }, // http://localhost:4200
+  
   {path:'app-table', component:TableComponent, canActivate: [AuthGuard]}, // http://localhost:4200/app-table
   {path:'calender',component:CalenderComponent, canActivate:[AuthGuard]}, // http://localhost:4200/calender
   {path:'login',component:LoginComponent}, // http:localhost:4200/login
