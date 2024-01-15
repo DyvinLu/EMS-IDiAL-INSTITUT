@@ -13,7 +13,7 @@ import { CalenderComponent } from './ludyComponents/calender/calender.component'
 import { LoginComponent } from './ludyComponents/login/login.component';
 import { FormsModule } from '@angular/forms';
 import { HomeComponent } from './ludyComponents/home/home.component';
-import { AuthCallbackComponent } from './ludyComponents/auth-callback/auth-callback.component';
+
 
 // Import the module from the SDK
 import { AuthModule } from '@auth0/auth0-angular';
@@ -29,7 +29,6 @@ import { AuthModule } from '@auth0/auth0-angular';
     CalenderComponent,
     LoginComponent,
     HomeComponent,
-    AuthCallbackComponent,
   ],
   imports: [
     BrowserModule,

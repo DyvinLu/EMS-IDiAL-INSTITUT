@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { callback } from 'chart.js/dist/helpers/helpers.core';
-import { UserModel } from '../ludyModel/user-model';
+
 
 
 @Injectable({
