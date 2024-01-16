@@ -18,7 +18,7 @@ component with a specific selector, template, and styles. */
 export class DashboardComponent implements OnInit{
 
 /* Properties:Declares properties for storing chart instances, 
-counter identifiers (Zähler1 to Zähler6), and arrays for x and y values  */ 
+counter identifiers (Zähler1 to Zähler5), and arrays for x and y values  */ 
   lineChart: any = [];
   barChart: any = [];
   pieChart: any = [];
@@ -28,7 +28,6 @@ counter identifiers (Zähler1 to Zähler6), and arrays for x and y values  */
   Zähler3 = "shelly-3em-ohs23-03";
   Zähler4 = "shelly-3em-ohs23-04";
   Zähler5 = "shelly-3em-ohs23-05";
-  Zähler6 = "shellyem3-485519C9734D";
 
   public data: DataModel[] = [];
 
@@ -39,12 +38,10 @@ counter identifiers (Zähler1 to Zähler6), and arrays for x and y values  */
   sumZähler3: any = 0;
   sumZähler4: any = 0;
   sumZähler5: any = 0;
-  sumZähler6: any = 0;
   yValues2: number[] = [];
   yValues3: number[] = [];
   yValues4: number[] = [];
   yValues5: number[] = [];
-  yValues6: number[] = [];
   
 
 /* Constructor:Initializes the component, including making
@@ -79,11 +76,7 @@ Creates a line chart using Chart.js with multiple datasets representing each cou
         }else if(item.device === this.Zähler5){
           this.yValues5.push(item._value)
           this.sumZähler5 = this.sumZähler5 + item._value;
-        }else if(item.device === this.Zähler6){
-          this.yValues6.push(item._value)
-          this.sumZähler6 = this.sumZähler6 + item._value;
         }
-        
       }
 
       this.lineChart = new Chart('lineChart', {
@@ -114,11 +107,6 @@ Creates a line chart using Chart.js with multiple datasets representing each cou
             {
               label: this.Zähler5,
               data: this.yValues5,
-              borderWidth: 1,
-            },
-            {
-              label: this.Zähler6,
-              data: this.yValues6,
               borderWidth: 1,
             }
           ],
@@ -162,11 +150,6 @@ Creates a line chart using Chart.js with multiple datasets representing each cou
               label: this.Zähler5,
               data: this.yValues5,
               borderWidth: 1,
-            },
-            {
-              label: this.Zähler6,
-              data: this.yValues6,
-              borderWidth: 1,
             }
           ],
         },
@@ -180,52 +163,6 @@ Creates a line chart using Chart.js with multiple datasets representing each cou
       });
 
 
-      /*this.pieChart = new Chart('pieChart', {
-        type: 'pie',
-        data: {
-          labels: ['Red', 'Pink','Green','Yellow','Orange','Blue', ],
-          datasets: [
-            {
-              label: this.Zähler1,
-              data: this.yValues1,
-              borderWidth: 1,
-            },
-            {
-              label: this.Zähler2,
-              data: this.yValues2,
-              borderWidth: 1,
-            },
-            {
-              label: this.Zähler3,
-              data: this.yValues3,
-              borderWidth: 1,
-            },
-            {
-              label: this.Zähler4,
-              data: this.yValues4,
-              borderWidth: 1,
-            },
-            {
-              label: this.Zähler5,
-              data: this.yValues5,
-              borderWidth: 1,
-            },
-            {
-              label: this.Zähler6,
-              data: this.yValues6,
-              borderWidth: 1,
-            }
-          ],
-        },
-        options: {
-          scales: {
-            y: {
-              beginAtZero: true,
-            },
-          },
-        },
-      });*/
-
       this.pieChart = new Chart("pieChart", {
         type: 'pie', //this denotes tha type of chart
   
@@ -236,7 +173,6 @@ Creates a line chart using Chart.js with multiple datasets representing each cou
             'shelly-3em-ohs23-03',
             'shelly-3em-ohs23-04',
             'shelly-3em-ohs23-05',
-            'shellyem3-485519C9734D',	
            ],
           datasets: [
             {
@@ -247,10 +183,9 @@ Creates a line chart using Chart.js with multiple datasets representing each cou
                 this.sumZähler3, 
                 this.sumZähler4, 
                 this.sumZähler5, 
-                this.sumZähler6
               ],
               backgroundColor: [
-                'Red', 'Pink','Green','Yellow','Orange','Blue', 
+                'Red', 'Pink','Green','Yellow','Orange', 
               ],
               hoverOffset: 4
             },
