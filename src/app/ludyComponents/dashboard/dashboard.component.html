@@ -17,76 +17,71 @@
     </div>
     <!-- /.content-header -->
 
+
     <!-- Main content -->
     <div class="content">
       <div class="container-fluid">
+
+
+        <!-- AREA CHART -->
         <div class="row">
-          <div class="col-lg-12">
-            <div class="card">
-              <div class="card-header border-0">
-                <div class="d-flex justify-content-between">
-                  <h3 class="card-title"> Live-Daten</h3>
-                  <!-- <a href="javascript:void(0);">View Report</a> -->
-                </div>
-              </div>
-              <div class="card-body">
-                <div class="d-flex">
-                  <p class="d-flex flex-column">
-                    <!-- <span class="text-bold text-lg">820</span> -->
-                    <span>Energie Over Time</span>
-                  </p>
-                  
-                </div>
-                <!-- /.d-flex -->
-
-                <div class="position-relative mb-4">
-                  <!-- <canvas id="visitors-chart" height="200"></canvas> -->
-                  <canvas id="lineChart">{{lineChart}}</canvas>
-                </div>
-                
-              </div>
-            </div>   
-
-            <!-- another char -->
-            <div class="row">
-              <div class="col-md-12">
-    
-                <!-- BAR CHART -->
-                <div class="card card-success">
-                  <div class="card-header">
-                    <h3 class="card-title">Studenverbräuche</h3>
-    
-                    <div class="card-tools">
-                      <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                        <i class="fas fa-minus"></i>
-                      </button>
-                      <button type="button" class="btn btn-tool" data-card-widget="remove">
-                        <i class="fas fa-times"></i>
-                      </button>
-                    </div>
-                  </div>
-                  <div class="card-body">
-                    <div class="chart">
-                      <canvas id="barChart">{{barChart}}</canvas>
-                    </div>
-                  </div>
-                  <!-- /.card-body -->
-                </div>
-                <!-- /.card -->
-    
+          <div class="col-md-12">
+           <div class="card card-primary">
+            <div class="card-header">
+              <h3 class="card-title">Area Chart</h3>
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                  <i class="fas fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-card-widget="remove">
+                  <i class="fas fa-times"></i>
+                </button>
               </div>
             </div>
-            <!-- /.card -->
+            <div class="card-body">
+              <div class="chart">
+                <canvasjs-chart [options]="areachart" (chartInstance)="getChartInstance($event)" [styles]="{width: '50%', height: '300px', 'float': 'left' }"></canvasjs-chart>           
+               </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card --> 
+
+
+          <!-- Bar CHART -->
+          <div class="row">
+          <div class="col-md-12">
+          <div class="card card-success">
+              <div class="card-header">
+                <h3 class="card-title">Studenverbräuche</h3>
+                  <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                      <i class="fas fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-tool" data-card-widget="remove">
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
+              </div>
+            <div class="card-body">
+              <div class="chart">
+                <canvas id="barChart">{{barChart}}</canvas>
+              </div>
+          </div>
+                  <!-- /.card-body -->
+          </div>
+          <!-- /.card -->   
+
+          </div>
+          </div>
+          <!-- /.card -->
+
           
-            <!-- another char -->
+        <!-- pie CHART -->
             <div class="row">
-              <div class="col-md-12">
-    
-                <!-- pie CHART -->
+              <div class="col-md-12">              
                 <div class="card card-danger">
                   <div class="card-header">
-                    <h3 class="card-title">Gesamtverbrauch</h3>
-    
+                    <h3 class="card-title">Gesamtverbrauch</h3> 
                     <div class="card-tools">
                       <button type="button" class="btn btn-tool" data-card-widget="collapse">
                         <i class="fas fa-minus"></i>
@@ -102,16 +97,15 @@
                   <!-- /.card-body -->
                 </div>
                 <!-- /.card -->
-    
               </div>
             </div>
-            <!-- /.card -->
+           <!-- /.card -->
           </div>
         </div>
         <!-- /.row -->
-
       </div>
+
       <!-- /.container-fluid -->
     </div>
     <!-- /.content -->
-  </div>
+</div>

@@ -13,10 +13,13 @@ import { CalenderComponent } from './ludyComponents/calender/calender.component'
 import { LoginComponent } from './ludyComponents/login/login.component';
 import { FormsModule } from '@angular/forms';
 import { HomeComponent } from './ludyComponents/home/home.component';
+import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
 
 
 // Import the module from the SDK
 import { AuthModule } from '@auth0/auth0-angular';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { DateSelectorComponent } from './date-selector/date-selector.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +32,7 @@ import { AuthModule } from '@auth0/auth0-angular';
     CalenderComponent,
     LoginComponent,
     HomeComponent,
+    DateSelectorComponent,
   ],
   imports: [
     BrowserModule,
@@ -42,7 +46,9 @@ import { AuthModule } from '@auth0/auth0-angular';
     }),
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    BrowserAnimationsModule,
+    CanvasJSAngularChartsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
