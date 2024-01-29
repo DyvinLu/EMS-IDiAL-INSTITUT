@@ -1,6 +1,7 @@
 //Import Statements:Imports necessary Angular modules and services
 
 import { Component, OnInit } from '@angular/core';
+import { CanvasJS } from '@canvasjs/angular-charts';
 import Chart from 'chart.js/auto';
 import { DataModel } from 'src/app/ludyModel/data-model';
 import { DataService } from 'src/app/ludyServices/data.service';
@@ -18,6 +19,10 @@ component with a specific selector, template, and styles. */
 export class DashboardComponent implements OnInit{
 
   dps1: any = []; dps2: any = []; dps3: any = []; charts: any = [];
+
+  dataVisual!: any[];
+
+  myForm!:any;
 	
 	toolTip = {
 		shared: true
@@ -40,8 +45,9 @@ export class DashboardComponent implements OnInit{
 /* Properties:Declares properties for storing chart instances, 
 counter identifiers (Zähler1 to Zähler5), and arrays for x and y values  */ 
   areachart: any = [];
-  barChart: any = [];
-  pieChart: any = [];
+  stackedChart:any = [];
+  //barChart: any = [];
+  //pieChart: any = [];
  
 
   Hauptzähler1 = "XX-06";
@@ -122,7 +128,7 @@ Creates a line chart using Chart.js with multiple datasets representing each cou
         },
         data: [{
         type: "area",     
-        name: "Received",
+        name: "Hauptzähler1",
         showInLegend: true,
         legendMarkerType: "square",
         color: "rgba(40,175,101,0.6)",
@@ -152,10 +158,175 @@ Creates a line chart using Chart.js with multiple datasets representing each cou
           {x:new Date(2013,0,1,21,0), y: 8},
           {x:new Date(2013,0,1,22,0), y: 13},
           {x:new Date(2013,0,1,23,0), y: 11} 
-        ]
-        }, {
+        ]},
+        {
+          type: "area",
+          name: "Hauptzähler2",
+          showInLegend: true,
+          legendMarkerType: "square",
+          color: "rgba(0,75,141,0.7)",
+          markerSize: 0,
+          dataPoints: [
+            {x:new Date(2013,0,1,0,0), y: 12, label: "midnight"  },
+            {x:new Date(2013,0,1,1,0), y: 10},
+            {x:new Date(2013,0,1,2,0), y: 3},
+            {x:new Date(2013,0,1,3,0), y: 5},
+            {x:new Date(2013,0,1,4,0), y: 2},
+            {x:new Date(2013,0,1,5,0), y: 1},
+            {x:new Date(2013,0,1,6,0), y: 3},
+            {x:new Date(2013,0,1,7,0), y: 6},
+            {x:new Date(2013,0,1,8,0), y: 14},
+            {x:new Date(2013,0,1,9,0), y: 15},
+            {x:new Date(2013,0,1,10,0), y: 21},
+            {x:new Date(2013,0,1,11,0), y: 24},         
+            {x:new Date(2013,0,1,12,0), y: 28, label: "noon" },                
+            {x:new Date(2013,0,1,13,0), y: 26},
+            {x:new Date(2013,0,1,14,0), y: 17},
+            {x:new Date(2013,0,1,15,0), y: 23},
+            {x:new Date(2013,0,1,16,0), y: 28},
+            {x:new Date(2013,0,1,17,0), y: 22},
+            {x:new Date(2013,0,1,18,0), y: 10},
+            {x:new Date(2013,0,1,19,0), y: 9},
+            {x:new Date(2013,0,1,20,0), y: 6},
+            {x:new Date(2013,0,1,21,0), y: 4},
+            {x:new Date(2013,0,1,22,0), y: 12},
+            {x:new Date(2013,0,1,23,0), y: 14}
+        ]},
+        {
+            type: "area",
+            name: "Zähler1",
+            showInLegend: true,
+            legendMarkerType: "square",
+            color: "rgba(0,75,141,0.7)",
+            markerSize: 0,
+            dataPoints: [
+              {x:new Date(2013,0,1,0,0), y: 12, label: "midnight"  },
+              {x:new Date(2013,0,1,1,0), y: 10},
+              {x:new Date(2013,0,1,2,0), y: 3},
+              {x:new Date(2013,0,1,3,0), y: 5},
+              {x:new Date(2013,0,1,4,0), y: 2},
+              {x:new Date(2013,0,1,5,0), y: 1},
+              {x:new Date(2013,0,1,6,0), y: 3},
+              {x:new Date(2013,0,1,7,0), y: 6},
+              {x:new Date(2013,0,1,8,0), y: 14},
+              {x:new Date(2013,0,1,9,0), y: 15},
+              {x:new Date(2013,0,1,10,0), y: 21},
+              {x:new Date(2013,0,1,11,0), y: 24},         
+              {x:new Date(2013,0,1,12,0), y: 28, label: "noon" },                
+              {x:new Date(2013,0,1,13,0), y: 26},
+              {x:new Date(2013,0,1,14,0), y: 17},
+              {x:new Date(2013,0,1,15,0), y: 23},
+              {x:new Date(2013,0,1,16,0), y: 28},
+              {x:new Date(2013,0,1,17,0), y: 22},
+              {x:new Date(2013,0,1,18,0), y: 10},
+              {x:new Date(2013,0,1,19,0), y: 9},
+              {x:new Date(2013,0,1,20,0), y: 6},
+              {x:new Date(2013,0,1,21,0), y: 4},
+              {x:new Date(2013,0,1,22,0), y: 12},
+              {x:new Date(2013,0,1,23,0), y: 14}
+          ]}, 
+          {
+              type: "area",
+              name: "Zähler2",
+              showInLegend: true,
+              legendMarkerType: "square",
+              color: "rgba(0,75,141,0.7)",
+              markerSize: 0,
+              dataPoints: [
+                {x:new Date(2013,0,1,0,0), y: 12, label: "midnight"  },
+                {x:new Date(2013,0,1,1,0), y: 10},
+                {x:new Date(2013,0,1,2,0), y: 3},
+                {x:new Date(2013,0,1,3,0), y: 5},
+                {x:new Date(2013,0,1,4,0), y: 2},
+                {x:new Date(2013,0,1,5,0), y: 1},
+                {x:new Date(2013,0,1,6,0), y: 3},
+                {x:new Date(2013,0,1,7,0), y: 6},
+                {x:new Date(2013,0,1,8,0), y: 14},
+                {x:new Date(2013,0,1,9,0), y: 15},
+                {x:new Date(2013,0,1,10,0), y: 21},
+                {x:new Date(2013,0,1,11,0), y: 24},         
+                {x:new Date(2013,0,1,12,0), y: 28, label: "noon" },                
+                {x:new Date(2013,0,1,13,0), y: 26},
+                {x:new Date(2013,0,1,14,0), y: 17},
+                {x:new Date(2013,0,1,15,0), y: 23},
+                {x:new Date(2013,0,1,16,0), y: 28},
+                {x:new Date(2013,0,1,17,0), y: 22},
+                {x:new Date(2013,0,1,18,0), y: 10},
+                {x:new Date(2013,0,1,19,0), y: 9},
+                {x:new Date(2013,0,1,20,0), y: 6},
+                {x:new Date(2013,0,1,21,0), y: 4},
+                {x:new Date(2013,0,1,22,0), y: 12},
+                {x:new Date(2013,0,1,23,0), y: 14}
+            ]},
+            {
+                type: "area",
+                name: "Zähler3",
+                showInLegend: true,
+                legendMarkerType: "square",
+                color: "rgba(0,75,141,0.7)",
+                markerSize: 0,
+                dataPoints: [
+                  {x:new Date(2013,0,1,0,0), y: 12, label: "midnight"  },
+                  {x:new Date(2013,0,1,1,0), y: 10},
+                  {x:new Date(2013,0,1,2,0), y: 3},
+                  {x:new Date(2013,0,1,3,0), y: 5},
+                  {x:new Date(2013,0,1,4,0), y: 2},
+                  {x:new Date(2013,0,1,5,0), y: 1},
+                  {x:new Date(2013,0,1,6,0), y: 3},
+                  {x:new Date(2013,0,1,7,0), y: 6},
+                  {x:new Date(2013,0,1,8,0), y: 14},
+                  {x:new Date(2013,0,1,9,0), y: 15},
+                  {x:new Date(2013,0,1,10,0), y: 21},
+                  {x:new Date(2013,0,1,11,0), y: 24},         
+                  {x:new Date(2013,0,1,12,0), y: 28, label: "noon" },                
+                  {x:new Date(2013,0,1,13,0), y: 26},
+                  {x:new Date(2013,0,1,14,0), y: 17},
+                  {x:new Date(2013,0,1,15,0), y: 23},
+                  {x:new Date(2013,0,1,16,0), y: 28},
+                  {x:new Date(2013,0,1,17,0), y: 22},
+                  {x:new Date(2013,0,1,18,0), y: 10},
+                  {x:new Date(2013,0,1,19,0), y: 9},
+                  {x:new Date(2013,0,1,20,0), y: 6},
+                  {x:new Date(2013,0,1,21,0), y: 4},
+                  {x:new Date(2013,0,1,22,0), y: 12},
+                  {x:new Date(2013,0,1,23,0), y: 14}
+              ]},
+              {
+                  type: "area",
+                  name: "Zähler4",
+                  showInLegend: true,
+                  legendMarkerType: "square",
+                  color: "rgba(0,75,141,0.7)",
+                  markerSize: 0,
+                  dataPoints: [
+                    {x:new Date(2013,0,1,0,0), y: 12, label: "midnight"  },
+                    {x:new Date(2013,0,1,1,0), y: 10},
+                    {x:new Date(2013,0,1,2,0), y: 3},
+                    {x:new Date(2013,0,1,3,0), y: 5},
+                    {x:new Date(2013,0,1,4,0), y: 2},
+                    {x:new Date(2013,0,1,5,0), y: 1},
+                    {x:new Date(2013,0,1,6,0), y: 3},
+                    {x:new Date(2013,0,1,7,0), y: 6},
+                    {x:new Date(2013,0,1,8,0), y: 14},
+                    {x:new Date(2013,0,1,9,0), y: 15},
+                    {x:new Date(2013,0,1,10,0), y: 21},
+                    {x:new Date(2013,0,1,11,0), y: 24},         
+                    {x:new Date(2013,0,1,12,0), y: 28, label: "noon" },                
+                    {x:new Date(2013,0,1,13,0), y: 26},
+                    {x:new Date(2013,0,1,14,0), y: 17},
+                    {x:new Date(2013,0,1,15,0), y: 23},
+                    {x:new Date(2013,0,1,16,0), y: 28},
+                    {x:new Date(2013,0,1,17,0), y: 22},
+                    {x:new Date(2013,0,1,18,0), y: 10},
+                    {x:new Date(2013,0,1,19,0), y: 9},
+                    {x:new Date(2013,0,1,20,0), y: 6},
+                    {x:new Date(2013,0,1,21,0), y: 4},
+                    {x:new Date(2013,0,1,22,0), y: 12},
+                    {x:new Date(2013,0,1,23,0), y: 14}
+                ]},
+                {
         type: "area",
-        name: "Sent",
+        name: "Zähler5",
         showInLegend: true,
         legendMarkerType: "square",
         color: "rgba(0,75,141,0.7)",
@@ -185,12 +356,12 @@ Creates a line chart using Chart.js with multiple datasets representing each cou
           {x:new Date(2013,0,1,21,0), y: 4},
           {x:new Date(2013,0,1,22,0), y: 12},
           {x:new Date(2013,0,1,23,0), y: 14}
-        ]
-        }]
-      }
+      ]}
+      ]
+}
 
 
-      this.barChart = new Chart('barChart', {
+      /* this.barChart = new Chart('barChart', {
         type: 'bar',
         data: {
           labels: this.xValues,
@@ -240,9 +411,9 @@ Creates a line chart using Chart.js with multiple datasets representing each cou
           },
         },
       });
+ */
 
-
-      this.pieChart = new Chart("pieChart", {
+      /* this.pieChart = new Chart("pieChart", {
         type: 'pie', //this denotes tha type of chart
   
         data: {// values on X-Axis
@@ -278,13 +449,145 @@ Creates a line chart using Chart.js with multiple datasets representing each cou
           aspectRatio:2.5
         }
   
-      });
+      }); */
       
+
+this.stackedChart = {
+	animationEnabled: true,
+	title:{
+		text: "Stundenverbräuche"
+	},
+	axisX: {
+		interval: 1,
+		intervalType: "year",
+		valueFormatString: "YYYY"
+	},
+	axisY: {
+		suffix: "%"
+	},
+	toolTip: {
+		shared: true
+	},
+	legend: {
+		reversed: true,
+		verticalAlign: "center",
+		horizontalAlign: "right"
+	},
+	data: [{
+		type: "stackedColumn100",
+		name: "Hauptzähler1",
+		showInLegend: true,
+		xValueFormatString: "YYYY",
+		yValueFormatString: "#,##0\"%\"",
+		dataPoints: [
+			{ x: new Date(2010,0), y: 40 },
+			{ x: new Date(2011,0), y: 50 },
+			{ x: new Date(2012,0), y: 60 },
+			{ x: new Date(2013,0), y: 61 },
+			{ x: new Date(2014,0), y: 63 },
+			{ x: new Date(2015,0), y: 65 },
+			{ x: new Date(2016,0), y: 67 }
+		]
+	}, 
+	{
+		type: "stackedColumn100",
+		name: "Hauptzähler2",
+		showInLegend: true,
+		xValueFormatString: "YYYY",
+		yValueFormatString: "#,##0\"%\"",
+		dataPoints: [
+			{ x: new Date(2010,0), y: 28 },
+			{ x: new Date(2011,0), y: 18 },
+			{ x: new Date(2012,0), y: 12 },
+			{ x: new Date(2013,0), y: 10 },
+			{ x: new Date(2014,0), y: 10 },
+			{ x: new Date(2015,0), y: 7 },
+			{ x: new Date(2016,0), y: 5 }
+		]
+	}, 
+	{
+		type: "stackedColumn100",
+		name: "Zähler1",
+		showInLegend: true,
+		xValueFormatString: "YYYY",
+		yValueFormatString: "#,##0\"%\"",
+		dataPoints: [
+			{ x: new Date(2010,0), y: 15 },
+			{ x: new Date(2011,0), y: 12 },
+			{ x: new Date(2012,0), y: 10 },
+			{ x: new Date(2013,0), y: 9 },
+			{ x: new Date(2014,0), y: 7 },
+			{ x: new Date(2015,0), y: 5 },
+			{ x: new Date(2016,0), y: 1 }
+		]
+	},
+  {
+		type: "stackedColumn100",
+		name: "Zähler2",
+		showInLegend: true,
+		xValueFormatString: "YYYY",
+		yValueFormatString: "#,##0\"%\"",
+		dataPoints: [
+			{ x: new Date(2010,0), y: 15 },
+			{ x: new Date(2011,0), y: 12 },
+			{ x: new Date(2012,0), y: 10 },
+			{ x: new Date(2013,0), y: 9 },
+			{ x: new Date(2014,0), y: 7 },
+			{ x: new Date(2015,0), y: 5 },
+			{ x: new Date(2016,0), y: 1 }
+		]
+	},
+  {
+		type: "stackedColumn100",
+		name: "Zähler3",
+		showInLegend: true,
+		xValueFormatString: "YYYY",
+		yValueFormatString: "#,##0\"%\"",
+		dataPoints: [
+			{ x: new Date(2010,0), y: 15 },
+			{ x: new Date(2011,0), y: 12 },
+			{ x: new Date(2012,0), y: 10 },
+			{ x: new Date(2013,0), y: 9 },
+			{ x: new Date(2014,0), y: 7 },
+			{ x: new Date(2015,0), y: 5 },
+			{ x: new Date(2016,0), y: 1 }
+		]
+	},
+  {
+		type: "stackedColumn100",
+		name: "Zähler4",
+		showInLegend: true,
+		xValueFormatString: "YYYY",
+		yValueFormatString: "#,##0\"%\"",
+		dataPoints: [
+			{ x: new Date(2010,0), y: 15 },
+			{ x: new Date(2011,0), y: 12 },
+			{ x: new Date(2012,0), y: 10 },
+			{ x: new Date(2013,0), y: 9 },
+			{ x: new Date(2014,0), y: 7 },
+			{ x: new Date(2015,0), y: 5 },
+			{ x: new Date(2016,0), y: 1 }
+		]
+	},
+	{
+		type: "stackedColumn100",
+		name: "Zähler5",
+		showInLegend: true,
+		xValueFormatString: "YYYY",
+		yValueFormatString: "#,##0\"%\"",
+		dataPoints: [
+			{ x: new Date(2010,0), y: 17 },
+			{ x: new Date(2011,0), y: 20 },
+			{ x: new Date(2012,0), y: 18 },
+			{ x: new Date(2013,0), y: 20 },
+			{ x: new Date(2014,0), y: 20 },
+			{ x: new Date(2015,0), y: 23 },
+			{ x: new Date(2016,0), y: 27 }
+		]
+	}]
+}
   
-
-    });
-
-    
+    }); 
    
   }
 

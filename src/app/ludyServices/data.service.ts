@@ -36,5 +36,9 @@ with the HttpClient for making HTTP requests  */
     return this.http.get("http://localhost:5000/api/data/compteurs/live"); // cette ligne permet d'appeler le backend
   }
 
+  DataFromShelly3emOhs2305(timeRange: number){
+    return this.http.post("http://localhost:5000/api/data/compteurs/live", timeRange); // cette ligne permet d'appeler le backend
+  }
+
   
 }
