@@ -2,19 +2,20 @@
     <!-- Brand Logo -->
     <a href="index3.html" class="brand-link">
       <span class="brand-text font-weight-light">
-        EMS IDiAL
+        Forschungsinstitut IDiAL
       </span>
     </a>
 
     <!-- Sidebar -->
     <div class="sidebar">
       <!-- Sidebar user panel (optional) -->
-      <div class="user-panel mt-3 pb-3 mb-3 d-flex">        
-        <a class="btn btn-app">
-          <span class="badge bg-purple"></span>
-          <i class="fas fa-users"></i> User Profil
-        </a>
-      </div>
+    <!-- <div class="user-panel mt-3 pb-3 mb-3 d-flex">        
+      <a class="btn btn-app">
+        <span class="badge bg-purple"></span>
+        <i class="fas fa-users"></i> Profil
+      </a>
+    </div> 
+     -->
 
       <!-- Sidebar Menu -->
       <nav class="mt-2">
@@ -24,7 +25,7 @@
             <a  [routerLink]="['']" class="nav-link">
               <i class="nav-icon fas fa-chart-pie"></i>
               <p>
-                Chart-Übersicht
+                Charts-Übersicht
               </p>
             </a>
           </li>
@@ -33,7 +34,7 @@
             <a [routerLink]="['app-table']" class="nav-link">
               <i class="nav-icon fas fa-table"></i>
               <p>
-                Table-Ansicht
+                Daten-Übersicht
               </p>
             </a>
           </li>
@@ -42,12 +43,12 @@
             <a [routerLink]="['calender']" class="nav-link">
               <i class="nav-icon fas fa-calendar-alt"></i>
               <p>
-                Kalender
+                Kalender-Ansicht
               </p>
             </a>
           </li>
 
-          <li class="nav-item">
+          <li [routerLinkActive]="'active' "class="nav-item">
             <a (click)="ludyLogout()" class="nav-link">
               <i class="nav-icon fas fa-sign-out-alt"></i>
               <p>

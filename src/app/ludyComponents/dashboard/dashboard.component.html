@@ -40,7 +40,7 @@
                 </div>
                 <div class="card-body">
                   <div class="chart">
-                    <canvasjs-chart [options]="areachart" (chartInstance)="getChartInstance($event)" [styles]="{width: '100%', height: '300px', 'float': 'left' }"></canvasjs-chart>           
+                    <canvas id="areaChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
                   </div>
                   <!-- /.card-body -->
                 </div>
@@ -67,13 +67,13 @@
                     </tr>
                     </thead>
                     <tbody>
-                      <tr *ngFor="let item of dataVisual">
+                      <!-- <tr *ngFor="let item of dataVisual">
                         <td>{{item.device}}</td>
                         <td>{{item._time | date: 'dd.MM.yyyy  hh:mm'}}</td>
                         <td>{{item._value}}</td>
                         <td>{{item.measurement_type}}</td>
                         <td>{{item._start | date: 'dd.MM.yyyy'}}</td>
-                      </tr>                 
+                      </tr>                  -->
                     </tbody>
                   </table>
                 </div>
@@ -101,7 +101,7 @@
                 </div>
                 <div class="card-body">
                   <div class="chart">
-                    <canvasjs-chart [options]="stackedChart" (chartInstance)="getChartInstance($event)" [styles]="{width: '100%', height: '300px', 'float': 'left' }"></canvasjs-chart>
+                    <!-- <canvasjs-chart [options]="stackedChart" (chartInstance)="getChartInstance($event)" [styles]="{width: '100%', height: '300px', 'float': 'left' }"></canvasjs-chart> -->
                   </div>
                 </div>
                 <!-- /.card-body -->
@@ -109,7 +109,7 @@
               <!-- /.card -->
             </div>
           </div>
-          <!-- /.card -->
+          <!-- /.card --
         </div>
 
 

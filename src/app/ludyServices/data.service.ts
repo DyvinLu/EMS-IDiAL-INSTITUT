@@ -8,6 +8,7 @@ defining a service, and the environment configuration */
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
+import { RufZaehler } from '../ludyModel/ruf-zaehler';
 
 /*Service Decoration:Decorates the service with @Injectable 
 and specifies that it should be provided at the root level */
@@ -36,8 +37,30 @@ with the HttpClient for making HTTP requests  */
     return this.http.get("http://localhost:5000/api/data/compteurs/live"); // cette ligne permet d'appeler le backend
   }
 
-  DataFromShelly3emOhs2305(timeRange: number){
-    return this.http.post("http://localhost:5000/api/data/compteurs/live", timeRange); // cette ligne permet d'appeler le backend
+  DataFromShelly3emOhs2305(ruf: RufZaehler){
+    return this.http.post("http://localhost:5000/api/data/compteurs/Shelly3emOhs2305", ruf); // cette ligne permet d'appeler le backend
+  }
+
+  DataFromShelly3emOhs2304(ruf: RufZaehler){
+    return this.http.post("http://localhost:5000/api/data/compteurs/Shelly3emOhs2304", ruf); // cette ligne permet d'appeler le backend
+  }
+
+  DataFromShelly3emOhs2303(ruf: RufZaehler){
+    return this.http.post("http://localhost:5000/api/data/compteurs/Shelly3emOhs2303", ruf); // cette ligne permet d'appeler le backend
+  }
+
+  DataFromShelly3emOhs2302(ruf: RufZaehler){
+    return this.http.post("http://localhost:5000/api/data/compteurs/Shelly3emOhs2302", ruf); // cette ligne permet d'appeler le backend
+  }
+  DataFromShelly3emOhs2301(ruf: RufZaehler){
+    return this.http.post("http://localhost:5000/api/data/compteurs/Shelly3emOhs2301", ruf); // cette ligne permet d'appeler le backend
+  }
+
+  DataFromXX06(ruf: RufZaehler){
+    return this.http.post("http://localhost:5000/api/data/compteurs/XX06", ruf); // cette ligne permet d'appeler le backend
+  }
+  DataFromXX07(ruf: RufZaehler){
+    return this.http.post("http://localhost:5000/api/data/compteurs/XX07", ruf); // cette ligne permet d'appeler le backend
   }
 
   

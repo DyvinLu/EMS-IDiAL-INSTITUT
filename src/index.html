@@ -87,6 +87,200 @@
       ]
     }
 
+    // TODO: definir les functions suivantes: getDataNomDuCompteur1, ..., 
+
+    const getDataFromShelly3emOhs2301 = ()=>{
+      firstTrace = fetch(
+        'http://localhost:5000/api/data/compteurs/Shelly3emOhs2301',
+        {
+          method: "POST",
+          body: JSON.stringify({
+            zaehlerName: "shelly-3em-ohs23-01",
+            timeRange: 1
+          }),
+          headers: {
+            "Content-type": "application/json; charset=UTF-8"
+          }
+        }
+      )
+      .then(response => {
+        console.log("**********************")
+        debugger
+        const tmp = response.json()
+        tmp.then(data=>{
+          debugger
+          console.log(data);
+          console.log("OK");
+        })
+
+        console.log("OK2");
+      })
+      /*.then(data => {
+        console.log(data)
+        debugger
+        const unpackData = (arr,key) => {
+          debugger
+          return arr.map(abj => obj[key])
+        }
+        const traceData = {
+          type: 'scatter',
+          mode: 'area',
+          name: 'CPU total Usage',
+          x: unpackData(data, '_time'),
+          y: unpackData(data, '_value'),
+          line: {color: '#17BECF'}
+        }
+        return traceData
+      })*/
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+    };
+
+    /*[firstTrace] = getDataFromShelly3emOhs2301()
+    Promise.all([firstTrace]).then((values)=>{
+      plotly(values[0], values[1]);
+    })*/
+
+    const getDataFromShelly3emOhs2302 = ()=>{
+      firstTrace = fetch('http://localhost:5000/api/data/compteurs/Shelly3emOhs2302')
+      .then(Response => response.json())
+      .then(data => {
+        console.log(data)
+        const unpackData = (arr,key) => {
+          return arr.map(abj => obj[key])
+        }
+        const traceData = {
+          type: 'scatter',
+          mode: 'lines',
+          name: 'CPU total Usage',
+          x: unpackData(data, '_time'),
+          y: unpackData(data, '_value'),
+          line: {color: '#17BECF'}
+        }
+        return traceData
+      }).catch((error) => {
+        console.error('Error:', error);
+      });
+    };
+
+    const getDataFromShelly3emOhs2303 = ()=>{
+      firstTrace = fetch('http://localhost:5000/api/data/compteurs/Shelly3emOhs2303')
+      .then(Response => response.json())
+      .then(data => {
+        console.log(data)
+        const unpackData = (arr,key) => {
+          return arr.map(abj => obj[key])
+        }
+        const traceData = {
+          type: 'scatter',
+          mode: 'lines',
+          name: 'CPU total Usage',
+          x: unpackData(data, '_time'),
+          y: unpackData(data, '_value'),
+          line: {color: '#17BECF'}
+        }
+        return traceData
+      }).catch((error) => {
+        console.error('Error:', error);
+      });
+    };
+
+    const getDataFromShelly3emOhs2304 = ()=>{
+      firstTrace = fetch('http://localhost:5000/api/data/compteurs/Shelly3emOhs2304')
+      .then(Response => response.json())
+      .then(data => {
+        console.log(data)
+        const unpackData = (arr,key) => {
+          return arr.map(abj => obj[key])
+        }
+        const traceData = {
+          type: 'scatter',
+          mode: 'lines',
+          name: 'CPU total Usage',
+          x: unpackData(data, '_time'),
+          y: unpackData(data, '_value'),
+          line: {color: '#17BECF'}
+        }
+        return traceData
+      }).catch((error) => {
+        console.error('Error:', error);
+      });
+    };
+
+    const getDataFromShelly3emOhs2305 = ()=>{
+      firstTrace = fetch('http://localhost:5000/api/data/compteurs/Shelly3emOhs2305')
+      .then(Response => response.json())
+      .then(data => {
+        console.log(data)
+        const unpackData = (arr,key) => {
+          return arr.map(abj => obj[key])
+        }
+        const traceData = {
+          type: 'scatter',
+          mode: 'lines',
+          name: 'CPU total Usage',
+          x: unpackData(data, '_time'),
+          y: unpackData(data, '_value'),
+          line: {color: '#17BECF'}
+        }
+        return traceData
+      }).catch((error) => {
+        console.error('Error:', error);
+      });
+    };
+
+    const getDataFromXX06 = ()=>{
+      firstTrace = fetch('http://localhost:5000/api/data/compteurs/XX06')
+      .then(Response => response.json())
+      .then(data => {
+        console.log(data)
+        const unpackData = (arr,key) => {
+          return arr.map(abj => obj[key])
+        }
+        const traceData = {
+          type: 'scatter',
+          mode: 'lines',
+          name: 'CPU total Usage',
+          x: unpackData(data, '_time'),
+          y: unpackData(data, '_value'),
+          line: {color: '#17BECF'}
+        }
+        return traceData
+      }).catch((error) => {
+        console.error('Error:', error);
+      });
+    };
+    
+    const getDataFromXX07 = ()=>{
+      firstTrace = fetch('http://localhost:5000/api/data/compteurs/XX07')
+      .then(Response => response.json())
+      .then(data => {
+        console.log(data)
+        const unpackData = (arr,key) => {
+          return arr.map(abj => obj[key])
+        }
+        const traceData = {
+          type: 'scatter',
+          mode: 'lines',
+          name: 'CPU total Usage',
+          x: unpackData(data, '_time'),
+          y: unpackData(data, '_value'),
+          line: {color: '#17BECF'}
+        }
+        return traceData
+      }).catch((error) => {
+        console.error('Error:', error);
+      });
+    };
+    
+
+
+
+    getDataFromShelly3emOhs2301();
+
+    
+
     var areaChartOptions = {
       maintainAspectRatio : false,
       responsive : true,

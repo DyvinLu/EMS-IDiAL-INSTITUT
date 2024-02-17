@@ -1,12 +1,9 @@
 
 
-<div class="wrapper" *ngIf="this.currentUrl.url !== '/login'; else signin">
+<div class="wrapper">
   <ludy-nav></ludy-nav>
   <ludy-aside-left></ludy-aside-left>
   <router-outlet></router-outlet>
   <ludy-footer></ludy-footer>
 </div>
 
-<ng-template #signin>
-  <router-outlet></router-outlet>
-</ng-template>
