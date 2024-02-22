@@ -28,9 +28,9 @@ component with a specific selector, template, and styles. */
 //Defines the DashboardComponent class, implementing the OnInit interface
 export class DashboardComponent implements OnInit{
 
-  lineChart: any = [];
+
+  MyLineChart: any = [];
   barChart: any = [];
-  pieChart: any = [];
   areaChart: any = []
 
   Zähler1 = "shelly-3em-ohs23-01";
@@ -40,7 +40,7 @@ export class DashboardComponent implements OnInit{
   Zähler5 = "shelly-3em-ohs23-05";
   Zähler6 = "shellyem3-485519C9734D";
 
-  public data: DataModel[] = [];
+  data: DataModel[] = [];
 
   xValues: any[] = [];
   yValues1: number[] = [];
@@ -56,223 +56,9 @@ export class DashboardComponent implements OnInit{
   yValues5: number[] = [];
   yValues6: number[] = [];
   
-
-/* Constructor:Initializes the component, including making
-an HTTP request to the backend using the DataService to 
-get data for the chart */
-
-    constructor(private dataServ: DataService){
-
-/* HTTP Request and Chart Creation: Makes an HTTP request to
-the backend using dataServ.getAllDataFromCompteurs() 
-Processes the data received and populates arrays for x and y values for each counter
-Creates a line chart using Chart.js with multiple datasets representing each counter*/
-    // data 1
-    this.dataServ.getAllDataFromCompteurs().subscribe((fromAPI:any)=>{
-      this.data = fromAPI;
-      //console.log(this.data);
-
-      for(var item of this.data){ // parcourir la liste des donnees
-        if(item.device === this.Zähler1){
-          this.xValues.push(item._time);
-          this.yValues1.push(item._value);
-          this.sumZähler1 = this.sumZähler1 + item._value;
-        }else if(item.device === this.Zähler2){
-          this.yValues2.push(item._value)
-          this.sumZähler2 = this.sumZähler2 + item._value;
-        }else if(item.device === this.Zähler3){
-          this.yValues3.push(item._value)
-          this.sumZähler3 = this.sumZähler3 + item._value;
-        }else if(item.device === this.Zähler4){
-          this.yValues4.push(item._value)
-          this.sumZähler4 = this.sumZähler4+ item._value;
-        }else if(item.device === this.Zähler5){
-          this.yValues5.push(item._value)
-          this.sumZähler5 = this.sumZähler5 + item._value;
-        }else if(item.device === this.Zähler6){
-          this.yValues6.push(item._value)
-          this.sumZähler6 = this.sumZähler6 + item._value;
-        }
-        
-      }
-
-
-      this.lineChart = new Chart('lineChart', {
-        type: 'line',
-        data: {
-          labels: this.xValues,
-          datasets: [
-            {
-              label: this.Zähler1,
-              data: this.yValues1,
-              borderWidth: 1,
-            },
-            {
-              label: this.Zähler2,
-              data: this.yValues2,
-              borderWidth: 1,
-            },
-            {
-              label: this.Zähler3,
-              data: this.yValues3,
-              borderWidth: 1,
-            },
-            {
-              label: this.Zähler4,
-              data: this.yValues4,
-              borderWidth: 1,
-            },
-            {
-              label: this.Zähler5,
-              data: this.yValues5,
-              borderWidth: 1,
-            },
-            {
-              label: this.Zähler6,
-              data: this.yValues6,
-              borderWidth: 1,
-            }
-          ],
-        },
-        options: {
-          scales: {
-            y: {
-              beginAtZero: true,
-            },
-          },
-        },
-      });
-
-      const areaChartData = {
-        labels  : ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-        datasets: [
-          {
-            label               : 'Digital Goods',
-            backgroundColor     : 'rgba(60,141,188,0.9)',
-            borderColor         : 'rgba(60,141,188,0.8)',
-            pointRadius          : false,
-            pointColor          : '#3b8bba',
-            pointStrokeColor    : 'rgba(60,141,188,1)',
-            pointHighlightFill  : '#fff',
-            pointHighlightStroke: 'rgba(60,141,188,1)',
-            data                : [28, 48, 40, 19, 86, 27, 90]
-          },
-          {
-            label               : 'Electronics',
-            backgroundColor     : 'rgba(210, 214, 222, 1)',
-            borderColor         : 'rgba(210, 214, 222, 1)',
-            pointRadius         : false,
-            pointColor          : 'rgba(210, 214, 222, 1)',
-            pointStrokeColor    : '#c1c7d1',
-            pointHighlightFill  : '#fff',
-            pointHighlightStroke: 'rgba(220,220,220,1)',
-            data                : [65, 59, 80, 81, 56, 55, 40]
-          },
-        ]
-      }
-  
-      const areaChartOptions: any = {
-        maintainAspectRatio: false,
-        responsive: true,
-        legend: {
-          display: false
-        },
-        scales: {
-          xAxes: [{
-            gridLines: {
-              display: false,
-            }
-          }],
-          yAxes: [{
-            gridLines: {
-              display: false,
-            }
-          }]
-        }
-      }
-
-      
-      /*this.areaChart = new Chart("areaChart3", {
-        type: 'line',
-        data: {
-          labels: this.xValues,
-          datasets: [
-            {
-              label: this.Zähler1,
-              data: this.yValues1,
-              borderWidth: 1,
-            },
-            {
-              label: this.Zähler2,
-              data: this.yValues2,
-              borderWidth: 1,
-            },
-            {
-              label: this.Zähler3,
-              data: this.yValues3,
-              borderWidth: 1,
-            },
-            {
-              label: this.Zähler4,
-              data: this.yValues4,
-              borderWidth: 1,
-            },
-            {
-              label: this.Zähler5,
-              data: this.yValues5,
-              borderWidth: 1,
-            },
-            {
-              label: this.Zähler6,
-              data: this.yValues6,
-              borderWidth: 1,
-            }
-          ],
-        },
-        options: areaChartOptions,
-      })*/
-
-      
-      let toSend = new RufZaehler();
-      toSend.timeRange = 1;
-      toSend.zaehlerName = "shelly-3em-ohs23-01";
-
-      dataServ.DataFromShelly3emOhs2301(toSend).subscribe(data=>{
-
-       
-      })
-
-    });
-
-    
-   
-  }
-
-  /*dps1: any = []; dps2: any = []; dps3: any = []; charts: any = [];
-
-  dataVisual!: any[];
+  dataVisual!: any;
 
   myForm!:any;
-
-  barChart!:any;
-	
-	toolTip = {
-		shared: true
-	};
-	legend = {
-		cursor: "pointer",
-		itemclick: function (e: any) {
-		  if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
-			e.dataSeries.visible = false;
-		  } else {
-			e.dataSeries.visible = true;
-		  }
-		  e.chart.render();
-		}
-	};
-	
-	systemDps: any = []; userDps: any = []; waitDps: any = []; buffersDps: any = []; cacheDps: any = []; usedDps: any = []; inboundDps: any = []; outboundDps: any = []; writeDps: any= []; readDps: any = [];
-	onToolTipUpdated: any; onToolTipHidden: any; onCrosshairUpdated: any; onCrosshairHidden: any; onRangeChanged: any;
 
 
   multiAreaChart = {
@@ -298,24 +84,9 @@ Creates a line chart using Chart.js with multiple datasets representing each cou
   xx06!: any;
   xx07!: any;
  
-  xValues: any[] = [];
   sumHauptzähler1: any = 0;
   sumHauptzähler2: any = 0;
-  sumZähler1: any = 0;
-  sumZähler2: any = 0;
-  sumZähler3: any = 0;
-  sumZähler4: any = 0;
-  sumZähler5: any = 0;
-  yValues1: number[] = [];
-  yValues2: number[] = [];
-  yValues3: number[] = [];
-  yValues4: number[] = [];
-  yValues5: number[] = [];
-  yValues6: number[] = [];
   yValues7: number[] = [];
-
-
-  Zähler5 = "shelly-3em-ohs23-05";
 
   zaehlerNamen = [
     "shelly-3em-ohs23-01",
@@ -332,9 +103,7 @@ Creates a line chart using Chart.js with multiple datasets representing each cou
  
   
 
-    constructor(private dataServ: DataService){
-
-
+  constructor(private dataServ: DataService){
   
     let sendToBAck1 = new RufZaehler();
     sendToBAck1.timeRange = 5,
@@ -364,15 +133,11 @@ Creates a line chart using Chart.js with multiple datasets representing each cou
         markerSize: 0,
         dataPoints: dataPts,
       };
-     
+    
       this.allData.push(this.shelly01);
 
     });
-
-    
- 
-
-    
+  
     let sendToBAck2 = new RufZaehler();
     sendToBAck2.timeRange = 5,
     sendToBAck2.zaehlerName = "shelly-3em-ohs23-02";
@@ -398,7 +163,7 @@ Creates a line chart using Chart.js with multiple datasets representing each cou
         markerSize: 0,
         dataPoints: dataPts,
       };
-     
+    
       this.allData.push(this.shelly01);
 
     });
@@ -428,7 +193,7 @@ Creates a line chart using Chart.js with multiple datasets representing each cou
         markerSize: 0,
         dataPoints: dataPts,
       };
-     
+    
       this.allData.push(this.shelly03);
 
     });
@@ -458,7 +223,7 @@ Creates a line chart using Chart.js with multiple datasets representing each cou
         markerSize: 0,
         dataPoints: dataPts,
       };
-     
+    
       this.allData.push(this.shelly04);
 
     });
@@ -488,7 +253,7 @@ Creates a line chart using Chart.js with multiple datasets representing each cou
         dataPoints: dataPts,
       };
       
-     
+    
       this.allData.push(this.shelly05);
 
     });
@@ -518,7 +283,7 @@ Creates a line chart using Chart.js with multiple datasets representing each cou
         dataPoints: dataPts,
       };
       
-     
+    
       this.allData.push(this.xx06);
 
     });
@@ -548,7 +313,7 @@ Creates a line chart using Chart.js with multiple datasets representing each cou
         dataPoints: dataPts,
       };
       
-     
+    
       this.allData.push(this.xx07);
 
     });
@@ -561,7 +326,7 @@ Creates a line chart using Chart.js with multiple datasets representing each cou
     console.log("multiareaChart:",this.multiAreaChart);    
     
 
-    this.barChart = new Chart('MyBarChart', {
+    this.MyLineChart = new Chart('MyBarChart', {
       type: 'bar',
       data: {
         labels: this.xValues,
@@ -613,117 +378,115 @@ Creates a line chart using Chart.js with multiple datasets representing each cou
     });
 
     console.log("bar: ",this.barChart);
+  
     
-    
-    
-  }*/
+  }
 
 
 
-//ngOnInit Method
+  //ngOnInit Method
   ngOnInit() {
-   
+    this.barChart = {
+      animationEnabled: true,
+      exportEnabled: true,
+      title: {
+          text: "Annual Expenses"
+      },
+      axisY: {
+          prefix: "$"
+      },
+      toolTip: {
+          shared: true,
+          content: "{name}: ${y}"
+      },
+      legend: {
+          fontSize: 13
+      },
+      data: [{
+          type: "splineArea",
+          showInLegend: true,
+          name: "Salaries",
+          markerSize: 0,
+          color: "rgba(54,158,173,.9)",
+          dataPoints: [
+              { x: new Date(2020, 0), y: 3000000 },
+              { x: new Date(2020, 1), y: 3500000 },
+              { x: new Date(2020, 2), y: 3000000 },
+              { x: new Date(2020, 3), y: 3040000 },
+              { x: new Date(2020, 4), y: 2090000 },
+              { x: new Date(2020, 5), y: 3100000 },
+              { x: new Date(2020, 6), y: 3020000 },
+              { x: new Date(2020, 7), y: 3000000 },
+              { x: new Date(2020, 8), y: 3300000 },
+              { x: new Date(2020, 9), y: 3800000 },
+              { x: new Date(2020, 10), y: 3890000 },
+              { x: new Date(2020, 11), y: 3900000 }
+          ]
+      },
+      {
+          type: "splineArea",
+          showInLegend: true,
+          name: "Office Cost",
+          markerSize: 0,
+          color: "rgba(134,180,2,.9)",
+          dataPoints: [
+              { x: new Date(2020, 0), y: 2010000 },
+              { x: new Date(2020, 1), y: 1600000 },
+              { x: new Date(2020, 2), y: 1400000 },
+              { x: new Date(2020, 3), y: 1800000 },
+              { x: new Date(2020, 4), y: 1800000 },
+              { x: new Date(2020, 5), y: 2100000 },
+              { x: new Date(2020, 6), y: 2200000 },
+              { x: new Date(2020, 7), y: 2500000 },
+              { x: new Date(2020, 8), y: 2300000 },
+              { x: new Date(2020, 9), y: 2500000 },
+              { x: new Date(2020, 10), y: 2600000 },
+              { x: new Date(2020, 11), y: 2500000 }
+          ]
+      },
+      {
+          type: "splineArea",
+          showInLegend: true,
+          name: "Entertainment",
+          markerSize: 0,
+          color: "rgba(194,70,66,.9)",
+          dataPoints: [
+              { x: new Date(2020, 0), y: 1010000 },
+              { x: new Date(2020, 1), y: 600000 },
+              { x: new Date(2020, 2), y: 340000 },
+              { x: new Date(2020, 3), y: 400000 },
+              { x: new Date(2020, 4), y: 900000 },
+              { x: new Date(2020, 5), y: 390000 },
+              { x: new Date(2020, 6), y: 420000 },
+              { x: new Date(2020, 7), y: 500000 },
+              { x: new Date(2020, 8), y: 1430000 },
+              { x: new Date(2020, 9), y: 1230000 },
+              { x: new Date(2020, 10), y: 830000 },
+              { x: new Date(2020, 11), y: 630000 }
+          ]
+      },
+      {
+          type: "splineArea",
+          showInLegend: true,
+          name: "Maintenance",
+          markerSize: 0,
+          color: "rgba(127,96,132,.9)",
+          dataPoints: [
+              { x: new Date(2020, 0), y: 170000 },
+              { x: new Date(2020, 1), y: 260000 },
+              { x: new Date(2020, 2), y: 100000 },
+              { x: new Date(2020, 3), y: 140000 },
+              { x: new Date(2020, 4), y: 90000 },
+              { x: new Date(2020, 5), y: 100000 },
+              { x: new Date(2020, 6), y: 120000 },
+              { x: new Date(2020, 7), y: 500000 },
+              { x: new Date(2020, 8), y: 130000 },
+              { x: new Date(2020, 9), y: 230000 },
+              { x: new Date(2020, 10), y: 280000 },
+              { x: new Date(2020, 11), y: 130000 }
+          ]
+        }]
+    }
   }
-
-
-  getData(){
-    $(function () {
-      /* ChartJS
-       * -------
-       * Here we will create a few charts using ChartJS
-       */
-  
-      //--------------
-      //- AREA CHART -
-      //--------------
-  
-      // Get context with jQuery - using jQuery's .get() method.
-      var areaChartCanvas = $('#areaChart2').get(0).getContext('2d')
-  
-      var areaChartData = {
-        labels  : ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-        datasets: [
-          {
-            label               : 'Digital Goods',
-            backgroundColor     : 'rgba(60,141,188,0.9)',
-            borderColor         : 'rgba(60,141,188,0.8)',
-            pointRadius          : false,
-            pointColor          : '#3b8bba',
-            pointStrokeColor    : 'rgba(60,141,188,1)',
-            pointHighlightFill  : '#fff',
-            pointHighlightStroke: 'rgba(60,141,188,1)',
-            data                : [28, 48, 40, 19, 86, 27, 90]
-          },
-          {
-            label               : 'Electronics',
-            backgroundColor     : 'rgba(210, 214, 222, 1)',
-            borderColor         : 'rgba(210, 214, 222, 1)',
-            pointRadius         : false,
-            pointColor          : 'rgba(210, 214, 222, 1)',
-            pointStrokeColor    : '#c1c7d1',
-            pointHighlightFill  : '#fff',
-            pointHighlightStroke: 'rgba(220,220,220,1)',
-            data                : [65, 59, 80, 81, 56, 55, 40]
-          },
-        ]
-      }
-  
-      const areaChartOptions: any = {
-        maintainAspectRatio : false,
-        responsive : true,
-        legend: {
-          display: false
-        },
-        scales: {
-          xAxes: [{
-            gridLines : {
-              display : false,
-            }
-          }],
-          yAxes: [{
-            gridLines : {
-              display : false,
-            }
-          }]
-        }
-      }
-  
-      // This will get the first returned node in the jQuery collection.
-      new Chart(areaChartCanvas, {
-        type: 'line' as ChartType,
-        data: areaChartData,
-        options: areaChartOptions
-      })
-  
-      
-  
-      //---------------------
-      //- STACKED BAR CHART -
-      //---------------------
-      /*var stackedBarChartCanvas = $('#stackedBarChart').get(0).getContext('2d')
-      var stackedBarChartData = $.extend(true, {}, barChartData)
-  
-      var stackedBarChartOptions = {
-        responsive              : true,
-        maintainAspectRatio     : false,
-        scales: {
-          xAxes: [{
-            stacked: true,
-          }],
-          yAxes: [{
-            stacked: true
-          }]
-        }
-      }
-  
-      new Chart(stackedBarChartCanvas, {
-        type: 'bar',
-        data: stackedBarChartData,
-        options: stackedBarChartOptions
-      })*/
-
-    })
-  }
-
 
 }
