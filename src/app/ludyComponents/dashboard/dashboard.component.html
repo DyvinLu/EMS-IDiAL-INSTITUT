@@ -28,7 +28,7 @@
             <div class="col-md-12">
               <div class="card card-primary">
                 <div class="card-header">
-                  <h3 class="card-title">Area Chart</h3>
+                  <h3 class="card-title">Energieverbrauch</h3>
                   <div class="card-tools">
                     <button type="button" class="btn btn-tool" data-card-widget="collapse">
                       <i class="fas fa-minus"></i>
@@ -39,8 +39,8 @@
                   </div>
                 </div>
                 <div class="card-body">
-                  <div class="chart">
-                    <canvasjs-chart [options]="barChart"></canvasjs-chart>
+                  <div class="chart" *ngIf="isChartLoading">
+                    <canvasjs-chart [options]="multiAreaChart"></canvasjs-chart>
                   </div>
                   <!-- /.card-body -->
                 </div>
@@ -128,9 +128,9 @@
                     <!-- select -->
                     <div class="form-group">
                       <label>Hauptzähler:</label>
-                      <select class="form-control">
-                        <option>Hauptzähler 1</option>
-                        <option>Hauptzähler 2</option>                       
+                      <select *ngFor="let name of hauptzaehlerNamen" class="form-control">
+                        <option>{{name}}</option>
+                                           
                       </select>
                     </div>
                   </div>
@@ -139,27 +139,13 @@
                   <div class="col-sm-12">
                     <!-- checkbox -->
                     <div class="form-group">
-                      <label>Teilzähler:</label>
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox">
-                        <label class="form-check-label">Teilzähler 1</label>
+                      <label>Shellys:</label>
+
+                      <div *ngFor="let name of zaehlerNamen" class="form-check">
+                        <input class="form-check-input" type="checkbox" value="{{name}}" (click)="showShellys($event)" />
+                        <label class="form-check-label">{{name}}</label>
                       </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" checked>
-                        <label class="form-check-label">Teilzähler 2</label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" >
-                        <label class="form-check-label">Teilzähler 3</label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" >
-                        <label class="form-check-label">Teilzähler 4</label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" >
-                        <label class="form-check-label">Teilzähler 5</label>
-                      </div>
+
                     </div>
                   </div>
                 </div>

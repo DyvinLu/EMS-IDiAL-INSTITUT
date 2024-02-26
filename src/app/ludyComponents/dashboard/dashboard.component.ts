@@ -1,14 +1,10 @@
 //Import Statements:Imports necessary Angular modules and services
 
-import { Component, OnInit } from '@angular/core';
-import { AgGridAngular } from 'ag-grid-angular';
-//import Chart from 'chart.js/auto';
-import { sortByProperty } from 'sort-by-property';
-import { DataModel } from 'src/app/ludyModel/data-model';
+import { Component, Input, OnInit } from '@angular/core';
+//import Chart from 'chart.js/auto'
 import { RufZaehler } from 'src/app/ludyModel/ruf-zaehler';
 import { DataService } from 'src/app/ludyServices/data.service';
 
-import {  Chart, ChartType,} from 'chart.js';
 
 
 
@@ -28,465 +24,260 @@ component with a specific selector, template, and styles. */
 //Defines the DashboardComponent class, implementing the OnInit interface
 export class DashboardComponent implements OnInit{
 
+  isChartLoading = false;
 
-  MyLineChart: any = [];
-  barChart: any = [];
-  areaChart: any = []
-
-  Zähler1 = "shelly-3em-ohs23-01";
-  Zähler2 = "shelly-3em-ohs23-02";
-  Zähler3 = "shelly-3em-ohs23-03";
-  Zähler4 = "shelly-3em-ohs23-04";
-  Zähler5 = "shelly-3em-ohs23-05";
-  Zähler6 = "shellyem3-485519C9734D";
-
-  data: DataModel[] = [];
-
-  xValues: any[] = [];
-  yValues1: number[] = [];
-  sumZähler1: any = 0;
-  sumZähler2: any = 0;
-  sumZähler3: any = 0;
-  sumZähler4: any = 0;
-  sumZähler5: any = 0;
-  sumZähler6: any = 0;
-  yValues2: number[] = [];
-  yValues3: number[] = [];
-  yValues4: number[] = [];
-  yValues5: number[] = [];
-  yValues6: number[] = [];
-  
+  timeRange = 5; // temps par defaut
+  areaChart: any = [];
   dataVisual!: any;
 
-  myForm!:any;
-
+  Hauptzähler1 = "xx6";
+  Hauptzähler2 = "xx7";
+ 
 
   multiAreaChart = {
     animationEnabled: true,
-      title: {
-          text: 'Live Energieverbrauch',
-      },
-      axisY: {
-          title: 'Verbrauch in Kilowatt',
-      },
+    exportEnabled: true,
+    title: {
+        text: ""
+    },
+    axisY: {
+        prefix: ""
+    },
+    toolTip: {
+        shared: true,
+        content: "{name}: ${y}"
+    },
+    legend: {
+        fontSize: 13
+    },
   };
 
   allData: any[] = [];
 
   stackedChart!:any;
  
-  shelly01!:any;
-  shelly02!:any;
-  shelly03!:any;
-  shelly04!: any;
-  shelly05!: any;
-
-  xx06!: any;
-  xx07!: any;
- 
   sumHauptzähler1: any = 0;
   sumHauptzähler2: any = 0;
   yValues7: number[] = [];
 
   zaehlerNamen = [
-    "shelly-3em-ohs23-01",
-    "shelly-3em-ohs23-02",
-    "shelly-3em-ohs23-03",
-    "shelly-3em-ohs23-04",
-    "shelly-3em-ohs23-05",
+    "shelly-3em-ohs23-01", // 0
+    "shelly-3em-ohs23-02", // 1
+    "shelly-3em-ohs23-03", // 2
+    "shelly-3em-ohs23-04", // 3
+    "shelly-3em-ohs23-05", // 0
   ]
 
   hauptzaehlerNamen = [
-    "XX-06",
-    "XX-07",
+    "XX-06", // 0
+    "XX-07", // 1
   ]
  
   
 
   constructor(private dataServ: DataService){
-  
+    this.getAreaChartGraph(this.timeRange);
+  }
+
+
+
+  ngOnInit() {
+   
+  }
+
+  showShellys(event: any){
+    console.log("event = ", event.target.defaultValue);
+
+    // reinitialier allData
+    this.allData = [];
+
+    switch(event.target.defaultValue){
+      case "shelly-3em-ohs23-01":
+        // TODO: appel shelly1
+        let sendToBAck1 = new RufZaehler();
+        sendToBAck1.timeRange = this.timeRange,
+        sendToBAck1.zaehlerName = this.zaehlerNamen[0]
+        this.dataServ.DataFromShelly3emOhs2301(sendToBAck1).subscribe((fromApi:any)=>{
+
+          this.getShellyData(fromApi, this.zaehlerNamen[0], "rgba(26, 26, 255, 1)", "splineArea");
+
+          const tmp = {data: this.allData}
+          this.multiAreaChart = {...this.multiAreaChart, ...tmp};
+          this.isChartLoading = true;
+
+        });
+    
+        break;
+      case "shelly-3em-ohs23-02":
+        let sendToBAck2 = new RufZaehler();
+        sendToBAck2.timeRange = this.timeRange,
+        sendToBAck2.zaehlerName = this.zaehlerNamen[1];
+        this.dataServ.DataFromShelly3emOhs2302(sendToBAck2).subscribe((fromApi:any)=>{
+
+          this.getShellyData(fromApi, this.zaehlerNamen[1], "rgba(230, 0, 172, 0.4)", "splineArea");
+
+          const tmp = {data: this.allData}
+          this.multiAreaChart = {...this.multiAreaChart, ...tmp};
+          this.isChartLoading = true;
+
+        });
+        break;
+      case "shelly-3em-ohs23-03":
+        let sendToBAck3 = new RufZaehler();
+        sendToBAck3.timeRange = this.timeRange,
+        sendToBAck3.zaehlerName = this.zaehlerNamen[2];
+        this.dataServ.DataFromShelly3emOhs2303(sendToBAck3).subscribe((fromApi:any)=>{
+
+          this.getShellyData(fromApi, this.zaehlerNamen[2], "rgba(0, 204, 204, 0.5)", "splineArea");
+          const tmp = {data: this.allData}
+          this.multiAreaChart = {...this.multiAreaChart, ...tmp};
+          this.isChartLoading = true;
+
+
+        });
+        break;
+      case "shelly-3em-ohs23-04":
+        let sendToBAck4 = new RufZaehler();
+        sendToBAck4.timeRange = this.timeRange,
+        sendToBAck4.zaehlerName = this.zaehlerNamen[3];
+        this.dataServ.DataFromShelly3emOhs2304(sendToBAck4).subscribe((fromApi:any)=>{
+
+          this.getShellyData(fromApi, this.zaehlerNamen[3], "rgba(255, 26, 117, 0.5)", "splineArea");
+
+          const tmp = {data: this.allData}
+          this.multiAreaChart = {...this.multiAreaChart, ...tmp};
+          this.isChartLoading = true;
+
+        });
+        break;
+      case "shelly-3em-ohs23-05":
+        let sendToBAck5 = new RufZaehler();
+        sendToBAck5.timeRange = this.timeRange,
+        sendToBAck5.zaehlerName = this.zaehlerNamen[4];
+        this.dataServ.DataFromShelly3emOhs2305(sendToBAck5).subscribe((fromApi:any)=>{
+
+          this.getShellyData(fromApi, this.zaehlerNamen[4], "rgba(255, 179, 203, 0.6)", "splineArea");
+
+          const tmp = {data: this.allData}
+          this.multiAreaChart = {...this.multiAreaChart, ...tmp};
+          this.isChartLoading = true;
+
+        });
+
+        break;
+    }
+    
+  }
+
+
+  getAreaChartGraph(timeInHour: number){
+
+    /////////////// for shelly01
     let sendToBAck1 = new RufZaehler();
-    sendToBAck1.timeRange = 5,
-    sendToBAck1.zaehlerName = "shelly-3em-ohs23-01";
+    sendToBAck1.timeRange = timeInHour,
+    sendToBAck1.zaehlerName = this.zaehlerNamen[0]
     this.dataServ.DataFromShelly3emOhs2301(sendToBAck1).subscribe((fromApi:any)=>{
-      let dataPts = [];
-      for(var item of fromApi){ // parcourir la liste des donnees
-          const xyValue = {
-            x: new Date(item._time),
-            y: item._value,
-          };
 
-          dataPts.push(xyValue);
-          this.yValues1.push(xyValue.y);
-          this.xValues.push(xyValue.x)
-          
-      }
-    
-      dataPts.sort((b:any, a:any) => b.x.getTime() - a.x.getTime());
-
-      this.shelly01 = {
-        type: 'area',
-        name: 'ZaehlerName 1',
-        showInLegend: true,
-        legendMarkerType: 'square',
-        color: 'rgba(138, 58, 45,0.8)',
-        markerSize: 0,
-        dataPoints: dataPts,
-      };
-    
-      this.allData.push(this.shelly01);
+      this.getShellyData(fromApi, this.zaehlerNamen[0], "rgba(26, 26, 255, 0.05)", "splineArea");
 
     });
+    
+    ////////////// for shelly02
   
     let sendToBAck2 = new RufZaehler();
-    sendToBAck2.timeRange = 5,
-    sendToBAck2.zaehlerName = "shelly-3em-ohs23-02";
+    sendToBAck2.timeRange = timeInHour,
+    sendToBAck2.zaehlerName = this.zaehlerNamen[1];
     this.dataServ.DataFromShelly3emOhs2302(sendToBAck2).subscribe((fromApi:any)=>{
-      let dataPts = [];
-      for(var item of fromApi){ // parcourir la liste des donnees
-          const xyValue = {
-            x: new Date(item._time),
-            y: item._value,
-          };
 
-          dataPts.push(xyValue);
-      }
-    
-      dataPts.sort((b:any, a:any) => b.x.getTime() - a.x.getTime());
-
-      this.shelly02 = {
-        type: 'area',
-        name: 'ZaehlerName 2',
-        showInLegend: true,
-        legendMarkerType: 'square',
-        color: 'rgba(182, 84, 214,0.3)',
-        markerSize: 0,
-        dataPoints: dataPts,
-      };
-    
-      this.allData.push(this.shelly01);
+      this.getShellyData(fromApi, this.zaehlerNamen[1], "rgba(230, 0, 172, 0.4)", "splineArea");
 
     });
 
     let sendToBAck3 = new RufZaehler();
-    sendToBAck3.timeRange = 5,
-    sendToBAck3.zaehlerName = "shelly-3em-ohs23-03";
+    sendToBAck3.timeRange = timeInHour,
+    sendToBAck3.zaehlerName = this.zaehlerNamen[2];
     this.dataServ.DataFromShelly3emOhs2303(sendToBAck3).subscribe((fromApi:any)=>{
-      let dataPts = [];
-      for(var item of fromApi){ // parcourir la liste des donnees
-          const xyValue = {
-            x: new Date(item._time),
-            y: item._value,
-          };
 
-          dataPts.push(xyValue);
-      }
-    
-      dataPts.sort((b:any, a:any) => b.x.getTime() - a.x.getTime());
-
-      this.shelly03 = {
-        type: 'area',
-        name: 'ZaehlerName 3',
-        showInLegend: true,
-        legendMarkerType: 'square',
-        color: 'rgba(176, 82, 53,0.8)',
-        markerSize: 0,
-        dataPoints: dataPts,
-      };
-    
-      this.allData.push(this.shelly03);
+      this.getShellyData(fromApi, this.zaehlerNamen[2], "rgba(0, 204, 204, 0.5)", "splineArea");
 
     });
 
     let sendToBAck4 = new RufZaehler();
-    sendToBAck4.timeRange = 5,
-    sendToBAck4.zaehlerName = "shelly-3em-ohs23-04";
+    sendToBAck4.timeRange = timeInHour,
+    sendToBAck4.zaehlerName = this.zaehlerNamen[3];
     this.dataServ.DataFromShelly3emOhs2304(sendToBAck4).subscribe((fromApi:any)=>{
-      let dataPts = [];
-      for(var item of fromApi){ // parcourir la liste des donnees
-          const xyValue = {
-            x: new Date(item._time),
-            y: item._value,
-          };
 
-          dataPts.push(xyValue);
-      }
-    
-      dataPts.sort((b:any, a:any) => b.x.getTime() - a.x.getTime());
-
-      this.shelly04 = {
-        type: 'area',
-        name: 'ZaehlerName 4',
-        showInLegend: true,
-        legendMarkerType: 'square',
-        color: 'rgba(0,75,141,0.7)',
-        markerSize: 0,
-        dataPoints: dataPts,
-      };
-    
-      this.allData.push(this.shelly04);
+      this.getShellyData(fromApi, this.zaehlerNamen[3], "rgba(255, 26, 117, 0.5)", "splineArea");
 
     });
 
     let sendToBAck5 = new RufZaehler();
-    sendToBAck5.timeRange = 5,
-    sendToBAck5.zaehlerName = "shelly-3em-ohs23-05";
+    sendToBAck5.timeRange = timeInHour,
+    sendToBAck5.zaehlerName = this.zaehlerNamen[4];
     this.dataServ.DataFromShelly3emOhs2305(sendToBAck5).subscribe((fromApi:any)=>{
-      let dataPts = [];
-      for(var item of fromApi){ // parcourir la liste des donnees
-        const xyValue = {
-          x: new Date(item._time),
-          y: item._value,
-        };
-        dataPts.push(xyValue);
-      }
 
-      dataPts.sort((b:any, a:any) => b.x.getTime() - a.x.getTime());
-    
-      this.shelly05 = {
-        type: 'area',
-        name: 'ZaehlerName 5',
-        showInLegend: true,
-        legendMarkerType: 'square',
-        color: 'rgba(40,175,101,0.6)',
-        markerSize: 0,
-        dataPoints: dataPts,
-      };
-      
-    
-      this.allData.push(this.shelly05);
+      this.getShellyData(fromApi, this.zaehlerNamen[4], "rgba(255, 179, 203, 0.6)", "splineArea");
 
     });
 
     let sendToBAck6 = new RufZaehler();
-    sendToBAck6.timeRange = 5,
-    sendToBAck6.zaehlerName = "XX-06";
-    this.dataServ.DataFromShelly3emOhs2305(sendToBAck6).subscribe((fromApi:any)=>{
-      let dataPts = [];
-      for(var item of fromApi){ // parcourir la liste des donnees
-        const xyValue = {
-          x: new Date(item._time),
-          y: item._value,
-        };
-        dataPts.push(xyValue);
-      }
+    sendToBAck6.timeRange = timeInHour,
+    sendToBAck6.zaehlerName = this.hauptzaehlerNamen[0];
+    this.dataServ.DataFromXX06(sendToBAck6).subscribe((fromApi:any)=>{
 
-      dataPts.sort((b:any, a:any) => b.x.getTime() - a.x.getTime());
-    
-      this.xx06 = {
-        type: 'area',
-        name: 'hauptzaehler 1',
-        showInLegend: true,
-        legendMarkerType: 'square',
-        color: 'rgba(94, 120, 140,0.6)',
-        markerSize: 0,
-        dataPoints: dataPts,
-      };
-      
-    
-      this.allData.push(this.xx06);
+      this.getShellyData(fromApi, this.hauptzaehlerNamen[0], "rgba(229, 255, 255, 0.8)", "splineArea");
 
     });
 
     let sendToBAck7 = new RufZaehler();
-    sendToBAck7.timeRange = 5,
-    sendToBAck7.zaehlerName = "XX-07";
-    this.dataServ.DataFromShelly3emOhs2305(sendToBAck7).subscribe((fromApi:any)=>{
-      let dataPts = [];
-      for(var item of fromApi){ // parcourir la liste des donnees
-        const xyValue = {
-          x: new Date(item._time),
-          y: item._value,
-        };
-        dataPts.push(xyValue);
-      }
+    sendToBAck7.timeRange = timeInHour,
+    sendToBAck7.zaehlerName = this.hauptzaehlerNamen[1];
+    this.dataServ.DataFromXX07(sendToBAck7).subscribe((fromApi:any)=>{
 
-      dataPts.sort((b:any, a:any) => b.x.getTime() - a.x.getTime());
-    
-      this.xx07 = {
-        type: 'area',
-        name: 'hauptzaehler 2',
-        showInLegend: true,
-        legendMarkerType: 'square',
-        color: 'rgba(59, 112, 168,0.6)',
-        markerSize: 0,
-        dataPoints: dataPts,
-      };
-      
-    
-      this.allData.push(this.xx07);
+      this.getShellyData(fromApi, this.hauptzaehlerNamen[1], "rgba(255, 255, 229, 0.9)", "splineArea");
 
     });
-
 
 
     const tmp = {data: this.allData}
 
     this.multiAreaChart = {...this.multiAreaChart, ...tmp};
-    console.log("multiareaChart:",this.multiAreaChart);    
+
+    console.log("multiAreaChart", this.multiAreaChart);
     
 
-    this.MyLineChart = new Chart('MyBarChart', {
-      type: 'bar',
-      data: {
-        labels: this.xValues,
-        datasets: [
-          {
-            label: "this.Hauptzähler1",
-            data: this.yValues1,
-            borderWidth: 1,
-          },
-          {
-            label: "this.Hauptzähler2",
-            data: this.yValues1,
-            borderWidth: 1,
-          },
-          {
-            label: this.Zähler1,
-            data: this.yValues3,
-            borderWidth: 1,
-          },
-          {
-            label: this.Zähler2,
-            data: this.yValues4,
-            borderWidth: 1,
-          },
-          {
-            label: this.Zähler3,
-            data: this.yValues5,
-            borderWidth: 1,
-          },
-          {
-            label: this.Zähler4,
-            data: this.yValues6,
-            borderWidth: 1,
-          },
-          {
-            label: this.Zähler5,
-            data: this.yValues7,
-            borderWidth: 1,
-          }
-        ],
-      },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true,
-          },
-        },
-      },
-    });
+    this.isChartLoading = true;
 
-    console.log("bar: ",this.barChart);
+    console.log("is it TrueOrFalse? = ",this.isChartLoading);
+    
+
+  }
+
+
+  getShellyData(fromApi: any, shellyName: string, colorRGBA: string, typeName: string){
+    let dataPts = [];
+    for(var item of fromApi){ // parcourir la liste des donnees
+      const xyValue = {
+        x: new Date(item._time),
+        y: item._value,
+      };
+
+      dataPts.push(xyValue);
+    }
   
-    
+    dataPts.sort((b:any, a:any) => b.x.getTime() - a.x.getTime());
+
+    const shelly = {
+      type: typeName,
+      showInLegend: true,
+      name: shellyName,
+      markerSize: 0,
+      color: colorRGBA,
+      dataPoints: dataPts
+    };
+  
+    this.allData.push(shelly);
   }
 
-
-
-  //ngOnInit Method
-  ngOnInit() {
-    this.barChart = {
-      animationEnabled: true,
-      exportEnabled: true,
-      title: {
-          text: "Annual Expenses"
-      },
-      axisY: {
-          prefix: "$"
-      },
-      toolTip: {
-          shared: true,
-          content: "{name}: ${y}"
-      },
-      legend: {
-          fontSize: 13
-      },
-      data: [{
-          type: "splineArea",
-          showInLegend: true,
-          name: "Salaries",
-          markerSize: 0,
-          color: "rgba(54,158,173,.9)",
-          dataPoints: [
-              { x: new Date(2020, 0), y: 3000000 },
-              { x: new Date(2020, 1), y: 3500000 },
-              { x: new Date(2020, 2), y: 3000000 },
-              { x: new Date(2020, 3), y: 3040000 },
-              { x: new Date(2020, 4), y: 2090000 },
-              { x: new Date(2020, 5), y: 3100000 },
-              { x: new Date(2020, 6), y: 3020000 },
-              { x: new Date(2020, 7), y: 3000000 },
-              { x: new Date(2020, 8), y: 3300000 },
-              { x: new Date(2020, 9), y: 3800000 },
-              { x: new Date(2020, 10), y: 3890000 },
-              { x: new Date(2020, 11), y: 3900000 }
-          ]
-      },
-      {
-          type: "splineArea",
-          showInLegend: true,
-          name: "Office Cost",
-          markerSize: 0,
-          color: "rgba(134,180,2,.9)",
-          dataPoints: [
-              { x: new Date(2020, 0), y: 2010000 },
-              { x: new Date(2020, 1), y: 1600000 },
-              { x: new Date(2020, 2), y: 1400000 },
-              { x: new Date(2020, 3), y: 1800000 },
-              { x: new Date(2020, 4), y: 1800000 },
-              { x: new Date(2020, 5), y: 2100000 },
-              { x: new Date(2020, 6), y: 2200000 },
-              { x: new Date(2020, 7), y: 2500000 },
-              { x: new Date(2020, 8), y: 2300000 },
-              { x: new Date(2020, 9), y: 2500000 },
-              { x: new Date(2020, 10), y: 2600000 },
-              { x: new Date(2020, 11), y: 2500000 }
-          ]
-      },
-      {
-          type: "splineArea",
-          showInLegend: true,
-          name: "Entertainment",
-          markerSize: 0,
-          color: "rgba(194,70,66,.9)",
-          dataPoints: [
-              { x: new Date(2020, 0), y: 1010000 },
-              { x: new Date(2020, 1), y: 600000 },
-              { x: new Date(2020, 2), y: 340000 },
-              { x: new Date(2020, 3), y: 400000 },
-              { x: new Date(2020, 4), y: 900000 },
-              { x: new Date(2020, 5), y: 390000 },
-              { x: new Date(2020, 6), y: 420000 },
-              { x: new Date(2020, 7), y: 500000 },
-              { x: new Date(2020, 8), y: 1430000 },
-              { x: new Date(2020, 9), y: 1230000 },
-              { x: new Date(2020, 10), y: 830000 },
-              { x: new Date(2020, 11), y: 630000 }
-          ]
-      },
-      {
-          type: "splineArea",
-          showInLegend: true,
-          name: "Maintenance",
-          markerSize: 0,
-          color: "rgba(127,96,132,.9)",
-          dataPoints: [
-              { x: new Date(2020, 0), y: 170000 },
-              { x: new Date(2020, 1), y: 260000 },
-              { x: new Date(2020, 2), y: 100000 },
-              { x: new Date(2020, 3), y: 140000 },
-              { x: new Date(2020, 4), y: 90000 },
-              { x: new Date(2020, 5), y: 100000 },
-              { x: new Date(2020, 6), y: 120000 },
-              { x: new Date(2020, 7), y: 500000 },
-              { x: new Date(2020, 8), y: 130000 },
-              { x: new Date(2020, 9), y: 230000 },
-              { x: new Date(2020, 10), y: 280000 },
-              { x: new Date(2020, 11), y: 130000 }
-          ]
-        }]
-    }
-  }
 
 }
