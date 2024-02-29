@@ -30,8 +30,8 @@ export class DashboardComponent implements OnInit{
   areaChart: any = [];
   dataVisual!: any;
 
-  Hauptzähler1 = "xx6";
-  Hauptzähler2 = "xx7";
+  Hauptzähler1 = "EBZDD3";
+  Hauptzähler2 = "ITRON";
  
 
   multiAreaChart = {
@@ -45,7 +45,7 @@ export class DashboardComponent implements OnInit{
     },
     toolTip: {
         shared: true,
-        content: "{name}: ${y}"
+        content: "{name}: {y} kwh"
     },
     legend: {
         fontSize: 13
@@ -56,8 +56,8 @@ export class DashboardComponent implements OnInit{
 
   stackedChart!:any;
  
-  sumHauptzähler1: any = 0;
-  sumHauptzähler2: any = 0;
+  sumHauptzaehler1: any = 0;
+  sumHauptzaehler2: any = 0;
   yValues7: number[] = [];
 
   zaehlerNamen = [
@@ -69,14 +69,14 @@ export class DashboardComponent implements OnInit{
   ]
 
   hauptzaehlerNamen = [
-    "XX-06", // 0
-    "XX-07", // 1
+    "EBZDD3", // 0
+    "ITRON", // 1
   ]
  
   
 
   constructor(private dataServ: DataService){
-    this.getAreaChartGraph(this.timeRange);
+    //this.getAreaChartGraph(this.timeRange);
   }
 
 
@@ -85,87 +85,129 @@ export class DashboardComponent implements OnInit{
    
   }
 
-  showShellys(event: any){
-    console.log("event = ", event.target.defaultValue);
+  showCheckedShellys(event: any){
 
+    console.log("-----------------------begin-------------------");
+    console.log("event = ", event.target.defaultValue);
+    console.log("isChecked: ", event.target.checked);
+    
+    
     // reinitialier allData
-    this.allData = [];
 
     switch(event.target.defaultValue){
       case "shelly-3em-ohs23-01":
         // TODO: appel shelly1
-        let sendToBAck1 = new RufZaehler();
-        sendToBAck1.timeRange = this.timeRange,
-        sendToBAck1.zaehlerName = this.zaehlerNamen[0]
-        this.dataServ.DataFromShelly3emOhs2301(sendToBAck1).subscribe((fromApi:any)=>{
-
-          this.getShellyData(fromApi, this.zaehlerNamen[0], "rgba(26, 26, 255, 1)", "splineArea");
-
-          const tmp = {data: this.allData}
-          this.multiAreaChart = {...this.multiAreaChart, ...tmp};
-          this.isChartLoading = true;
-
-        });
+        if(event.target.checked == true){
+          const isAny = this.allData.filter(item => item.name === event.target.defaultValue);
+          
+          if(isAny.length == 0){
+            let sendToBAck1 = new RufZaehler();
+            sendToBAck1.timeRange = this.timeRange,
+            sendToBAck1.zaehlerName = this.zaehlerNamen[0]
+            this.dataServ.DataFromShelly3emOhs2301(sendToBAck1).subscribe((fromApi:any)=>{
     
+              this.getShellyData(fromApi, this.zaehlerNamen[0], "rgba(26, 26, 255, 1)", "splineArea");
+            });
+          }
+
+        }else{
+          // enlever le shelly s'il n'est pas cocher
+          this.allData = this.allData.filter(item => item.name !== event.target.defaultValue);
+          
+        }
+        
         break;
       case "shelly-3em-ohs23-02":
-        let sendToBAck2 = new RufZaehler();
-        sendToBAck2.timeRange = this.timeRange,
-        sendToBAck2.zaehlerName = this.zaehlerNamen[1];
-        this.dataServ.DataFromShelly3emOhs2302(sendToBAck2).subscribe((fromApi:any)=>{
+        if(event.target.checked == true){
+          const isAny = this.allData.filter(item => item.name === event.target.defaultValue);
 
-          this.getShellyData(fromApi, this.zaehlerNamen[1], "rgba(230, 0, 172, 0.4)", "splineArea");
-
-          const tmp = {data: this.allData}
-          this.multiAreaChart = {...this.multiAreaChart, ...tmp};
-          this.isChartLoading = true;
-
-        });
+          if(isAny.length == 0){
+            let sendToBAck2 = new RufZaehler();
+            sendToBAck2.timeRange = this.timeRange,
+            sendToBAck2.zaehlerName = this.zaehlerNamen[1];
+            this.dataServ.DataFromShelly3emOhs2302(sendToBAck2).subscribe((fromApi:any)=>{
+    
+              this.getShellyData(fromApi, this.zaehlerNamen[1], "rgba(230, 0, 172, 0.4)", "splineArea");
+    
+            });
+          }
+          
+        }else{
+          // enlever le shelly s'il n'est pas cocher
+          this.allData = this.allData.filter(item => item.name !== event.target.defaultValue);
+        }
+        
         break;
       case "shelly-3em-ohs23-03":
-        let sendToBAck3 = new RufZaehler();
-        sendToBAck3.timeRange = this.timeRange,
-        sendToBAck3.zaehlerName = this.zaehlerNamen[2];
-        this.dataServ.DataFromShelly3emOhs2303(sendToBAck3).subscribe((fromApi:any)=>{
-
-          this.getShellyData(fromApi, this.zaehlerNamen[2], "rgba(0, 204, 204, 0.5)", "splineArea");
-          const tmp = {data: this.allData}
-          this.multiAreaChart = {...this.multiAreaChart, ...tmp};
-          this.isChartLoading = true;
-
-
-        });
+        if(event.target.checked == true){
+          const isAny = this.allData.filter(item => item.name === event.target.defaultValue);
+        
+        if(isAny.length == 0){
+          let sendToBAck3 = new RufZaehler();
+          sendToBAck3.timeRange = this.timeRange,
+          sendToBAck3.zaehlerName = this.zaehlerNamen[2];
+          this.dataServ.DataFromShelly3emOhs2303(sendToBAck3).subscribe((fromApi:any)=>{
+  
+            this.getShellyData(fromApi, this.zaehlerNamen[2], "rgba(0, 204, 204, 0.5)", "splineArea");
+  
+          });
+        }
+      }else{
+        // enlever le shelly s'il n'est pas cocher
+        this.allData = this.allData.filter(item => item.name !== event.target.defaultValue);
+      }
+        
         break;
       case "shelly-3em-ohs23-04":
-        let sendToBAck4 = new RufZaehler();
-        sendToBAck4.timeRange = this.timeRange,
-        sendToBAck4.zaehlerName = this.zaehlerNamen[3];
-        this.dataServ.DataFromShelly3emOhs2304(sendToBAck4).subscribe((fromApi:any)=>{
+        if(event.target.checked == true){
+          const isAny = this.allData.filter(item => item.name === event.target.defaultValue);
 
-          this.getShellyData(fromApi, this.zaehlerNamen[3], "rgba(255, 26, 117, 0.5)", "splineArea");
-
-          const tmp = {data: this.allData}
-          this.multiAreaChart = {...this.multiAreaChart, ...tmp};
-          this.isChartLoading = true;
-
-        });
+        if(isAny.length == 0){
+          let sendToBAck4 = new RufZaehler();
+          sendToBAck4.timeRange = this.timeRange,
+          sendToBAck4.zaehlerName = this.zaehlerNamen[3];
+          this.dataServ.DataFromShelly3emOhs2304(sendToBAck4).subscribe((fromApi:any)=>{
+  
+            this.getShellyData(fromApi, this.zaehlerNamen[3], "rgba(255, 26, 117, 0.5)", "splineArea");
+  
+          });
+        }
+      }else{
+        // enlever le shelly s'il n'est pas cocher
+        this.allData = this.allData.filter(item => item.name !== event.target.defaultValue);
+      }
+        
         break;
       case "shelly-3em-ohs23-05":
-        let sendToBAck5 = new RufZaehler();
-        sendToBAck5.timeRange = this.timeRange,
-        sendToBAck5.zaehlerName = this.zaehlerNamen[4];
-        this.dataServ.DataFromShelly3emOhs2305(sendToBAck5).subscribe((fromApi:any)=>{
 
-          this.getShellyData(fromApi, this.zaehlerNamen[4], "rgba(255, 179, 203, 0.6)", "splineArea");
+      if(event.target.checked == true){
+        const isAny = this.allData.filter(item => item.name === event.target.defaultValue);
 
-          const tmp = {data: this.allData}
-          this.multiAreaChart = {...this.multiAreaChart, ...tmp};
-          this.isChartLoading = true;
-
-        });
+        if(isAny.length == 0){
+          let sendToBAck5 = new RufZaehler();
+          sendToBAck5.timeRange = this.timeRange,
+          sendToBAck5.zaehlerName = this.zaehlerNamen[4];
+          this.dataServ.DataFromShelly3emOhs2305(sendToBAck5).subscribe((fromApi:any)=>{
+  
+            this.getShellyData(fromApi, this.zaehlerNamen[4], "rgb(455, 26, 117, 0.6)", "splineArea");
+  
+  
+          });  
+        }
+      }else{
+        // enlever le shelly s'il n'est pas cocher
+        this.allData = this.allData.filter(item => item.name !== event.target.defaultValue);
+      }
 
         break;
     }
+
+    
+    const tmp = {data: this.allData}
+    this.multiAreaChart = {...this.multiAreaChart, ...tmp};
+    this.isChartLoading = true;
+
+    console.log("-----------------------end-------------------");
     
   }
 
@@ -220,24 +262,6 @@ export class DashboardComponent implements OnInit{
 
     });
 
-    let sendToBAck6 = new RufZaehler();
-    sendToBAck6.timeRange = timeInHour,
-    sendToBAck6.zaehlerName = this.hauptzaehlerNamen[0];
-    this.dataServ.DataFromXX06(sendToBAck6).subscribe((fromApi:any)=>{
-
-      this.getShellyData(fromApi, this.hauptzaehlerNamen[0], "rgba(229, 255, 255, 0.8)", "splineArea");
-
-    });
-
-    let sendToBAck7 = new RufZaehler();
-    sendToBAck7.timeRange = timeInHour,
-    sendToBAck7.zaehlerName = this.hauptzaehlerNamen[1];
-    this.dataServ.DataFromXX07(sendToBAck7).subscribe((fromApi:any)=>{
-
-      this.getShellyData(fromApi, this.hauptzaehlerNamen[1], "rgba(255, 255, 229, 0.9)", "splineArea");
-
-    });
-
 
     const tmp = {data: this.allData}
 
@@ -254,20 +278,42 @@ export class DashboardComponent implements OnInit{
   }
 
 
-  getShellyData(fromApi: any, shellyName: string, colorRGBA: string, typeName: string){
-    let dataPts = [];
+  getShellyData(fromApi: any, shellyName: string, colorRGBA: string, typeName: string) {
+    let dataPhase0 = [];
+    let dataPhase1 = [];
+    let dataPhase2 = []; 
+
     for(var item of fromApi){ // parcourir la liste des donnees
       const xyValue = {
         x: new Date(item._time),
         y: item._value,
       };
 
+      if(item.phase == "0"){
+        dataPhase0.push(xyValue);
+      }else if(item.phase == "1"){
+        dataPhase1.push(xyValue);
+      }else if(item.phase == "2"){
+        dataPhase2.push(xyValue);
+      }
+    }
+
+    dataPhase0.sort((b:any, a:any) => b.x.getTime() - a.x.getTime());
+    dataPhase1.sort((b:any, a:any) => b.x.getTime() - a.x.getTime());
+    dataPhase2.sort((b:any, a:any) => b.x.getTime() - a.x.getTime());
+
+    let dataPts = [];
+
+    for(let i = 0; i < dataPhase0.length; i++){
+      const xyValue = {
+        x: dataPhase0[i].x,
+        y: (dataPhase0[i].y + dataPhase1[i].y + dataPhase2[i].y) / 3
+      };
+
       dataPts.push(xyValue);
     }
   
-    dataPts.sort((b:any, a:any) => b.x.getTime() - a.x.getTime());
-
-    const shelly = {
+    const shelly =  {
       type: typeName,
       showInLegend: true,
       name: shellyName,

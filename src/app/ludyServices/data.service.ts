@@ -56,11 +56,11 @@ with the HttpClient for making HTTP requests  */
     return this.http.post("http://localhost:5000/api/data/compteurs/Shelly3emOhs2301", ruf); // cette ligne permet d'appeler le backend
   }
 
-  DataFromXX06(ruf: RufZaehler){
-    return this.http.post("http://localhost:5000/api/data/compteurs/XX06", ruf); // cette ligne permet d'appeler le backend
+  DataFromEBZDD3(ruf: RufZaehler){
+    return this.http.post("http://localhost:5000/api/data/compteurs/EBZDD3", ruf); // cette ligne permet d'appeler le backend
   }
-  DataFromXX07(ruf: RufZaehler){
-    return this.http.post("http://localhost:5000/api/data/compteurs/XX07", ruf); // cette ligne permet d'appeler le backend
+  DataFromITRON(ruf: RufZaehler){
+    return this.http.post("http://localhost:5000/api/data/compteurs/ITRON", ruf); // cette ligne permet d'appeler le backend
   }
 
   

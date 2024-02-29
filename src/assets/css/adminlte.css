@@ -26650,7 +26650,7 @@ body.text-sm .input-group-text {
 }
 
 .card-primary:not(.card-outline) > .card-header {
-  background-color: #007bff;
+  background-color: #90a4ae;
 }
 
 .card-primary:not(.card-outline) > .card-header,
@@ -29088,7 +29088,7 @@ html.maximized-card {
 }
 
 .dark-mode .card-primary:not(.card-outline) > .card-header {
-  background-color: #3f6791;
+  background-color:#90a4ae;
 }
 
 .dark-mode .card-primary:not(.card-outline) > .card-header,
