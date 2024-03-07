@@ -104,7 +104,7 @@ export class DashboardComponent implements OnInit{
             let sendToBAck1 = new RufZaehler();
             sendToBAck1.timeRange = this.timeRange,
             sendToBAck1.zaehlerName = this.zaehlerNamen[0]
-            this.dataServ.DataFromShelly3emOhs2301(sendToBAck1).subscribe((fromApi:any)=>{
+            this.dataServ.DataFromShelly(sendToBAck1).subscribe((fromApi:any)=>{
     
               this.getShellyData(fromApi, this.zaehlerNamen[0], "rgba(26, 26, 255, 1)", "splineArea");
             });
@@ -125,7 +125,7 @@ export class DashboardComponent implements OnInit{
             let sendToBAck2 = new RufZaehler();
             sendToBAck2.timeRange = this.timeRange,
             sendToBAck2.zaehlerName = this.zaehlerNamen[1];
-            this.dataServ.DataFromShelly3emOhs2302(sendToBAck2).subscribe((fromApi:any)=>{
+            this.dataServ.DataFromShelly(sendToBAck2).subscribe((fromApi:any)=>{
     
               this.getShellyData(fromApi, this.zaehlerNamen[1], "rgba(230, 0, 172, 0.4)", "splineArea");
     
@@ -146,7 +146,7 @@ export class DashboardComponent implements OnInit{
           let sendToBAck3 = new RufZaehler();
           sendToBAck3.timeRange = this.timeRange,
           sendToBAck3.zaehlerName = this.zaehlerNamen[2];
-          this.dataServ.DataFromShelly3emOhs2303(sendToBAck3).subscribe((fromApi:any)=>{
+          this.dataServ.DataFromShelly(sendToBAck3).subscribe((fromApi:any)=>{
   
             this.getShellyData(fromApi, this.zaehlerNamen[2], "rgba(0, 204, 204, 0.5)", "splineArea");
   
@@ -166,7 +166,7 @@ export class DashboardComponent implements OnInit{
           let sendToBAck4 = new RufZaehler();
           sendToBAck4.timeRange = this.timeRange,
           sendToBAck4.zaehlerName = this.zaehlerNamen[3];
-          this.dataServ.DataFromShelly3emOhs2304(sendToBAck4).subscribe((fromApi:any)=>{
+          this.dataServ.DataFromShelly(sendToBAck4).subscribe((fromApi:any)=>{
   
             this.getShellyData(fromApi, this.zaehlerNamen[3], "rgba(255, 26, 117, 0.5)", "splineArea");
   
@@ -187,7 +187,7 @@ export class DashboardComponent implements OnInit{
           let sendToBAck5 = new RufZaehler();
           sendToBAck5.timeRange = this.timeRange,
           sendToBAck5.zaehlerName = this.zaehlerNamen[4];
-          this.dataServ.DataFromShelly3emOhs2305(sendToBAck5).subscribe((fromApi:any)=>{
+          this.dataServ.DataFromShelly(sendToBAck5).subscribe((fromApi:any)=>{
   
             this.getShellyData(fromApi, this.zaehlerNamen[4], "rgb(455, 26, 117, 0.6)", "splineArea");
   
@@ -218,7 +218,7 @@ export class DashboardComponent implements OnInit{
     let sendToBAck1 = new RufZaehler();
     sendToBAck1.timeRange = timeInHour,
     sendToBAck1.zaehlerName = this.zaehlerNamen[0]
-    this.dataServ.DataFromShelly3emOhs2301(sendToBAck1).subscribe((fromApi:any)=>{
+    this.dataServ.DataFromShelly(sendToBAck1).subscribe((fromApi:any)=>{
 
       this.getShellyData(fromApi, this.zaehlerNamen[0], "rgba(26, 26, 255, 0.05)", "splineArea");
 
@@ -229,7 +229,7 @@ export class DashboardComponent implements OnInit{
     let sendToBAck2 = new RufZaehler();
     sendToBAck2.timeRange = timeInHour,
     sendToBAck2.zaehlerName = this.zaehlerNamen[1];
-    this.dataServ.DataFromShelly3emOhs2302(sendToBAck2).subscribe((fromApi:any)=>{
+    this.dataServ.DataFromShelly(sendToBAck2).subscribe((fromApi:any)=>{
 
       this.getShellyData(fromApi, this.zaehlerNamen[1], "rgba(230, 0, 172, 0.4)", "splineArea");
 
@@ -238,7 +238,7 @@ export class DashboardComponent implements OnInit{
     let sendToBAck3 = new RufZaehler();
     sendToBAck3.timeRange = timeInHour,
     sendToBAck3.zaehlerName = this.zaehlerNamen[2];
-    this.dataServ.DataFromShelly3emOhs2303(sendToBAck3).subscribe((fromApi:any)=>{
+    this.dataServ.DataFromShelly(sendToBAck3).subscribe((fromApi:any)=>{
 
       this.getShellyData(fromApi, this.zaehlerNamen[2], "rgba(0, 204, 204, 0.5)", "splineArea");
 
@@ -247,7 +247,7 @@ export class DashboardComponent implements OnInit{
     let sendToBAck4 = new RufZaehler();
     sendToBAck4.timeRange = timeInHour,
     sendToBAck4.zaehlerName = this.zaehlerNamen[3];
-    this.dataServ.DataFromShelly3emOhs2304(sendToBAck4).subscribe((fromApi:any)=>{
+    this.dataServ.DataFromShelly(sendToBAck4).subscribe((fromApi:any)=>{
 
       this.getShellyData(fromApi, this.zaehlerNamen[3], "rgba(255, 26, 117, 0.5)", "splineArea");
 
@@ -256,7 +256,7 @@ export class DashboardComponent implements OnInit{
     let sendToBAck5 = new RufZaehler();
     sendToBAck5.timeRange = timeInHour,
     sendToBAck5.zaehlerName = this.zaehlerNamen[4];
-    this.dataServ.DataFromShelly3emOhs2305(sendToBAck5).subscribe((fromApi:any)=>{
+    this.dataServ.DataFromShelly(sendToBAck5).subscribe((fromApi:any)=>{
 
       this.getShellyData(fromApi, this.zaehlerNamen[4], "rgba(255, 179, 203, 0.6)", "splineArea");
 

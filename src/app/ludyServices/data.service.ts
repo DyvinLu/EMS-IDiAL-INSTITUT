@@ -31,37 +31,15 @@ with the HttpClient for making HTTP requests  */
     //this.getAllData();
   }
 
-  /* HTTP Request Method: Defines a method getAllDataFromCompteurs()
-  that makes an HTTP GET request to the specified endpoint */
-  getAllDataFromCompteurs(){
-    return this.http.get("http://localhost:5000/api/data/compteurs/live"); // cette ligne permet d'appeler le backend
+
+  DataFromShelly(ruf: RufZaehler){
+    return this.http.post("http://localhost:5000/api/data/shelly", ruf); // cette ligne permet d'appeler le backend
   }
 
-  DataFromShelly3emOhs2305(ruf: RufZaehler){
-    return this.http.post("http://localhost:5000/api/data/compteurs/Shelly3emOhs2305", ruf); // cette ligne permet d'appeler le backend
+  DataFromHauptZaehler(ruf: RufZaehler){
+    return this.http.post("http://localhost:5000/api/data/hauptzaehler", ruf); // cette ligne permet d'appeler le backend
   }
 
-  DataFromShelly3emOhs2304(ruf: RufZaehler){
-    return this.http.post("http://localhost:5000/api/data/compteurs/Shelly3emOhs2304", ruf); // cette ligne permet d'appeler le backend
-  }
-
-  DataFromShelly3emOhs2303(ruf: RufZaehler){
-    return this.http.post("http://localhost:5000/api/data/compteurs/Shelly3emOhs2303", ruf); // cette ligne permet d'appeler le backend
-  }
-
-  DataFromShelly3emOhs2302(ruf: RufZaehler){
-    return this.http.post("http://localhost:5000/api/data/compteurs/Shelly3emOhs2302", ruf); // cette ligne permet d'appeler le backend
-  }
-  DataFromShelly3emOhs2301(ruf: RufZaehler){
-    return this.http.post("http://localhost:5000/api/data/compteurs/Shelly3emOhs2301", ruf); // cette ligne permet d'appeler le backend
-  }
-
-  DataFromEBZDD3(ruf: RufZaehler){
-    return this.http.post("http://localhost:5000/api/data/compteurs/EBZDD3", ruf); // cette ligne permet d'appeler le backend
-  }
-  DataFromITRON(ruf: RufZaehler){
-    return this.http.post("http://localhost:5000/api/data/compteurs/ITRON", ruf); // cette ligne permet d'appeler le backend
-  }
 
   
 }
