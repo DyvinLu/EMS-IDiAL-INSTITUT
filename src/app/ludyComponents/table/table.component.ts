@@ -25,12 +25,12 @@ export class TableComponent {
  getAllDataFromCompteurs() and populates the data property 
  with the received data. Logs the data to the console (for debugging purposes). */
   
-//  constructor(private dataServ: DataService){
-//     this.dataServ.getAllDataFromCompteurs().subscribe((fromAPI:any)=>{
-//       this.data = fromAPI;
-//       console.log(this.data);
-//     });
-//   }
+  constructor(private dataServ: DataService){
+     this.dataServ.getAllDataFromCompteurs().subscribe((fromAPI:any)=>{
+       this.data = fromAPI;
+       console.log(this.data);
+     });
+   }
 
 
 }
