@@ -1,0 +1,53 @@
+          <!-- STACKED BAR CHART -->
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card card-success">
+                <div class="card-header" style="background-color: #e0e0e0;">
+                  <h3 class="card-title" style="color:#1f2d3d; font-weight:bold;">Stacked Bar Chart</h3>
+                  <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                      <i class="fas fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-tool" data-card-widget="remove">
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="chart">
+                    <!-- <canvasjs-chart [options]="stackedChart" (chartInstance)="getChartInstance($event)" [styles]="{width: '100%', height: '300px', 'float': 'left' }"></canvasjs-chart> -->
+                  </div>
+                </div>
+                <!-- /.card-body -->
+              </div>
+              <!-- /.card -->
+            </div>
+          </div>
+
+
+                    <!-- AREA CHART -->
+                    <div class="row">
+                        <div class="col-md-12">
+                          <div class="card card-primary">
+                            <div class="card-header" style="background-color: #e0e0e0;">
+                              <h3 class="card-title" style="color:#1f2d3d; font-weight:bold;">Energieverbrauch</h3>
+                              <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                  <i class="fas fa-minus"></i>
+                                </button>
+                                <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                  <i class="fas fa-times"></i>
+                                </button>
+                              </div>
+                            </div>
+                            <div class="card-body">
+                              <div class="chart" *ngIf="isChartLoading">
+                                <canvasjs-chart [options]="multiAreaChart"></canvasjs-chart>
+                              </div>
+                              <!-- /.card-body -->
+                            </div>
+                            <!-- /.card -->
+                          </div>
+                          <!-- /.card -->
+                        </div>
+                      </div>

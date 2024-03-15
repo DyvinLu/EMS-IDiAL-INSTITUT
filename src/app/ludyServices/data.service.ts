@@ -34,6 +34,9 @@ with the HttpClient for making HTTP requests  */
   /* HTTP Request Method: Defines a method getAllDataFromCompteurs()
   that makes an HTTP GET request to the specified endpoint */
 
+  getAllDataFromCompteurs(){
+    return this.http.get("http://localhost:5000/api/data/compteurs/live"); // cette ligne permet d'appeler le backend
+  }
 
   DataFromShelly(ruf: RufZaehler){
     return this.http.post("http://localhost:5000/api/data/shelly", ruf); // cette ligne permet d'appeler le backend
