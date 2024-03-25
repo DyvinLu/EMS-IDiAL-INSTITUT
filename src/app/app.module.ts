@@ -14,7 +14,10 @@ import { CalenderComponent } from './ludyComponents/calender/calender.component'
 import { LoginComponent } from './ludyComponents/login/login.component';
 import { FormsModule } from '@angular/forms'; //Stellt Funktionen für das Arbeiten mit Angular-Formularen bereit.
 import { HomeComponent } from './ludyComponents/home/home.component';
-import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts'; // Ermöglicht die Verwendung von CanvasJS-Angular-Charts in der Anwendung.
+
+
+
+//import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts'; // Ermöglicht die Verwendung von CanvasJS-Angular-Charts in der Anwendung.
 
 
 // Import the module from the SDK
@@ -53,10 +56,11 @@ import { DateSelectorComponent } from './date-selector/date-selector.component';
     HttpClientModule,
     FormsModule,
     BrowserAnimationsModule,
-    CanvasJSAngularChartsModule,
+    //CanvasJSAngularChartsModule,
 
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+ 

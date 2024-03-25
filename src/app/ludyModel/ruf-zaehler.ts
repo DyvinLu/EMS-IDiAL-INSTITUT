@@ -1,6 +1,7 @@
 export class RufZaehler {
     zaehlerName!: string;
-    timeRange!: number;
+    dateStart!: Date;
+    dateEnd!: Date;
 }
 
 

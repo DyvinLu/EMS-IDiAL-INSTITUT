@@ -3,6 +3,8 @@ import Chart from 'chart.js/auto'
 import { RufZaehler } from 'src/app/ludyModel/ruf-zaehler';
 import { DataService } from 'src/app/ludyServices/data.service';
 
+
+
 //declare var $:any;
 
 @Component({
@@ -15,7 +17,13 @@ export class DashboardComponent implements OnInit{
 
   stackedChart: any;
   isChartLoading = false;
-  timeRange = 5; // temps par defaut
+  //timeRange = 1; // en terme d'heure
+  dateEnd: any = new Date(Date.now());
+  MS_PER_MINUTE = 60*60*1000;
+  dateStart = new Date(this.dateEnd.getTime() - (1 * this.MS_PER_MINUTE));
+
+
+  //timeRange = 5; // temps par defaut
   dataVisual!: any;
   allData: any[] = [];
   shellyNamen = [
@@ -55,17 +63,19 @@ export class DashboardComponent implements OnInit{
   borderColorsHauptzaehler =[
     'rgba(255, 159, 64, 1)',
     'rgba(100, 200, 159, 1)',
-  ]
- 
-  
+  ];
+
+  xAbscisse: any;
 
   constructor(private dataServ: DataService){}
 
    ngOnInit() {
-    this.stackBarChartForAllGraphs(this.timeRange);
+    this.stackBarChartForAllGraphs();
 
-    console.log("datasets = ",this.allData);
+    //console.log("datasets = ",this.allData);
   } 
+
+
 
   showCheckedShellys(event: any){
 
@@ -196,20 +206,31 @@ export class DashboardComponent implements OnInit{
   }
 
 
-    stackBarChartForAllGraphs(timeInHour: number){
+  stackBarChartForAllGraphs(){
 
+    this.allData = []
+    //debugger
     let sendToBAck = new RufZaehler();
-    sendToBAck.timeRange = timeInHour;
+    sendToBAck.dateStart = this.dateStart;
+    sendToBAck.dateEnd = this.dateEnd;
 
     for(let i = 0; i < this.shellyNamen.length; i++){
       sendToBAck.zaehlerName = "\"" + this.shellyNamen[i] + "\""
-      this.dataServ.DataFromShelly(sendToBAck).subscribe((fromApi:any)=>{
-        
-        this.getShellyDataForStackChart(fromApi, this.shellyNamen[i], this.backgroundColorsShellys[i], this.borderColorsShellys[i]);
-        
-      });
+      setTimeout(()=>{
+        this.dataServ.DataFromShelly(sendToBAck).subscribe((fromApi:any)=>{
+          console.log("i = ",i,this.allData);
+          
+          this.getShellyDataForStackChart(fromApi, this.shellyNamen[i], this.backgroundColorsShellys[i], this.borderColorsShellys[i]);
+          
+        });
+      },5000);
     }
     
+    this.allData = []
+    //debugger
+    //let sendToBAck = new RufZaehler();
+    sendToBAck.dateStart = this.dateStart;
+    sendToBAck.dateEnd = this.dateEnd;
 
     for(let i = 0; i < this.hauptZaehlerNamen.length; i++){
       sendToBAck.zaehlerName = "\"" + this.hauptZaehlerNamen[i] + "\""
@@ -220,10 +241,11 @@ export class DashboardComponent implements OnInit{
       });
     }
 
+
     this.stackedChart = new Chart('stackedBarChart', {
       type: 'bar',
       data: {
-        labels: ['Label 1', 'Label 2', 'Label 3', 'Label 4', 'Label 5'], // Hier können Sie Ihre eigenen Labels einfügen
+        labels: this.xAbscisse, // ['Label 1', 'Label 2', 'Label 3', 'Label 4', 'Label 5'], // Hier können Sie Ihre eigenen Labels einfügen
         datasets: this.allData
       },
       options: {
@@ -238,6 +260,7 @@ export class DashboardComponent implements OnInit{
       }
     });
 
+    //debugger;
     console.log("stackBarChart", this.stackedChart);
     
     this.isChartLoading = true;
@@ -246,7 +269,7 @@ export class DashboardComponent implements OnInit{
     
   }
 
-    getShellyDataForStackChart(fromApi: any, shellyName: string, backgroundColorRGBA: string, borderColorRGBA: string) {
+  getShellyDataForStackChart(fromApi: any, shellyName: string, backgroundColorRGBA: string, borderColorRGBA: string) {
     let xValues = [];
     let dataPhase0 = [];
     let dataPhase1 = [];
@@ -254,10 +277,9 @@ export class DashboardComponent implements OnInit{
 
     //debugger
     for(var item of fromApi){ // parcourir la liste des donnees
-     
-      xValues.push( new Date(item._time));
       if(item.phase == "0"){
         dataPhase0.push(item._value);
+        xValues.push( new Date(item._time));
       }else if(item.phase == "1"){
         dataPhase1.push(item._value);
       }else if(item.phase == "2"){
@@ -271,6 +293,7 @@ export class DashboardComponent implements OnInit{
       dataPts.push((dataPhase0[i] + dataPhase1[i] + dataPhase2[i]) / 3);
     }
 
+    this.xAbscisse = xValues;
     const shelly = {
       label: shellyName,
       backgroundColor: backgroundColorRGBA,
