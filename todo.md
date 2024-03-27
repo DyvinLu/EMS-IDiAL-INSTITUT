@@ -38,11 +38,11 @@ Il est question de faire ce qui suit:
 
 # 3.  Etape du Frontend
 
-## 3.1. Montrer un graph contenant tous les compteurs et tous les shelly pour les X heure passees.
+## 3.1. Montrer un graph contenant tous les compteurs et tous les shelly pour les X heure passees (PRESQUE OK).
 
 ce graph doit etre un stack bar chart. Pour cela, on doit avoir 
-- les valurs sur les axes des ordonnees (y)
-- le temps sur les axes des abscisses (x)
+- les valeurs sur les axes des ordonnees (y).La valeur est representer en KWH/Stunden. L´axe des ordonnes doit avoir un titre KWH/Stunden
+- le temps sur les axes des abscisses (x). Juste la date et l´heure doivent etre affiches selon l´interval de temps choisi
 - si le curseur se place sur un point, cela doit afficher la valeur et le nom du compteur.
 
 ## 3.2. Creer un calendrier
@@ -177,3 +177,21 @@ ceci est un algorithm
 ## 3. ecraser le koki
 ## 4. mettre le koki dan un mortier
 ## 5. ajouter les ingrdients suivant: sel, ....
+
+
+
+
+# Question 1: Comment est ce que j'ai procede' pour creer le data-model?
+
+Pour creer le fichier data-model.ts j'ai appele' la commande suivante:
+
+ng g cl ludyModel/data-model
+
+De maniere generalle, pour creer une classe dans Angular, il suffit d'appeller la commande suivante:
+
+
+ng generate class NomDuFichier  // ou alors NomDuDossier(optionel)/nomDuFichier
+
+ou bien
+
+ng g cl NomDuFichier // NomDuDossier/NomFichier

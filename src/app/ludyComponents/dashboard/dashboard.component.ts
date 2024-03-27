@@ -17,26 +17,27 @@ export class DashboardComponent implements OnInit{
 
   stackedChart: any;
   isChartLoading = false;
-  //timeRange = 1; // en terme d'heure
+  timeRange = 2; // en terme d'heure
   dateEnd: any = new Date(Date.now());
   MS_PER_MINUTE = 60*60*1000;
-  dateStart = new Date(this.dateEnd.getTime() - (1 * this.MS_PER_MINUTE));
+  dateStart = new Date(this.dateEnd.getTime() - (this.timeRange * this.MS_PER_MINUTE));
 
 
   //timeRange = 5; // temps par defaut
   dataVisual!: any;
   allData: any[] = [];
+
   shellyNamen = [
     "shelly-3em-ohs23-01", // 0
     "shelly-3em-ohs23-02", // 1
     "shelly-3em-ohs23-03", // 2
     "shelly-3em-ohs23-04", // 3
-    "shelly-3em-ohs23-05", // 0
+    "shelly-3em-ohs23-05", // 4
   ]
 
-  hauptZaehlerNamen = [
-    "EBZDD3", // 0
-    "ITRON", // 1
+  hauptZaehlerNamen = [  
+    "ITRON", // 0
+    "EBZDD3",// 1
   ]
 
   backgroundColorsShellys = [
@@ -56,13 +57,13 @@ export class DashboardComponent implements OnInit{
   ]
 
   backgroundColorsHauptzaehler =[
-    'rgba(255, 99, 132, 0.2)',
-    'rgba(255, 99, 132, 0.2)',
+    'rgba(255, 0, 0, 0.2)',
+    'rgba(0, 255, 0, 0.2)',
   ]
 
   borderColorsHauptzaehler =[
-    'rgba(255, 159, 64, 1)',
-    'rgba(100, 200, 159, 1)',
+    'rgba(255, 0, 0, 1)',
+    'rgba(0, 255, 0, 1)',
   ];
 
   xAbscisse: any;
@@ -214,58 +215,70 @@ export class DashboardComponent implements OnInit{
     sendToBAck.dateStart = this.dateStart;
     sendToBAck.dateEnd = this.dateEnd;
 
+    console.log("initialization = ",this.allData);
+
     for(let i = 0; i < this.shellyNamen.length; i++){
+      console.log("---------------------- i-:",i," start ------------------");
+      
       sendToBAck.zaehlerName = "\"" + this.shellyNamen[i] + "\""
-      setTimeout(()=>{
-        this.dataServ.DataFromShelly(sendToBAck).subscribe((fromApi:any)=>{
-          console.log("i = ",i,this.allData);
+      this.dataServ.DataFromShelly(sendToBAck).subscribe((fromApi:any)=>{
           
-          this.getShellyDataForStackChart(fromApi, this.shellyNamen[i], this.backgroundColorsShellys[i], this.borderColorsShellys[i]);
-          
-        });
-      },5000);
+        this.getShellyDataForStackChart(fromApi, this.shellyNamen[i], this.backgroundColorsShellys[i], this.borderColorsShellys[i]);
+        
+      });
+      
+      console.log("i = ",i,this.allData);
+      console.log("---------------------- i-:",i," end ------------------");
+
     }
     
-    this.allData = []
     //debugger
     //let sendToBAck = new RufZaehler();
-    sendToBAck.dateStart = this.dateStart;
-    sendToBAck.dateEnd = this.dateEnd;
+
+    console.log("initialization = ",this.allData);
 
     for(let i = 0; i < this.hauptZaehlerNamen.length; i++){
+      console.log("---------------------- i-:",i," start ------------------");
+
       sendToBAck.zaehlerName = "\"" + this.hauptZaehlerNamen[i] + "\""
       this.dataServ.DataFromHauptZaehler(sendToBAck).subscribe((fromApi:any)=>{
         
-        this.getShellyDataForStackChart(fromApi, this.hauptZaehlerNamen[i], this.backgroundColorsHauptzaehler[i], this.borderColorsHauptzaehler[i]);
+        this.getHauptzaehlerDataForStackChart(fromApi, this.hauptZaehlerNamen[i], this.backgroundColorsHauptzaehler[i], this.borderColorsHauptzaehler[i]);
         
       });
+
+            
+      console.log("i = ",i,this.allData);
+      console.log("---------------------- i-:",i," end ------------------");
     }
 
-
-    this.stackedChart = new Chart('stackedBarChart', {
-      type: 'bar',
-      data: {
-        labels: this.xAbscisse, // ['Label 1', 'Label 2', 'Label 3', 'Label 4', 'Label 5'], // Hier können Sie Ihre eigenen Labels einfügen
-        datasets: this.allData
-      },
-      options: {
-        scales: {
-          x: {
-            stacked: true // X-Achse gestapelt
-          },
-          y: {
-            stacked: true // Y-Achse gestapelt
+    setTimeout(()=>{
+      this.stackedChart = new Chart('stackedBarChart', {
+        type: 'bar',
+        data: {
+          labels: this.xAbscisse, // ['Label 1', 'Label 2', 'Label 3', 'Label 4', 'Label 5'], // Hier können Sie Ihre eigenen Labels einfügen
+          datasets: this.allData
+        },
+        options: {
+          scales: {
+            x: {
+              stacked: true // X-Achse gestapelt
+            },
+            y: {
+              stacked: true // Y-Achse gestapelt
+            }
           }
         }
-      }
-    });
-
-    //debugger;
-    console.log("stackBarChart", this.stackedChart);
+      });
+  
+      //debugger;
+      console.log("stackBarChart", this.stackedChart);
+      
+      this.isChartLoading = true;
+  
+      console.log("is it TrueOrFalse? = ",this.isChartLoading);
+    }, 5000);
     
-    this.isChartLoading = true;
-
-    console.log("is it TrueOrFalse? = ",this.isChartLoading);
     
   }
 
@@ -279,7 +292,7 @@ export class DashboardComponent implements OnInit{
     for(var item of fromApi){ // parcourir la liste des donnees
       if(item.phase == "0"){
         dataPhase0.push(item._value);
-        xValues.push( new Date(item._time));
+        xValues.push( new Date(item._time).toLocaleString());
       }else if(item.phase == "1"){
         dataPhase1.push(item._value);
       }else if(item.phase == "2"){
@@ -287,10 +300,12 @@ export class DashboardComponent implements OnInit{
       }
     }
 
+    
+
     let dataPts = [];
 
     for(let i = 0; i < dataPhase0.length; i++){
-      dataPts.push((dataPhase0[i] + dataPhase1[i] + dataPhase2[i]) / 3);
+      dataPts.push((dataPhase0[i] + dataPhase1[i] + dataPhase2[i]));
     }
 
     this.xAbscisse = xValues;
@@ -303,7 +318,30 @@ export class DashboardComponent implements OnInit{
     }
   
     this.allData.push(shelly);
+    console.log("allData = ",this.allData)
+  }
+
+  getHauptzaehlerDataForStackChart(fromApi: any, hauptZaehlerNamen: string, backgroundColorRGBA: string, borderColorRGBA: string) {
+    let dataPhase0 = [];
+
+    //debugger
+    for(var item of fromApi){ // parcourir la liste des donnees
+        dataPhase0.push(item._value);
+    }
+
+   
+    const hauptzaehler = {
+      label: hauptZaehlerNamen,
+      backgroundColor: backgroundColorRGBA,
+      borderColor: borderColorRGBA,
+      borderWidth: 1,
+      data: dataPhase0
+    }
+  
+    this.allData.push(hauptzaehler);
+    console.log("allData = ",this.allData)
   }
 
 
+  
 }
