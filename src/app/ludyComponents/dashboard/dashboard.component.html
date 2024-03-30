@@ -29,7 +29,7 @@
             <div class="col-md-12">
               <div class="card card-success">
                 <div class="card-header" style="background-color: #e0e0e0;">
-                  <h3 class="card-title" style="color:#1f2d3d; font-weight:bold;">Stacked Bar Chart</h3>
+                  <h3 class="card-title" style="color:#1f2d3d; font-weight:bold;">Live Graphische Darstellung</h3>
                   <div class="card-tools">
                     <button type="button" class="btn btn-tool" data-card-widget="collapse">
                       <i class="fas fa-minus"></i>
@@ -128,39 +128,26 @@
           </div>
           <!-- /.card -->
 
-          <!-- Konfiguration Live-Daten -->
+          <!-- Kalender mit Datum und Uhrzeit -->
           <div class="card card-warning">
             <div class="card-header" style="background-color: #e0e0e0;">
-              <h3 class="card-title" style="color:#1f2d3d; font-weight:bold;">Konfiguration Live-Daten:</h3>
+              <h3 class="card-title" style="color:#1f2d3d; font-weight:bold;">Zeitraumauswahl</h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
               <form>
                 <div class="form-group">
-                  <label>Einheiten wechseln:</label>
+                  <!-- <label>Einheiten wechseln:</label> -->
                   <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
-                    <input type="checkbox" class="custom-control-input" id="customSwitch3">
-                    <label class="custom-control-label" for="customSwitch3">W<->kW</label>
+                  <input type="text" name="datetimes" style="width: 300px; height: 70px; border-radius: 5px;text-align: center;"/> <!-- Runde Ecken mit 5px Radius --><!-- Breite des Eingabefeldes anpassen -->
                   </div>
                 </div>
-                <div class="form-group">
-                  <label for="customRange1">Fenstergröße:</label>
-                  <input type="range" class="custom-range" id="customRange1">
-                </div>
-                <div class="row">
-                  <div class="col-md-2">1h</div>
-                  <div class="col-md-2">2h</div>
-                  <div class="col-md-2">4h</div>
-                  <div class="col-md-2">6h</div>
-                  <div class="col-md-2">8h</div>
-                  <div class="col-md-2">10h</div>
-                </div>
-
               </form>
             </div>
             <!-- /.card-body -->
           </div>
           <!-- /.card -->
+
 
         </div>
       </div>

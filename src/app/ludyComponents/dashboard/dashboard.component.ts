@@ -1,19 +1,29 @@
 import { Component, OnInit } from '@angular/core';
-import Chart from 'chart.js/auto'
+import Chart from 'chart.js/auto';
 import { RufZaehler } from 'src/app/ludyModel/ruf-zaehler';
 import { DataService } from 'src/app/ludyServices/data.service';
+import * as moment from 'moment';
 
 
 
-//declare var $:any;
+const today = new Date();
+const month = today.getMonth();
+const year = today.getFullYear();
+
+declare var $:any; // Deklarieren Sie jQuery, damit TypeScript es verwenden kann
+
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+  styleUrls: ['./dashboard.component.css'],
+  //standalone: true,
+  //providers: [],
+  //imports: [MatDatepickerModule, MatFormFieldModule, FormsModule, ReactiveFormsModule], 
   
 })
 export class DashboardComponent implements OnInit{
+  //selected!: {startDate: Dayjs, endDate: Dayjs};
 
   stackedChart: any;
   isChartLoading = false;
@@ -70,13 +80,32 @@ export class DashboardComponent implements OnInit{
 
   constructor(private dataServ: DataService){}
 
-   ngOnInit() {
+
+  ngOnInit(): void {
+
+  // Lokalisieren Sie moment.js auf Deutsch
+  moment.locale('de');
+  // Initialisierung des Date Range Picker mit deutschem Datumsformat
+  $('input[name="datetimes"]').daterangepicker({
+    timePicker: true,
+    startDate: moment().startOf('hour'),
+    endDate: moment().startOf('hour').add(1, 'hour'), // Beispiel für eine Start- und Endzeit
+    locale: {
+      format: 'DD.MM.YYYY HH:mm', // Deutsches Datums- und Zeitformat
+      applyLabel: 'Anwenden',
+      cancelLabel: 'Abbrechen',
+      fromLabel: 'Von',
+      toLabel: 'Bis',
+      weekLabel: 'W',
+      customRangeLabel: 'Benutzerdefiniert',
+      daysOfWeek: moment.weekdaysMin(), // Verwenden Sie moment.js, um die Abkürzungen der Wochentage auf Deutsch zu erhalten
+      monthNames: moment.monthsShort() // Verwenden Sie moment.js, um die Abkürzungen der Monate auf Deutsch zu erhalten
+    }
+  });
+
+    // Initialisierung des gestapelten Balkendiagramms
     this.stackBarChartForAllGraphs();
-
-    //console.log("datasets = ",this.allData);
-  } 
-
-
+  }
 
   showCheckedShellys(event: any){
 
@@ -231,9 +260,6 @@ export class DashboardComponent implements OnInit{
       console.log("---------------------- i-:",i," end ------------------");
 
     }
-    
-    //debugger
-    //let sendToBAck = new RufZaehler();
 
     console.log("initialization = ",this.allData);
 
@@ -256,7 +282,7 @@ export class DashboardComponent implements OnInit{
       this.stackedChart = new Chart('stackedBarChart', {
         type: 'bar',
         data: {
-          labels: this.xAbscisse, // ['Label 1', 'Label 2', 'Label 3', 'Label 4', 'Label 5'], // Hier können Sie Ihre eigenen Labels einfügen
+          labels: this.xAbscisse, 
           datasets: this.allData
         },
         options: {
@@ -271,13 +297,12 @@ export class DashboardComponent implements OnInit{
         }
       });
   
-      //debugger;
       console.log("stackBarChart", this.stackedChart);
       
       this.isChartLoading = true;
   
       console.log("is it TrueOrFalse? = ",this.isChartLoading);
-    }, 5000);
+    }, 2000);
     
     
   }
@@ -305,7 +330,7 @@ export class DashboardComponent implements OnInit{
     let dataPts = [];
 
     for(let i = 0; i < dataPhase0.length; i++){
-      dataPts.push((dataPhase0[i] + dataPhase1[i] + dataPhase2[i]));
+      dataPts.push(dataPhase0[i] + dataPhase1[i] + dataPhase2[i]);
     }
 
     this.xAbscisse = xValues;

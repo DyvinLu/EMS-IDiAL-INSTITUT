@@ -10,11 +10,9 @@ import { AsideLeftComponent } from './ludyComponents/aside-left/aside-left.compo
 import { DashboardComponent } from './ludyComponents/dashboard/dashboard.component';
 import { FooterComponent } from './ludyComponents/footer/footer.component';
 import { TableComponent } from './ludyComponents/table/table.component';
-import { CalenderComponent } from './ludyComponents/calender/calender.component';
 import { LoginComponent } from './ludyComponents/login/login.component';
-import { FormsModule } from '@angular/forms'; //Stellt Funktionen für das Arbeiten mit Angular-Formularen bereit.
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'; //Stellt Funktionen für das Arbeiten mit Angular-Formularen bereit.
 import { HomeComponent } from './ludyComponents/home/home.component';
-
 
 
 //import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts'; // Ermöglicht die Verwendung von CanvasJS-Angular-Charts in der Anwendung.
@@ -36,7 +34,6 @@ import { DateSelectorComponent } from './date-selector/date-selector.component';
     DashboardComponent,
     FooterComponent,
     TableComponent,
-    CalenderComponent,
     LoginComponent,
     HomeComponent,
     DateSelectorComponent,
@@ -55,8 +52,10 @@ import { DateSelectorComponent } from './date-selector/date-selector.component';
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
+    ReactiveFormsModule,
     BrowserAnimationsModule,
     //CanvasJSAngularChartsModule,
+    //NgxDaterangepickerMd.forRoot()
 
   ],
   providers: [],

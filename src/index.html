@@ -7,16 +7,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 
-   <!-- Google Font: Source Sans Pro -->
-   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-   <!-- Font Awesome Icons -->
-   <link rel="stylesheet" href="assets/plugins/fontawesome-free/css/all.min.css">
-   <!-- IonIcons -->
-   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-   <!-- Theme style -->
-   <link rel="stylesheet" href="assets/dist/css/adminlte.min.css">
-     <!-- fullCalendar -->
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="assets/plugins/fontawesome-free/css/all.min.css">
+  <!-- IonIcons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="assets/dist/css/adminlte.min.css">
+  <!-- Daterange picker -->
+  <link rel="stylesheet" href="assets/plugins/daterangepicker/daterangepicker.css">
+  <!-- fullCalendar -->
   <link rel="stylesheet" href="assets/plugins/fullcalendar/main.css">
+
 
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
@@ -36,7 +39,10 @@
 <script src="assets/dist/js/adminlte.js"></script>
 <!-- fullCalendar 2.2.5 -->
 <script src="assets/plugins/moment/moment.min.js"></script>
-<!-- <script src="assets/plugins/fullcalendar/main.js"></script> -->
+<!-- daterangepicker -->
+<script src="assets/plugins/daterangepicker/daterangepicker.js"></script>
+<!-- ChartJS -->
+<script src="assets/plugins/fullcalendar/main.js"></script>
 
 <!-- OPTIONAL SCRIPTS -->
 <!-- <script src="assets/plugins/chart.js/Chart.min.js"></script> -->
@@ -46,6 +52,16 @@
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <!-- <script src="assets/dist/js/pages/dashboard3.js"></script> -->
 
+ <!-- <script>
+  $('input[name="datetimes"]').daterangepicker({
+      timePicker: true,
+      startDate: moment().startOf('hour'),
+      endDate: moment().startOf('hour').add(32, 'hour'),
+      locale: {
+        format: 'M/DD hh:mm A'
+      }
+  });
+</script> -->
 
 </body>
 </html>
