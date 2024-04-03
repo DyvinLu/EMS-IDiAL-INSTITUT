@@ -24,7 +24,7 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Table-Ansicht</h3>
+                <h3 class="card-title">Daten-Ansicht</h3>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
@@ -35,6 +35,7 @@
                     <th>Zeit</th>
                     <th>Wert</th>
                     <th>Measurement Type</th>
+                    <th>Field</th>
                     <th>Start</th>
                     <th>Stop</th>
                   </tr>
@@ -45,6 +46,7 @@
                       <td>{{item._time | date: 'dd.MM.yyyy  hh:mm'}}</td>
                       <td>{{item._value}}</td>
                       <td>{{item.measurement_type}}</td>
+                      <td>{{item._field}}</td>
                       <td>{{item._start | date: 'dd.MM.yyyy'}}</td>
                       <td> {{item._stop | date: 'dd.MM.yyyy'}}</td>
                     </tr>                 

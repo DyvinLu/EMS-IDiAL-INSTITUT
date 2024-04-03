@@ -6,9 +6,9 @@ import * as moment from 'moment';
 
 
 
-const today = new Date();
-const month = today.getMonth();
-const year = today.getFullYear();
+//  const today = new Date();
+//  const month = today.getMonth();
+//  const year = today.getFullYear();
 
 declare var $:any; // Deklarieren Sie jQuery, damit TypeScript es verwenden kann
 
@@ -88,6 +88,7 @@ export class DashboardComponent implements OnInit{
   // Initialisierung des Date Range Picker mit deutschem Datumsformat
   $('input[name="datetimes"]').daterangepicker({
     timePicker: true,
+    timePicker24Hour: true, // Aktivieren Sie das 24-Stunden-Zeitformat
     startDate: moment().startOf('hour'),
     endDate: moment().startOf('hour').add(1, 'hour'), // Beispiel für eine Start- und Endzeit
     locale: {
@@ -106,6 +107,7 @@ export class DashboardComponent implements OnInit{
     // Initialisierung des gestapelten Balkendiagramms
     this.stackBarChartForAllGraphs();
   }
+  
 
   showCheckedShellys(event: any){
 
