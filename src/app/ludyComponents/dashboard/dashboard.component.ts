@@ -17,13 +17,9 @@ declare var $:any; // Deklarieren Sie jQuery, damit TypeScript es verwenden kann
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
-  //standalone: true,
-  //providers: [],
-  //imports: [MatDatepickerModule, MatFormFieldModule, FormsModule, ReactiveFormsModule], 
   
 })
 export class DashboardComponent implements OnInit{
-  //selected!: {startDate: Dayjs, endDate: Dayjs};
 
   stackedChart: any;
   isChartLoading = false;
@@ -33,7 +29,6 @@ export class DashboardComponent implements OnInit{
   dateStart = new Date(this.dateEnd.getTime() - (this.timeRange * this.MS_PER_MINUTE));
 
 
-  //timeRange = 5; // temps par defaut
   dataVisual!: any;
   allData: any[] = [];
 
@@ -368,7 +363,5 @@ export class DashboardComponent implements OnInit{
     this.allData.push(hauptzaehler);
     console.log("allData = ",this.allData)
   }
-
-
   
 }

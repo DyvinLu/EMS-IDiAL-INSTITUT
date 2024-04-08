@@ -97,9 +97,11 @@ A cote sur la droite la consommation en Kwh
 
 ## 3.3 Les modifications du graphs 
 
+# 4: Zählerstände für einen bestimmten Zeitraum abfragen
 
 
-# 4. Exemple pratique 
+
+# 50. Exemple pratique 
 
 La base de donnees envoi des donnees de 3 phase pour chaque shelly.
 Ceci dit, nous avons 3 donnees pour un temps X donnees comme le montre le tableau suivant:
