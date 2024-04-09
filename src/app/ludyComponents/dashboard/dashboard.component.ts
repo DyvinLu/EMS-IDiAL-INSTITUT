@@ -4,10 +4,6 @@ import { RufZaehler } from 'src/app/ludyModel/ruf-zaehler';
 import { DataService } from 'src/app/ludyServices/data.service';
 import * as moment from 'moment';
 
-//  const today = new Date();
-//  const month = today.getMonth();
-//  const year = today.getFullYear();
-
 declare var $: any; // Deklarieren Sie jQuery, damit TypeScript es verwenden kann
 
 @Component({
@@ -67,7 +63,7 @@ export class DashboardComponent implements OnInit {
     'rgba(0, 255, 0, 1)',
   ];
 
-  private xAbscisse: any;
+  private xAbscisse: string[] = [];
 
   constructor(private dataServ: DataService) {}
 
@@ -76,7 +72,7 @@ export class DashboardComponent implements OnInit {
     this.stackBarChartForAllGraphs();
     setTimeout(() => {
       this.generateChart();
-    },2000)
+    }, 2000);
     this.generateCalendar();
   }
 
@@ -108,13 +104,15 @@ export class DashboardComponent implements OnInit {
       this.dateEnd = new Date(picker.endDate);
 
       //update Chart
-      this.stackBarChartForAllGraphs();
+      this.allData = [];
+      console.log('allDAta sollte lerr', this.allData);
+      this.stackBarChartForAllGraphs(true);
       setTimeout(() => {
         this.stackedChart.data.labels = this.xAbscisse;
-      this.stackedChart.data.datasets = this.allData;
-      this.stackedChart.update();
-      },2000)
-      
+        this.stackedChart.data.datasets = this.allData;
+        console.log(this.allData);
+        this.stackedChart.update();
+      }, 2000);
     });
   }
 
@@ -271,75 +269,165 @@ export class DashboardComponent implements OnInit {
     console.log("-----------------------end-------------------");*/
   }
 
-  stackBarChartForAllGraphs() {
+  private calculateDiffHauptZaehler(
+    fromApi: any[],
+    hauptZaehlerNamen: string,
+    backgroundColorRGBA: string,
+    borderColorRGBA: string
+  ) {
+    const size = fromApi.length - 1;
+    const xValues: string[] = [];
+    if (!(fromApi[size - 1] && fromApi[0])) {
+      console.log(
+        `Für ${hauptZaehlerNamen} haben wir zurzeit keine Daten bekommen`
+      );
+      return;
+    }
+    const diff: number[] = [];
+    for (let i = 0; i < size; i++) {
+      const lastEl = fromApi[i + 1];
+      const firstEl = fromApi[i];
+      const tmp = lastEl._value - firstEl._value;
+      const hour = this.timeDifference(firstEl._time, lastEl._time);
+      const res = tmp / hour;
+      diff.push(res);
+      xValues.push(new Date(firstEl._time).toLocaleString());
+    }
+    console.log('diff H', diff.length);
+    const hauptzaehler = {
+      label: hauptZaehlerNamen,
+      backgroundColor: backgroundColorRGBA,
+      borderColor: borderColorRGBA,
+      borderWidth: 1,
+      data: diff,
+    };
+
+    this.xAbscisse = xValues;
+    this.allData.push(hauptzaehler);
+  }
+
+  private timeDifference(start: string, end: string): number {
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+    const diff = endDate.getTime() - startDate.getTime();
+    const hour = diff / (1000 * 3600);
+
+    return hour;
+  }
+  private calculateDiffShelly(
+    fromApi: any[],
+    shellyName: string,
+    backgroundColorRGBA: string,
+    borderColorRGBA: string
+  ) {
+    const diff: number[] = [];
+    const { dataPts, time } = this.getShellySumme(fromApi);
+    const size = dataPts.length - 1;
+
+    for (let i = 0; i < size; i++) {
+      const tmp = dataPts[i + 1] - dataPts[i];
+      const hour = this.timeDifference(time[i], time[i + 1]);
+      const res = tmp / 1;
+      diff.push(res);
+    }
+    console.log('diff S', diff.length);
+    const shelly = {
+      label: shellyName,
+      backgroundColor: backgroundColorRGBA,
+      borderColor: borderColorRGBA,
+      borderWidth: 1,
+      data: diff,
+    };
+
+    this.allData.push(shelly);
+  }
+
+  stackBarChartForAllGraphs(diff: boolean = false) {
     this.allData = [];
     //debugger
     let sendToBAck = new RufZaehler();
     sendToBAck.dateStart = this.dateStart;
     sendToBAck.dateEnd = this.dateEnd;
 
-
     for (let i = 0; i < this.shellyNamen.length; i++) {
-
       sendToBAck.zaehlerName = `"${this.shellyNamen[i]}"`;
       this.dataServ.DataFromShelly(sendToBAck).subscribe((fromApi: any) => {
-        this.getShellyDataForStackChart(
-          fromApi,
-          this.shellyNamen[i],
-          this.backgroundColorsShellys[i],
-          this.borderColorsShellys[i]
-        );
+        if (!diff)
+          this.getShellyDataForStackChart(
+            fromApi,
+            this.shellyNamen[i],
+            this.backgroundColorsShellys[i],
+            this.borderColorsShellys[i]
+          );
+        else
+          this.calculateDiffShelly(
+            fromApi,
+            this.shellyNamen[i],
+            this.backgroundColorsShellys[i],
+            this.borderColorsShellys[i]
+          );
       });
-
     }
 
     for (let i = 0; i < this.hauptZaehlerNamen.length; i++) {
-
       sendToBAck.zaehlerName = '"' + this.hauptZaehlerNamen[i] + '"';
       this.dataServ
         .DataFromHauptZaehler(sendToBAck)
         .subscribe((fromApi: any) => {
-          this.getHauptzaehlerDataForStackChart(
-            fromApi,
-            this.hauptZaehlerNamen[i],
-            this.backgroundColorsHauptzaehler[i],
-            this.borderColorsHauptzaehler[i]
-          );
+          if (!diff)
+            this.getHauptzaehlerDataForStackChart(
+              fromApi,
+              this.hauptZaehlerNamen[i],
+              this.backgroundColorsHauptzaehler[i],
+              this.borderColorsHauptzaehler[i]
+            );
+          else
+            this.calculateDiffHauptZaehler(
+              fromApi,
+              this.hauptZaehlerNamen[i],
+              this.backgroundColorsHauptzaehler[i],
+              this.borderColorsHauptzaehler[i]
+            );
         });
     }
   }
 
+  private getShellySumme(fromApi: any[]) {
+    const dataPts: number[] = [];
+    const phase0: number[] = [];
+    const phase1: number[] = [];
+    const phase2: number[] = [];
+    const time: string[] = [];
+
+    fromApi.forEach((item) => {
+      const value = item._value;
+      if (item.phase == '0') {
+        phase0.push(value);
+        time.push(item._time);
+      } else if (item.phase == '1') {
+        phase1.push(value);
+      } else if (item.phase == '2') {
+        phase2.push(value);
+      }
+    });
+
+    const size = phase0.length;
+
+    for (let i = 0; i < size; i++) {
+      const sum = phase0[i] + phase1[i] + phase2[i];
+      dataPts.push(sum);
+    }
+    return { dataPts, time };
+  }
+
   getShellyDataForStackChart(
-    fromApi: any,
+    fromApi: any[],
     shellyName: string,
     backgroundColorRGBA: string,
     borderColorRGBA: string
   ) {
-    let xValues = [];
-    let dataPhase0 = [];
-    let dataPhase1 = [];
-    let dataPhase2 = [];
+    const { dataPts } = this.getShellySumme(fromApi);
 
-    //debugger
-    for (var item of fromApi) {
-      // parcourir la liste des donnees
-      if (item.phase == '0') {
-        dataPhase0.push(item._value);
-        xValues.push(new Date(item._time).toLocaleString());
-      } else if (item.phase == '1') {
-        dataPhase1.push(item._value);
-      } else if (item.phase == '2') {
-        dataPhase2.push(item._value);
-      }
-    }
-
-    let dataPts = [];
-
-    for (let i = 0; i < dataPhase0.length; i++) {
-      dataPts.push(dataPhase0[i] + dataPhase1[i] + dataPhase2[i]);
-    }
-
-    this.xAbscisse = xValues;
     const shelly = {
       label: shellyName,
       backgroundColor: backgroundColorRGBA,
@@ -353,17 +441,19 @@ export class DashboardComponent implements OnInit {
   }
 
   getHauptzaehlerDataForStackChart(
-    fromApi: any,
+    fromApi: any[],
     hauptZaehlerNamen: string,
     backgroundColorRGBA: string,
     borderColorRGBA: string
   ) {
-    let dataPhase0 = [];
+    let data = [];
+    const xValues: string[] = [];
 
     //debugger
     for (var item of fromApi) {
       // parcourir la liste des donnees
-      dataPhase0.push(item._value);
+      data.push(item._value);
+      xValues.push(new Date(item._time).toLocaleString());
     }
 
     const hauptzaehler = {
@@ -371,9 +461,10 @@ export class DashboardComponent implements OnInit {
       backgroundColor: backgroundColorRGBA,
       borderColor: borderColorRGBA,
       borderWidth: 1,
-      data: dataPhase0,
+      data,
     };
 
+    this.xAbscisse = xValues;
     this.allData.push(hauptzaehler);
     // console.log('allData = ', this.allData);
   }
