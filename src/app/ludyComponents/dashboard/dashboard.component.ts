@@ -4,108 +4,148 @@ import { RufZaehler } from 'src/app/ludyModel/ruf-zaehler';
 import { DataService } from 'src/app/ludyServices/data.service';
 import * as moment from 'moment';
 
-
-
 //  const today = new Date();
 //  const month = today.getMonth();
 //  const year = today.getFullYear();
 
-declare var $:any; // Deklarieren Sie jQuery, damit TypeScript es verwenden kann
-
+declare var $: any; // Deklarieren Sie jQuery, damit TypeScript es verwenden kann
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
-  
 })
-export class DashboardComponent implements OnInit{
-
+export class DashboardComponent implements OnInit {
   stackedChart: any;
   isChartLoading = false;
   timeRange = 2; // en terme d'heure
-  dateEnd: any = new Date(Date.now());
-  MS_PER_MINUTE = 60*60*1000;
-  dateStart = new Date(this.dateEnd.getTime() - (this.timeRange * this.MS_PER_MINUTE));
-
+  dateEnd: Date = new Date(Date.now());
+  readonly MS_PER_MINUTE = 60 * 60 * 1000;
+  dateStart: Date = new Date(
+    this.dateEnd.getTime() - this.timeRange * this.MS_PER_MINUTE
+  );
 
   dataVisual!: any;
   allData: any[] = [];
 
-  shellyNamen = [
-    "shelly-3em-ohs23-01", // 0
-    "shelly-3em-ohs23-02", // 1
-    "shelly-3em-ohs23-03", // 2
-    "shelly-3em-ohs23-04", // 3
-    "shelly-3em-ohs23-05", // 4
-  ]
+  readonly shellyNamen = [
+    'shelly-3em-ohs23-01', // 0
+    'shelly-3em-ohs23-02', // 1
+    'shelly-3em-ohs23-03', // 2
+    'shelly-3em-ohs23-04', // 3
+    'shelly-3em-ohs23-05', // 4
+  ];
 
-  hauptZaehlerNamen = [  
-    "ITRON", // 0
-    "EBZDD3",// 1
-  ]
+  readonly hauptZaehlerNamen = [
+    'ITRON', // 0
+    'EBZDD3', // 1
+  ];
 
-  backgroundColorsShellys = [
+  readonly backgroundColorsShellys = [
     'rgba(255, 99, 132, 0.2)',
     'rgba(54, 162, 235, 0.2)',
     'rgba(255, 206, 86, 0.2)',
     'rgba(75, 192, 192, 0.2)',
     'rgba(153, 102, 255, 0.2)',
-  ]
+  ];
 
-  borderColorsShellys = [
+  readonly borderColorsShellys = [
     'rgba(255, 99, 132, 1)',
     'rgba(54, 162, 235, 1)',
     'rgba(255, 206, 86, 1)',
     'rgba(75, 192, 192, 1)',
-    'rgba(153, 102, 255, 1)'
-  ]
+    'rgba(153, 102, 255, 1)',
+  ];
 
-  backgroundColorsHauptzaehler =[
+  readonly backgroundColorsHauptzaehler = [
     'rgba(255, 0, 0, 0.2)',
     'rgba(0, 255, 0, 0.2)',
-  ]
+  ];
 
-  borderColorsHauptzaehler =[
+  private readonly borderColorsHauptzaehler = [
     'rgba(255, 0, 0, 1)',
     'rgba(0, 255, 0, 1)',
   ];
 
-  xAbscisse: any;
+  private xAbscisse: any;
 
-  constructor(private dataServ: DataService){}
-
+  constructor(private dataServ: DataService) {}
 
   ngOnInit(): void {
+    // Lokalisieren Sie moment.js auf Deutsch
+    this.stackBarChartForAllGraphs();
+    setTimeout(() => {
+      this.generateChart();
+    },2000)
+    this.generateCalendar();
+  }
 
-  // Lokalisieren Sie moment.js auf Deutsch
-  moment.locale('de');
-  // Initialisierung des Date Range Picker mit deutschem Datumsformat
-  $('input[name="datetimes"]').daterangepicker({
-    timePicker: true,
-    timePicker24Hour: true, // Aktivieren Sie das 24-Stunden-Zeitformat
-    startDate: moment().startOf('hour'),
-    endDate: moment().startOf('hour').add(1, 'hour'), // Beispiel für eine Start- und Endzeit
-    locale: {
-      format: 'DD.MM.YYYY HH:mm', // Deutsches Datums- und Zeitformat
-      applyLabel: 'Anwenden',
-      cancelLabel: 'Abbrechen',
-      fromLabel: 'Von',
-      toLabel: 'Bis',
-      weekLabel: 'W',
-      customRangeLabel: 'Benutzerdefiniert',
-      daysOfWeek: moment.weekdaysMin(), // Verwenden Sie moment.js, um die Abkürzungen der Wochentage auf Deutsch zu erhalten
-      monthNames: moment.monthsShort() // Verwenden Sie moment.js, um die Abkürzungen der Monate auf Deutsch zu erhalten
-    }
-  });
+  private generateCalendar(): void {
+    moment.locale('de');
+    // Initialisierung des Date Range Picker mit deutschem Datumsformat
+    const picker = $('input[name="datetimes"]').daterangepicker({
+      timePicker: true,
+      timePicker24Hour: true, // Aktivieren Sie das 24-Stunden-Zeitformat
+      startDate: moment().startOf('hour'),
+      endDate: moment().startOf('hour').add(1, 'hour'), // Beispiel für eine Start- und Endzeit
+      locale: {
+        format: 'DD.MM.YYYY HH:mm', // Deutsches Datums- und Zeitformat
+        applyLabel: 'Anwenden',
+        cancelLabel: 'Abbrechen',
+        fromLabel: 'Von',
+        toLabel: 'Bis',
+        weekLabel: 'W',
+        customRangeLabel: 'Benutzerdefiniert',
+        daysOfWeek: moment.weekdaysMin(), // Verwenden Sie moment.js, um die Abkürzungen der Wochentage auf Deutsch zu erhalten
+        monthNames: moment.monthsShort(), // Verwenden Sie moment.js, um die Abkürzungen der Monate auf Deutsch zu erhalten
+      },
+      maxDate: moment(),
+    });
 
-    // Initialisierung des gestapelten Balkendiagramms
+    picker.on('apply.daterangepicker', (ev: any, picker: any) => {
+      // Zugriff auf das ausgewählte Startdatum und Enddatum
+      this.dateStart = new Date(picker.startDate);
+      this.dateEnd = new Date(picker.endDate);
+
+      //update Chart
+      this.stackBarChartForAllGraphs();
+      setTimeout(() => {
+        this.stackedChart.data.labels = this.xAbscisse;
+      this.stackedChart.data.datasets = this.allData;
+      this.stackedChart.update();
+      },2000)
+      
+    });
+  }
+
+  private generateChart(): void {
+    this.stackedChart = new Chart('stackedBarChart', {
+      type: 'bar',
+      data: {
+        labels: this.xAbscisse,
+        datasets: this.allData,
+      },
+      options: {
+        scales: {
+          x: {
+            stacked: true, // X-Achse gestapelt
+          },
+          y: {
+            stacked: true, // Y-Achse gestapelt
+          },
+        },
+      },
+    });
+    this.isChartLoading = true;
+  }
+
+  handleSelectedDates(start: Date, end: Date) {
+    this.dateStart = start;
+    this.dateEnd = end;
     this.stackBarChartForAllGraphs();
   }
-  
 
-  showCheckedShellys(event: any){
-
+  showCheckedShellys(event: any) {
     /*console.log("-----------------------begin-------------------");
     console.log("event = ", event.target.defaultValue);
     console.log("isChecked: ", event.target.checked);
@@ -229,104 +269,73 @@ export class DashboardComponent implements OnInit{
     this.isChartLoading = true;
 
     console.log("-----------------------end-------------------");*/
-    
   }
 
-
-  stackBarChartForAllGraphs(){
-
-    this.allData = []
+  stackBarChartForAllGraphs() {
+    this.allData = [];
     //debugger
     let sendToBAck = new RufZaehler();
     sendToBAck.dateStart = this.dateStart;
     sendToBAck.dateEnd = this.dateEnd;
 
-    console.log("initialization = ",this.allData);
 
-    for(let i = 0; i < this.shellyNamen.length; i++){
-      console.log("---------------------- i-:",i," start ------------------");
-      
-      sendToBAck.zaehlerName = "\"" + this.shellyNamen[i] + "\""
-      this.dataServ.DataFromShelly(sendToBAck).subscribe((fromApi:any)=>{
-          
-        this.getShellyDataForStackChart(fromApi, this.shellyNamen[i], this.backgroundColorsShellys[i], this.borderColorsShellys[i]);
-        
+    for (let i = 0; i < this.shellyNamen.length; i++) {
+
+      sendToBAck.zaehlerName = `"${this.shellyNamen[i]}"`;
+      this.dataServ.DataFromShelly(sendToBAck).subscribe((fromApi: any) => {
+        this.getShellyDataForStackChart(
+          fromApi,
+          this.shellyNamen[i],
+          this.backgroundColorsShellys[i],
+          this.borderColorsShellys[i]
+        );
       });
-      
-      console.log("i = ",i,this.allData);
-      console.log("---------------------- i-:",i," end ------------------");
 
     }
 
-    console.log("initialization = ",this.allData);
+    for (let i = 0; i < this.hauptZaehlerNamen.length; i++) {
 
-    for(let i = 0; i < this.hauptZaehlerNamen.length; i++){
-      console.log("---------------------- i-:",i," start ------------------");
-
-      sendToBAck.zaehlerName = "\"" + this.hauptZaehlerNamen[i] + "\""
-      this.dataServ.DataFromHauptZaehler(sendToBAck).subscribe((fromApi:any)=>{
-        
-        this.getHauptzaehlerDataForStackChart(fromApi, this.hauptZaehlerNamen[i], this.backgroundColorsHauptzaehler[i], this.borderColorsHauptzaehler[i]);
-        
-      });
-
-            
-      console.log("i = ",i,this.allData);
-      console.log("---------------------- i-:",i," end ------------------");
+      sendToBAck.zaehlerName = '"' + this.hauptZaehlerNamen[i] + '"';
+      this.dataServ
+        .DataFromHauptZaehler(sendToBAck)
+        .subscribe((fromApi: any) => {
+          this.getHauptzaehlerDataForStackChart(
+            fromApi,
+            this.hauptZaehlerNamen[i],
+            this.backgroundColorsHauptzaehler[i],
+            this.borderColorsHauptzaehler[i]
+          );
+        });
     }
-
-    setTimeout(()=>{
-      this.stackedChart = new Chart('stackedBarChart', {
-        type: 'bar',
-        data: {
-          labels: this.xAbscisse, 
-          datasets: this.allData
-        },
-        options: {
-          scales: {
-            x: {
-              stacked: true // X-Achse gestapelt
-            },
-            y: {
-              stacked: true // Y-Achse gestapelt
-            }
-          }
-        }
-      });
-  
-      console.log("stackBarChart", this.stackedChart);
-      
-      this.isChartLoading = true;
-  
-      console.log("is it TrueOrFalse? = ",this.isChartLoading);
-    }, 2000);
-    
-    
   }
 
-  getShellyDataForStackChart(fromApi: any, shellyName: string, backgroundColorRGBA: string, borderColorRGBA: string) {
+  getShellyDataForStackChart(
+    fromApi: any,
+    shellyName: string,
+    backgroundColorRGBA: string,
+    borderColorRGBA: string
+  ) {
     let xValues = [];
     let dataPhase0 = [];
     let dataPhase1 = [];
-    let dataPhase2 = []; 
+    let dataPhase2 = [];
 
     //debugger
-    for(var item of fromApi){ // parcourir la liste des donnees
-      if(item.phase == "0"){
+    for (var item of fromApi) {
+      // parcourir la liste des donnees
+      if (item.phase == '0') {
         dataPhase0.push(item._value);
-        xValues.push( new Date(item._time).toLocaleString());
-      }else if(item.phase == "1"){
+        xValues.push(new Date(item._time).toLocaleString());
+      } else if (item.phase == '1') {
         dataPhase1.push(item._value);
-      }else if(item.phase == "2"){
+      } else if (item.phase == '2') {
         dataPhase2.push(item._value);
       }
     }
 
-    
-
     let dataPts = [];
 
-    for(let i = 0; i < dataPhase0.length; i++){
+    for (let i = 0; i < dataPhase0.length; i++) {
       dataPts.push(dataPhase0[i] + dataPhase1[i] + dataPhase2[i]);
     }
 
@@ -336,32 +345,36 @@ export class DashboardComponent implements OnInit{
       backgroundColor: backgroundColorRGBA,
       borderColor: borderColorRGBA,
       borderWidth: 1,
-      data: dataPts // Hier können Sie Ihre eigenen Daten einfügen
-    }
-  
+      data: dataPts, // Hier können Sie Ihre eigenen Daten einfügen
+    };
+
     this.allData.push(shelly);
-    console.log("allData = ",this.allData)
+    // console.log('allData = ', this.allData);
   }
 
-  getHauptzaehlerDataForStackChart(fromApi: any, hauptZaehlerNamen: string, backgroundColorRGBA: string, borderColorRGBA: string) {
+  getHauptzaehlerDataForStackChart(
+    fromApi: any,
+    hauptZaehlerNamen: string,
+    backgroundColorRGBA: string,
+    borderColorRGBA: string
+  ) {
     let dataPhase0 = [];
 
     //debugger
-    for(var item of fromApi){ // parcourir la liste des donnees
-        dataPhase0.push(item._value);
+    for (var item of fromApi) {
+      // parcourir la liste des donnees
+      dataPhase0.push(item._value);
     }
 
-   
     const hauptzaehler = {
       label: hauptZaehlerNamen,
       backgroundColor: backgroundColorRGBA,
       borderColor: borderColorRGBA,
       borderWidth: 1,
-      data: dataPhase0
-    }
-  
+      data: dataPhase0,
+    };
+
     this.allData.push(hauptzaehler);
-    console.log("allData = ",this.allData)
+    // console.log('allData = ', this.allData);
   }
-  
 }

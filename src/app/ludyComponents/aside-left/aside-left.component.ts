@@ -4,16 +4,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'ludy-aside-left',
   templateUrl: './aside-left.component.html',
-  styleUrls: ['./aside-left.component.css']
+  styleUrls: ['./aside-left.component.css'],
 })
 export class AsideLeftComponent {
   about: any;
 
-  constructor(private router: Router){}
+  constructor(private router: Router) {}
 
-  ludyLogout(){
+  ludyLogout() {
     //window.alert("tu veux sortir");
     this.router.navigate(['login']);
   }
-
 }

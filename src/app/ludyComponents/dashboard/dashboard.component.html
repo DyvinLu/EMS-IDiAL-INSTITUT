@@ -5,43 +5,59 @@
       <div class="row mb-2">
         <div class="col-sm-6">
           <h1 class="m-0">Dashboard</h1>
-        </div><!-- /.col -->
+        </div>
+        <!-- /.col -->
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="#">Home</a></li>
             <li class="breadcrumb-item active">Dashboard</li>
           </ol>
-        </div><!-- /.col -->
-      </div><!-- /.row -->
-    </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
   </div>
   <!-- /.content-header -->
-
 
   <!-- Main content -->
   <div class="content">
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-9">
-
           <!-- STACKED BAR CHART -->
           <div class="row">
             <div class="col-md-12">
               <div class="card card-success">
-                <div class="card-header" style="background-color: #e0e0e0;">
-                  <h3 class="card-title" style="color:#1f2d3d; font-weight:bold;">Live Graphische Darstellung</h3>
+                <div class="card-header" style="background-color: #e0e0e0">
+                  <h3
+                    class="card-title"
+                    style="color: #1f2d3d; font-weight: bold"
+                  >
+                    Live Graphische Darstellung
+                  </h3>
                   <div class="card-tools">
-                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <button
+                      type="button"
+                      class="btn btn-tool"
+                      data-card-widget="collapse"
+                    >
                       <i class="fas fa-minus"></i>
                     </button>
-                    <button type="button" class="btn btn-tool" data-card-widget="remove">
+                    <button
+                      type="button"
+                      class="btn btn-tool"
+                      data-card-widget="remove"
+                    >
                       <i class="fas fa-times"></i>
                     </button>
                   </div>
                 </div>
                 <div class="card-body">
                   <div class="chart">
-                    <canvas id="stackedBarChart"></canvas> <!-- Stacked Bar Chart wird hier gerendert -->
+                    <canvas id="stackedBarChart"></canvas>
+                    <!-- Stacked Bar Chart wird hier gerendert -->
                   </div>
                 </div>
                 <!-- /.card-body -->
@@ -84,15 +100,15 @@
             <!-- /.col -->
           </div>
           <!-- /.row -->
-
         </div>
-
 
         <div class="col-md-3">
           <!-- Zählerauswahl -->
           <div class="card card-warning">
-            <div class="card-header" style="background-color: #e0e0e0;">
-              <h3 class="card-title" style="color:#1f2d3d; font-weight:bold;">Zählerauswahl</h3>
+            <div class="card-header" style="background-color: #e0e0e0">
+              <h3 class="card-title" style="color: #1f2d3d; font-weight: bold">
+                Zählerauswahl
+              </h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -103,7 +119,9 @@
                     <div class="form-group">
                       <label>Hauptzähler:</label>
                       <select class="form-control">
-                        <option *ngFor="let name of hauptZaehlerNamen">{{name}}</option>
+                        <option *ngFor="let name of hauptZaehlerNamen">
+                          {{ name }}
+                        </option>
                       </select>
                     </div>
                   </div>
@@ -113,9 +131,17 @@
                     <!-- checkbox -->
                     <div class="form-group">
                       <label>Shellys:</label>
-                      <div *ngFor="let shelly of shellyNamen" class="form-check">
-                         <input class="form-check-input" type="checkbox" [value]="shelly" (change)="showCheckedShellys($event)" /> 
-                        <label class="form-check-label">{{shelly}}</label>
+                      <div
+                        *ngFor="let shelly of shellyNamen"
+                        class="form-check"
+                      >
+                        <!-- <input
+                          class="form-check-input"
+                          type="checkbox"
+                          [value]="shelly"
+                          (change)="showCheckedShellys($event)"
+                        /> -->
+                        <label class="form-check-label">{{ shelly }}</label>
                       </div>
                     </div>
                   </div>
@@ -128,16 +154,30 @@
 
           <!-- Kalender mit Datum und Uhrzeit -->
           <div class="card card-warning">
-            <div class="card-header" style="background-color: #e0e0e0;">
-              <h3 class="card-title" style="color:#1f2d3d; font-weight:bold;">Zeitraumauswahl</h3>
+            <div class="card-header" style="background-color: #e0e0e0">
+              <h3 class="card-title" style="color: #1f2d3d; font-weight: bold">
+                Zeitraumauswahl
+              </h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
               <form>
                 <div class="form-group">
                   <!-- <label>Einheiten wechseln:</label> -->
-                  <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
-                  <input type="text" name="datetimes" style="width: 250px; height: 70px; border-radius: 5px;text-align: center;"/> <!-- Runde Ecken mit 5px Radius --><!-- Breite des Eingabefeldes anpassen -->
+                  <div
+                    class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success"
+                  >
+                    <input
+                      type="text"
+                      name="datetimes"
+                      style="
+                        width: 250px;
+                        height: 70px;
+                        border-radius: 5px;
+                        text-align: center;
+                      "
+                    />
+                    <!-- Runde Ecken mit 5px Radius --><!-- Breite des Eingabefeldes anpassen -->
                   </div>
                 </div>
               </form>
@@ -145,12 +185,9 @@
             <!-- /.card-body -->
           </div>
           <!-- /.card -->
-
-
         </div>
       </div>
     </div>
-
 
     <!-- /.container-fluid -->
   </div>

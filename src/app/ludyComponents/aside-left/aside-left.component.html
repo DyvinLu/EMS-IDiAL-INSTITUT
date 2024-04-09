@@ -1,14 +1,12 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
-    <!-- Brand Logo -->
-    <a href="index3.html" class="brand-link">
-      <span class="brand-text font-weight-light">
-        Forschungsinstitut IDiAL
-      </span>
-    </a>
+  <!-- Brand Logo -->
+  <a href="index3.html" class="brand-link">
+    <span class="brand-text font-weight-light"> Forschungsinstitut IDiAL </span>
+  </a>
 
-    <!-- Sidebar -->
-    <div class="sidebar">
-      <!-- Sidebar user panel (optional) -->
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <!-- Sidebar user panel (optional) -->
     <!-- <div class="user-panel mt-3 pb-3 mb-3 d-flex">        
       <a class="btn btn-app">
         <span class="badge bg-purple"></span>
@@ -17,29 +15,29 @@
     </div> 
      -->
 
-      <!-- Sidebar Menu -->
-      <nav class="mt-2">
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-         
-          <li [routerLinkActive]="'active'" class="nav-item">
-            <a  [routerLink]="['']" class="nav-link">
-              <i class="nav-icon fas fa-chart-pie"></i>
-              <p>
-                Chart-Übersicht
-              </p>
-            </a>
-          </li>
-          
-          <li [routerLinkActive]="'active'" class="nav-item">
-            <a [routerLink]="['app-table']" class="nav-link">
-              <i class="nav-icon fas fa-table"></i>
-              <p>
-                Daten-Ansicht
-              </p>
-            </a>
-          </li>
+    <!-- Sidebar Menu -->
+    <nav class="mt-2">
+      <ul
+        class="nav nav-pills nav-sidebar flex-column"
+        data-widget="treeview"
+        role="menu"
+        data-accordion="false"
+      >
+        <li [routerLinkActive]="'active'" class="nav-item">
+          <a [routerLink]="['']" class="nav-link">
+            <i class="nav-icon fas fa-chart-pie"></i>
+            <p>Chart-Übersicht</p>
+          </a>
+        </li>
 
-<!--           <li [routerLinkActive]="'active'"class="nav-item">
+        <li [routerLinkActive]="'active'" class="nav-item">
+          <a [routerLink]="['app-table']" class="nav-link">
+            <i class="nav-icon fas fa-table"></i>
+            <p>Daten-Ansicht</p>
+          </a>
+        </li>
+
+        <!--           <li [routerLinkActive]="'active'"class="nav-item">
             <a [routerLink]="['calender']" class="nav-link">
               <i class="nav-icon fas fa-calendar-alt"></i>
               <p>
@@ -48,18 +46,15 @@
             </a>
           </li>
  -->
-          <li [routerLinkActive]="'active' "class="nav-item">
-            <a (click)="ludyLogout()" class="nav-link">
-              <i class="nav-icon fas fa-sign-out-alt"></i>
-              <p>
-                Logout
-              </p>
-            </a>
-          </li>
-          
-        </ul>
-      </nav>
-      <!-- /.sidebar-menu -->
-    </div>
-    <!-- /.sidebar -->
-  </aside>
+        <li [routerLinkActive]="'active'" class="nav-item">
+          <a (click)="ludyLogout()" class="nav-link">
+            <i class="nav-icon fas fa-sign-out-alt"></i>
+            <p>Logout</p>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <!-- /.sidebar-menu -->
+  </div>
+  <!-- /.sidebar -->
+</aside>

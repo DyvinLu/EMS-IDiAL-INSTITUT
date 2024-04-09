@@ -1,35 +1,35 @@
-
 <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1>Daten-Übersicht</h1>
-          </div>
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Table-Ansicht</li>
-            </ol>
-          </div>
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>Daten-Übersicht</h1>
         </div>
-      </div><!-- /.container-fluid -->
-    </section>
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item active">Table-Ansicht</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <!-- /.container-fluid -->
+  </section>
 
-    <!-- Main content -->
-    <section class="content">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-12">
-            <div class="card">
-              <div class="card-header">
-                <h3 class="card-title">Daten-Ansicht</h3>
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body">
-                <table id="example2" class="table table-bordered table-hover">
-                  <thead>
+  <!-- Main content -->
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Daten-Ansicht</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+              <table id="example2" class="table table-bordered table-hover">
+                <thead>
                   <tr>
                     <th>Zähler</th>
                     <th>Zeit</th>
@@ -39,28 +39,28 @@
                     <th>Start</th>
                     <th>Stop</th>
                   </tr>
-                  </thead>
-                  <tbody>
-                    <tr *ngFor="let item of data">
-                      <td>{{item.device}}</td>
-                      <td>{{item._time | date: 'dd.MM.yyyy  hh:mm'}}</td>
-                      <td>{{item._value}}</td>
-                      <td>{{item.measurement_type}}</td>
-                      <td>{{item._field}}</td>
-                      <td>{{item._start | date: 'dd.MM.yyyy'}}</td>
-                      <td> {{item._stop | date: 'dd.MM.yyyy'}}</td>
-                    </tr>                 
-                  </tbody>
-                </table>
-              </div>
-              <!-- /.card-body -->
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of data">
+                    <td>{{ item.device }}</td>
+                    <td>{{ item._time | date: 'dd.MM.yyyy  hh:mm' }}</td>
+                    <td>{{ item._value }}</td>
+                    <td>{{ item.measurement_type }}</td>
+                    <td>{{ item._field }}</td>
+                    <td>{{ item._start | date: 'dd.MM.yyyy' }}</td>
+                    <td>{{ item._stop | date: 'dd.MM.yyyy' }}</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
+            <!-- /.card-body -->
           </div>
-          <!-- /.col -->
         </div>
-        <!-- /.row -->
+        <!-- /.col -->
       </div>
-      <!-- /.container-fluid -->
-    </section>
-    <!-- /.content -->
-  </div>
+      <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+  </section>
+  <!-- /.content -->
+</div>

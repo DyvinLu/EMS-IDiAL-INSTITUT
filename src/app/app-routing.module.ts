@@ -5,29 +5,26 @@ import { TableComponent } from './ludyComponents/table/table.component';
 import { LoginComponent } from './ludyComponents/login/login.component';
 import { AuthGuard } from './_guards/auth.guard';
 
-
 const routes: Routes = [
   {
-    path:'', 
-    component:DashboardComponent, 
+    path: '',
+    component: DashboardComponent,
     //canActivate: [AuthGuard]
   }, // http://localhost:4200
 
   {
-    path:'app-table',
-   component:TableComponent,
-   //canActivate: [AuthGuard]
-  },// http://localhost:4200/app-table
+    path: 'app-table',
+    component: TableComponent,
+    //canActivate: [AuthGuard]
+  }, // http://localhost:4200/app-table
   {
-    path:'login',component:LoginComponent
+    path: 'login',
+    component: LoginComponent,
   }, // http:localhost:4200/login
-
-  
-  
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

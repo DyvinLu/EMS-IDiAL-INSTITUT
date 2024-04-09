@@ -7,38 +7,31 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
 })
-export class LoginComponent  implements OnInit{
-
-loginObj:any = {
-  userName: '',
-  password:'',
-};
+export class LoginComponent implements OnInit {
+  loginObj: any = {
+    userName: '',
+    password: '',
+  };
 
   constructor(
-    public auth: AuthService, 
-    @Inject(DOCUMENT) private document: Document, 
-    private route:Router){ }
+    public auth: AuthService,
+    @Inject(DOCUMENT) private document: Document,
+    private route: Router
+  ) {}
 
-  ngOnInit(): void{
-
-
-   this.auth.isAuthenticated$.subscribe((res)=>{
-    debugger;
-    console.log(res);
-    
-   })
-    
+  ngOnInit(): void {
+    this.auth.isAuthenticated$.subscribe((res) => {
+      debugger;
+      console.log(res);
+    });
   }
 
-
-
-  onLogin(){
+  onLogin() {
     // chandle callback here
     //window.open("http://sems.vms.idial.fh:8086/signin", "_blank");
     //this.document.location.href = "http://sems.vms.idial.fh:8086/signin";
-
     /*setTimeout(()=>{                           // <<<---using ()=> syntax
       this.auth.getLoginInfos();
 
@@ -49,8 +42,5 @@ loginObj:any = {
     }, 20000); // 10 secondes
 
     */
-   
-
-   
   }
 }

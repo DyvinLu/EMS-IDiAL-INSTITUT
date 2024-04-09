@@ -4,12 +4,12 @@ import { RufZaehler } from 'src/app/ludyModel/ruf-zaehler';
 import { DataService } from 'src/app/ludyServices/data.service';
 import * as moment from 'moment';
 
-declare var $:any;
+declare var $: any;
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+  styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent implements OnInit {
   stackedChart: any;
@@ -17,18 +17,41 @@ export class DashboardComponent implements OnInit {
   timeRange = 2;
   dateEnd: any = new Date(Date.now());
   MS_PER_MINUTE = 60 * 60 * 1000;
-  dateStart = new Date(this.dateEnd.getTime() - (this.timeRange * this.MS_PER_MINUTE));
+  dateStart = new Date(
+    this.dateEnd.getTime() - this.timeRange * this.MS_PER_MINUTE
+  );
   dataVisual: any;
   allData: any[] = [];
-  shellyNamen = ["shelly-3em-ohs23-01", "shelly-3em-ohs23-02", "shelly-3em-ohs23-03", "shelly-3em-ohs23-04", "shelly-3em-ohs23-05"];
-  hauptZaehlerNamen = ["ITRON", "EBZDD3"];
-  backgroundColorsShellys = ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)', 'rgba(75, 192, 192, 0.2)', 'rgba(153, 102, 255, 0.2)'];
-  borderColorsShellys = ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)', 'rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)'];
-  backgroundColorsHauptzaehler = ['rgba(255, 0, 0, 0.2)', 'rgba(0, 255, 0, 0.2)'];
+  shellyNamen = [
+    'shelly-3em-ohs23-01',
+    'shelly-3em-ohs23-02',
+    'shelly-3em-ohs23-03',
+    'shelly-3em-ohs23-04',
+    'shelly-3em-ohs23-05',
+  ];
+  hauptZaehlerNamen = ['ITRON', 'EBZDD3'];
+  backgroundColorsShellys = [
+    'rgba(255, 99, 132, 0.2)',
+    'rgba(54, 162, 235, 0.2)',
+    'rgba(255, 206, 86, 0.2)',
+    'rgba(75, 192, 192, 0.2)',
+    'rgba(153, 102, 255, 0.2)',
+  ];
+  borderColorsShellys = [
+    'rgba(255, 99, 132, 1)',
+    'rgba(54, 162, 235, 1)',
+    'rgba(255, 206, 86, 1)',
+    'rgba(75, 192, 192, 1)',
+    'rgba(153, 102, 255, 1)',
+  ];
+  backgroundColorsHauptzaehler = [
+    'rgba(255, 0, 0, 0.2)',
+    'rgba(0, 255, 0, 0.2)',
+  ];
   borderColorsHauptzaehler = ['rgba(255, 0, 0, 1)', 'rgba(0, 255, 0, 1)'];
   xAbscisse: any;
 
-  constructor(private dataServ: DataService){}
+  constructor(private dataServ: DataService) {}
 
   ngOnInit(): void {
     moment.locale('de');
@@ -46,13 +69,16 @@ export class DashboardComponent implements OnInit {
         weekLabel: 'W',
         customRangeLabel: 'Benutzerdefiniert',
         daysOfWeek: moment.weekdaysMin(),
-        monthNames: moment.monthsShort()
-      }
+        monthNames: moment.monthsShort(),
+      },
     });
 
-    $('input[name="datetimes"]').on('apply.daterangepicker', (ev: any, picker: any) => {
-      this.dateRangeChanged(picker.startDate, picker.endDate);
-    });
+    $('input[name="datetimes"]').on(
+      'apply.daterangepicker',
+      (ev: any, picker: any) => {
+        this.dateRangeChanged(picker.startDate, picker.endDate);
+      }
+    );
 
     this.stackBarChartForAllGraphs();
   }
@@ -70,25 +96,35 @@ export class DashboardComponent implements OnInit {
       sendToBAck.dateEnd = endDate;
       sendToBAck.zaehlerName = this.shellyNamen[i];
       this.dataServ.DataFromShelly(sendToBAck).subscribe((fromApi: any) => {
-        this.getShellyDataForStackChart(fromApi, this.shellyNamen[i], this.backgroundColorsShellys[i], this.borderColorsShellys[i]);
+        this.getShellyDataForStackChart(
+          fromApi,
+          this.shellyNamen[i],
+          this.backgroundColorsShellys[i],
+          this.borderColorsShellys[i]
+        );
         this.stackedChart();
       });
     }
   }
 
-  getShellyDataForStackChart(fromApi: any, shellyName: string, backgroundColorRGBA: string, borderColorRGBA: string) {
+  getShellyDataForStackChart(
+    fromApi: any,
+    shellyName: string,
+    backgroundColorRGBA: string,
+    borderColorRGBA: string
+  ) {
     let xValues = [];
     let dataPhase0 = [];
     let dataPhase1 = [];
     let dataPhase2 = [];
 
     for (var item of fromApi) {
-      if (item.phase == "0") {
+      if (item.phase == '0') {
         dataPhase0.push(item._value);
         xValues.push(new Date(item._time).toLocaleString());
-      } else if (item.phase == "1") {
+      } else if (item.phase == '1') {
         dataPhase1.push(item._value);
-      } else if (item.phase == "2") {
+      } else if (item.phase == '2') {
         dataPhase2.push(item._value);
       }
     }
@@ -105,7 +141,7 @@ export class DashboardComponent implements OnInit {
       backgroundColor: backgroundColorRGBA,
       borderColor: borderColorRGBA,
       borderWidth: 1,
-      data: dataPts
+      data: dataPts,
     };
 
     this.allData.push(shelly);
@@ -118,17 +154,29 @@ export class DashboardComponent implements OnInit {
     sendToBAck.dateEnd = this.dateEnd;
 
     for (let i = 0; i < this.shellyNamen.length; i++) {
-      sendToBAck.zaehlerName = "\"" + this.shellyNamen[i] + "\"";
+      sendToBAck.zaehlerName = '"' + this.shellyNamen[i] + '"';
       this.dataServ.DataFromShelly(sendToBAck).subscribe((fromApi: any) => {
-        this.getShellyDataForStackChart(fromApi, this.shellyNamen[i], this.backgroundColorsShellys[i], this.borderColorsShellys[i]);
+        this.getShellyDataForStackChart(
+          fromApi,
+          this.shellyNamen[i],
+          this.backgroundColorsShellys[i],
+          this.borderColorsShellys[i]
+        );
       });
     }
 
     for (let i = 0; i < this.hauptZaehlerNamen.length; i++) {
-      sendToBAck.zaehlerName = "\"" + this.hauptZaehlerNamen[i] + "\"";
-      this.dataServ.DataFromHauptZaehler(sendToBAck).subscribe((fromApi: any) => {
-        this.getHauptzaehlerDataForStackChart(fromApi, this.hauptZaehlerNamen[i], this.backgroundColorsHauptzaehler[i], this.borderColorsHauptzaehler[i]);
-      });
+      sendToBAck.zaehlerName = '"' + this.hauptZaehlerNamen[i] + '"';
+      this.dataServ
+        .DataFromHauptZaehler(sendToBAck)
+        .subscribe((fromApi: any) => {
+          this.getHauptzaehlerDataForStackChart(
+            fromApi,
+            this.hauptZaehlerNamen[i],
+            this.backgroundColorsHauptzaehler[i],
+            this.borderColorsHauptzaehler[i]
+          );
+        });
     }
 
     setTimeout(() => {
@@ -136,25 +184,30 @@ export class DashboardComponent implements OnInit {
         type: 'bar',
         data: {
           labels: this.xAbscisse,
-          datasets: this.allData
+          datasets: this.allData,
         },
         options: {
           scales: {
             x: {
-              stacked: true
+              stacked: true,
             },
             y: {
-              stacked: true
-            }
-          }
-        }
+              stacked: true,
+            },
+          },
+        },
       });
 
       this.isChartLoading = true;
     }, 2000);
   }
 
-  getHauptzaehlerDataForStackChart(fromApi: any, hauptZaehlerNamen: string, backgroundColorRGBA: string, borderColorRGBA: string) {
+  getHauptzaehlerDataForStackChart(
+    fromApi: any,
+    hauptZaehlerNamen: string,
+    backgroundColorRGBA: string,
+    borderColorRGBA: string
+  ) {
     let dataPhase0 = [];
 
     for (var item of fromApi) {
@@ -166,7 +219,7 @@ export class DashboardComponent implements OnInit {
       backgroundColor: backgroundColorRGBA,
       borderColor: borderColorRGBA,
       borderWidth: 1,
-      data: dataPhase0
+      data: dataPhase0,
     };
 
     this.allData.push(hauptzaehler);
