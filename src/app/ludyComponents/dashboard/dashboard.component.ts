@@ -1,10 +1,24 @@
 import { Component, OnInit } from '@angular/core';
-import Chart from 'chart.js/auto';
+import { Chart, registerables } from 'chart.js/auto';
 import { RufZaehler } from 'src/app/ludyModel/ruf-zaehler';
 import { DataService } from 'src/app/ludyServices/data.service';
+// import { NgModel } from '@angular/forms';
+
 import * as moment from 'moment';
 
 declare var $: any; // Deklarieren Sie jQuery, damit TypeScript es verwenden kann
+type chartData = {
+  label: string;
+  backgroundColor: string;
+  borderColor: string;
+  borderWidth: number;
+  data: number[]; // Hier können Sie Ihre eigenen Daten einfügen
+};
+type schalterType = {
+  name: string;
+  status: boolean;
+  data: chartData;
+};
 
 @Component({
   selector: 'app-dashboard',
@@ -14,7 +28,7 @@ declare var $: any; // Deklarieren Sie jQuery, damit TypeScript es verwenden kan
 export class DashboardComponent implements OnInit {
   stackedChart: any;
   isChartLoading = false;
-  timeRange = 2; // en terme d'heure
+  timeRange = 5; // en terme d'heure
   dateEnd: Date = new Date(Date.now());
   readonly MS_PER_MINUTE = 60 * 60 * 1000;
   dateStart: Date = new Date(
@@ -24,17 +38,87 @@ export class DashboardComponent implements OnInit {
   dataVisual!: any;
   allData: any[] = [];
 
-  readonly shellyNamen = [
-    'shelly-3em-ohs23-01', // 0
-    'shelly-3em-ohs23-02', // 1
-    'shelly-3em-ohs23-03', // 2
-    'shelly-3em-ohs23-04', // 3
-    'shelly-3em-ohs23-05', // 4
+  shellys: schalterType[] = [
+    {
+      name: 'shelly-3em-ohs23-01',
+      status: false,
+      data: {
+        label: '',
+        backgroundColor: '',
+        borderColor: '',
+        borderWidth: 1,
+        data: [],
+      },
+    },
+    {
+      name: 'shelly-3em-ohs23-02',
+      status: false,
+      data: {
+        label: '',
+        backgroundColor: '',
+        borderColor: '',
+        borderWidth: 1,
+        data: [],
+      },
+    },
+    {
+      name: 'shelly-3em-ohs23-03',
+      status: false,
+      data: {
+        label: '',
+        backgroundColor: '',
+        borderColor: '',
+        borderWidth: 1,
+        data: [],
+      },
+    },
+    {
+      name: 'shelly-3em-ohs23-04',
+      status: false,
+      data: {
+        label: '',
+        backgroundColor: '',
+        borderColor: '',
+        borderWidth: 1,
+        data: [],
+      },
+    },
+    {
+      name: 'shelly-3em-ohs23-05',
+      status: false,
+      data: {
+        label: '',
+        backgroundColor: '',
+        borderColor: '',
+        borderWidth: 1,
+        data: [],
+      },
+    },
   ];
 
-  readonly hauptZaehlerNamen = [
-    'ITRON', // 0
-    'EBZDD3', // 1
+  hauptZaehler: schalterType[] = [
+    {
+      name: 'ITRON',
+      status: false,
+      data: {
+        label: '',
+        backgroundColor: '',
+        borderColor: '',
+        borderWidth: 1,
+        data: [],
+      },
+    },
+    {
+      name: 'EBZDD3',
+      status: false,
+      data: {
+        label: '',
+        backgroundColor: '',
+        borderColor: '',
+        borderWidth: 1,
+        data: [],
+      },
+    },
   ];
 
   readonly backgroundColorsShellys = [
@@ -65,10 +149,11 @@ export class DashboardComponent implements OnInit {
 
   private xAbscisse: string[] = [];
 
-  constructor(private dataServ: DataService) {}
+  constructor(private dataServ: DataService) {
+    Chart.register(...registerables);
+  }
 
   ngOnInit(): void {
-    // Lokalisieren Sie moment.js auf Deutsch
     this.stackBarChartForAllGraphs();
     setTimeout(() => {
       this.generateChart();
@@ -108,10 +193,7 @@ export class DashboardComponent implements OnInit {
       console.log('allDAta sollte lerr', this.allData);
       this.stackBarChartForAllGraphs(true);
       setTimeout(() => {
-        this.stackedChart.data.labels = this.xAbscisse;
-        this.stackedChart.data.datasets = this.allData;
-        console.log(this.allData);
-        this.stackedChart.update();
+        this.updateChart();
       }, 2000);
     });
   }
@@ -127,9 +209,31 @@ export class DashboardComponent implements OnInit {
         scales: {
           x: {
             stacked: true, // X-Achse gestapelt
+            // title: {
+            //   display: true,
+            //   text: '15 min Fenster',
+            //   padding: {
+            //     top: 10,
+            //     bottom: 10,
+            //   },
+            //   font: {
+            //     size: 14,
+            //   },
+            // },
           },
           y: {
             stacked: true, // Y-Achse gestapelt
+            title: {
+              display: true,
+              text: 'Mittlere Leistung Pro Minuten in Kilowatt',
+              padding: {
+                top: 10,
+                bottom: 10,
+              },
+              font: {
+                size: 14,
+              },
+            },
           },
         },
       },
@@ -137,136 +241,31 @@ export class DashboardComponent implements OnInit {
     this.isChartLoading = true;
   }
 
-  handleSelectedDates(start: Date, end: Date) {
-    this.dateStart = start;
-    this.dateEnd = end;
-    this.stackBarChartForAllGraphs();
+  updateChart() {
+    this.stackedChart.data.labels = this.xAbscisse;
+    this.stackedChart.data.datasets = this.allData;
+    this.stackedChart.update();
   }
 
-  showCheckedShellys(event: any) {
-    /*console.log("-----------------------begin-------------------");
-    console.log("event = ", event.target.defaultValue);
-    console.log("isChecked: ", event.target.checked);
-    console.log("event: ",event);
-    
-    
-    
-    // reinitialier allData
+  showCheckedShellys() {
+    this.allData = [];
+    this.hauptZaehler.forEach((item) =>{
+      if(item.status) this.allData.push(item.data)
+    })
+    this.shellys.forEach((item) =>{
+      if(item.status) this.allData.push(item.data)
+    })
+    this.updateChart();
 
-    switch(event.target.defaultValue){
-      case "shelly-3em-ohs23-01":
-        // TODO: appel shelly1
-        if(event.target.checked == true){
-          const isAny = this.allData.filter(item => item.name === event.target.defaultValue);
-          
-          if(isAny.length == 0){
-            let sendToBAck1 = new RufZaehler();
-            sendToBAck1.timeRange = this.timeRange,
-            sendToBAck1.zaehlerName = "\"" + this.shellyNamen[0] + "\"";
-            this.dataServ.DataFromShelly(sendToBAck1).subscribe((fromApi:any)=>{
-    
-              this.getShellyData(fromApi, this.shellyNamen[0], "rgba(26, 26, 255, 1)", "splineArea");
-            });
-          }
+  }
 
-        }else{
-          // enlever le shelly s'il n'est pas cocher
-          this.allData = this.allData.filter(item => item.name !== event.target.defaultValue);
-          
-        }
-        
-        break;
-      case "shelly-3em-ohs23-02":
-        if(event.target.checked == true){
-          const isAny = this.allData.filter(item => item.name === event.target.defaultValue);
+  private timeDifference(start: string, end: string): number {
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+    const diff = endDate.getTime() - startDate.getTime();
+    const hour = diff / (1000 * 3600);
 
-          if(isAny.length == 0){
-            let sendToBAck2 = new RufZaehler();
-            sendToBAck2.timeRange = this.timeRange,
-            sendToBAck2.zaehlerName = "\"" + this.shellyNamen[1] + "\"";
-            this.dataServ.DataFromShelly(sendToBAck2).subscribe((fromApi:any)=>{
-    
-              this.getShellyData(fromApi, this.shellyNamen[1], "rgba(230, 0, 172, 0.4)", "splineArea");
-    
-            });
-          }
-          
-        }else{
-          // enlever le shelly s'il n'est pas cocher
-          this.allData = this.allData.filter(item => item.name !== event.target.defaultValue);
-        }
-        
-        break;
-      case "shelly-3em-ohs23-03":
-        if(event.target.checked == true){
-          const isAny = this.allData.filter(item => item.name === event.target.defaultValue);
-        
-        if(isAny.length == 0){
-          let sendToBAck3 = new RufZaehler();
-          sendToBAck3.timeRange = this.timeRange,
-          sendToBAck3.zaehlerName = "\"" + this.shellyNamen[2] + "\"";
-          this.dataServ.DataFromShelly(sendToBAck3).subscribe((fromApi:any)=>{
-  
-            this.getShellyData(fromApi, this.shellyNamen[2], "rgba(0, 204, 204, 0.5)", "splineArea");
-  
-          });
-        }
-      }else{
-        // enlever le shelly s'il n'est pas cocher
-        this.allData = this.allData.filter(item => item.name !== event.target.defaultValue);
-      }
-        
-        break;
-      case "shelly-3em-ohs23-04":
-        if(event.target.checked == true){
-          const isAny = this.allData.filter(item => item.name === event.target.defaultValue);
-
-        if(isAny.length == 0){
-          let sendToBAck4 = new RufZaehler();
-          sendToBAck4.timeRange = this.timeRange,
-          sendToBAck4.zaehlerName = "\"" + this.shellyNamen[3] + "\"";
-          this.dataServ.DataFromShelly(sendToBAck4).subscribe((fromApi:any)=>{
-  
-            this.getShellyData(fromApi, this.shellyNamen[3], "rgba(255, 26, 117, 0.5)", "splineArea");
-  
-          });
-        }
-      }else{
-        // enlever le shelly s'il n'est pas cocher
-        this.allData = this.allData.filter(item => item.name !== event.target.defaultValue);
-      }
-        
-        break;
-      case "shelly-3em-ohs23-05":
-
-      if(event.target.checked == true){
-        const isAny = this.allData.filter(item => item.name === event.target.defaultValue);
-
-        if(isAny.length == 0){
-          let sendToBAck5 = new RufZaehler();
-          sendToBAck5.timeRange = this.timeRange,
-          sendToBAck5.zaehlerName = "\"" + this.shellyNamen[4] + "\"";
-          this.dataServ.DataFromShelly(sendToBAck5).subscribe((fromApi:any)=>{
-  
-            this.getShellyData(fromApi, this.shellyNamen[4], "rgb(455, 26, 117, 0.6)", "splineArea");
-  
-  
-          });  
-        }
-      }else{
-        // enlever le shelly s'il n'est pas cocher
-        this.allData = this.allData.filter(item => item.name !== event.target.defaultValue);
-      }
-
-        break;
-    }
-
-    
-    const tmp = {data: this.allData}
-    this.multiAreaChart = {...this.multiAreaChart, ...tmp};
-    this.isChartLoading = true;
-
-    console.log("-----------------------end-------------------");*/
+    return hour;
   }
 
   private calculateDiffHauptZaehler(
@@ -274,14 +273,21 @@ export class DashboardComponent implements OnInit {
     hauptZaehlerNamen: string,
     backgroundColorRGBA: string,
     borderColorRGBA: string
-  ) {
+  ): chartData {
     const size = fromApi.length - 1;
     const xValues: string[] = [];
+    const hauptzaehler: chartData = {
+      label: hauptZaehlerNamen,
+      backgroundColor: backgroundColorRGBA,
+      borderColor: borderColorRGBA,
+      borderWidth: 1,
+      data: [],
+    };
     if (!(fromApi[size - 1] && fromApi[0])) {
       console.log(
         `Für ${hauptZaehlerNamen} haben wir zurzeit keine Daten bekommen`
       );
-      return;
+      return hauptzaehler;
     }
     const diff: number[] = [];
     for (let i = 0; i < size; i++) {
@@ -293,27 +299,13 @@ export class DashboardComponent implements OnInit {
       diff.push(res);
       xValues.push(new Date(firstEl._time).toLocaleString());
     }
-    console.log('diff H', diff.length);
-    const hauptzaehler = {
-      label: hauptZaehlerNamen,
-      backgroundColor: backgroundColorRGBA,
-      borderColor: borderColorRGBA,
-      borderWidth: 1,
-      data: diff,
-    };
-
+    
+    hauptzaehler.data = diff;
     this.xAbscisse = xValues;
     this.allData.push(hauptzaehler);
+    return hauptzaehler;
   }
 
-  private timeDifference(start: string, end: string): number {
-    const startDate = new Date(start);
-    const endDate = new Date(end);
-    const diff = endDate.getTime() - startDate.getTime();
-    const hour = diff / (1000 * 3600);
-
-    return hour;
-  }
   private calculateDiffShelly(
     fromApi: any[],
     shellyName: string,
@@ -330,8 +322,7 @@ export class DashboardComponent implements OnInit {
       const res = tmp / 1;
       diff.push(res);
     }
-    console.log('diff S', diff.length);
-    const shelly = {
+    const shelly: chartData = {
       label: shellyName,
       backgroundColor: backgroundColorRGBA,
       borderColor: borderColorRGBA,
@@ -340,6 +331,7 @@ export class DashboardComponent implements OnInit {
     };
 
     this.allData.push(shelly);
+    return shelly;
   }
 
   stackBarChartForAllGraphs(diff: boolean = false) {
@@ -349,42 +341,42 @@ export class DashboardComponent implements OnInit {
     sendToBAck.dateStart = this.dateStart;
     sendToBAck.dateEnd = this.dateEnd;
 
-    for (let i = 0; i < this.shellyNamen.length; i++) {
-      sendToBAck.zaehlerName = `"${this.shellyNamen[i]}"`;
+    for (let i = 0; i < this.shellys.length; i++) {
+      sendToBAck.zaehlerName = `"${this.shellys[i].name}"`;
       this.dataServ.DataFromShelly(sendToBAck).subscribe((fromApi: any) => {
         if (!diff)
-          this.getShellyDataForStackChart(
+          this.shellys[i].data = this.getShellyDataForStackChart(
             fromApi,
-            this.shellyNamen[i],
+            this.shellys[i].name,
             this.backgroundColorsShellys[i],
             this.borderColorsShellys[i]
           );
         else
-          this.calculateDiffShelly(
+          this.shellys[i].data = this.calculateDiffShelly(
             fromApi,
-            this.shellyNamen[i],
+            this.shellys[i].name,
             this.backgroundColorsShellys[i],
             this.borderColorsShellys[i]
           );
       });
     }
 
-    for (let i = 0; i < this.hauptZaehlerNamen.length; i++) {
-      sendToBAck.zaehlerName = '"' + this.hauptZaehlerNamen[i] + '"';
+    for (let i = 0; i < this.hauptZaehler.length; i++) {
+      sendToBAck.zaehlerName = `"${this.hauptZaehler[i].name}"`;
       this.dataServ
         .DataFromHauptZaehler(sendToBAck)
         .subscribe((fromApi: any) => {
           if (!diff)
-            this.getHauptzaehlerDataForStackChart(
+            this.hauptZaehler[i].data = this.getHauptzaehlerDataForStackChart(
               fromApi,
-              this.hauptZaehlerNamen[i],
+              this.hauptZaehler[i].name,
               this.backgroundColorsHauptzaehler[i],
               this.borderColorsHauptzaehler[i]
             );
           else
-            this.calculateDiffHauptZaehler(
+            this.hauptZaehler[i].data = this.calculateDiffHauptZaehler(
               fromApi,
-              this.hauptZaehlerNamen[i],
+              this.hauptZaehler[i].name,
               this.backgroundColorsHauptzaehler[i],
               this.borderColorsHauptzaehler[i]
             );
@@ -428,7 +420,7 @@ export class DashboardComponent implements OnInit {
   ) {
     const { dataPts } = this.getShellySumme(fromApi);
 
-    const shelly = {
+    const shelly: chartData = {
       label: shellyName,
       backgroundColor: backgroundColorRGBA,
       borderColor: borderColorRGBA,
@@ -437,7 +429,8 @@ export class DashboardComponent implements OnInit {
     };
 
     this.allData.push(shelly);
-    // console.log('allData = ', this.allData);
+
+    return shelly;
   }
 
   getHauptzaehlerDataForStackChart(
@@ -456,7 +449,7 @@ export class DashboardComponent implements OnInit {
       xValues.push(new Date(item._time).toLocaleString());
     }
 
-    const hauptzaehler = {
+    const hauptzaehler: chartData = {
       label: hauptZaehlerNamen,
       backgroundColor: backgroundColorRGBA,
       borderColor: borderColorRGBA,
@@ -466,6 +459,7 @@ export class DashboardComponent implements OnInit {
 
     this.xAbscisse = xValues;
     this.allData.push(hauptzaehler);
-    // console.log('allData = ', this.allData);
+
+    return hauptzaehler;
   }
 }

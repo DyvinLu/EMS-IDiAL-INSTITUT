@@ -83,14 +83,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <!-- <tr *ngFor="let item of dataVisual">
-                        <td>{{item.device}}</td>
-                        <td>{{item._time | date: 'dd.MM.yyyy  hh:mm'}}</td>      
-                        <td>{{item._value}}</td>
-                        <td>{{item.measurement_type}}</td>
-                        <td>{{item._start | date: 'dd.MM.yyyy'}}</td>      
-
-                      </tr> -->
+                      <tr *ngFor="let item of dataVisual"></tr>
                     </tbody>
                   </table>
                 </div>
@@ -115,14 +108,25 @@
               <form>
                 <div class="row">
                   <div class="col-sm-12">
-                    <!-- select -->
+                    <!-- checkbox -->
                     <div class="form-group">
                       <label>Hauptzähler:</label>
-                      <select class="form-control">
-                        <option *ngFor="let name of hauptZaehlerNamen">
-                          {{ name }}
-                        </option>
-                      </select>
+                      <div
+                        *ngFor="let zaehler of hauptZaehler"
+                        class="form-check"
+                      >
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          [(ngModel)]="zaehler.status"
+                          name="{{ zaehler.name }}"
+                          [value]="zaehler.name"
+                          (change)="showCheckedShellys()"
+                        />
+                        <label class="form-check-label">{{
+                          zaehler.name
+                        }}</label>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -131,17 +135,18 @@
                     <!-- checkbox -->
                     <div class="form-group">
                       <label>Shellys:</label>
-                      <div
-                        *ngFor="let shelly of shellyNamen"
-                        class="form-check"
-                      >
-                        <!-- <input
+                      <div *ngFor="let shelly of shellys" class="form-check">
+                        <input
                           class="form-check-input"
                           type="checkbox"
-                          [value]="shelly"
-                          (change)="showCheckedShellys($event)"
-                        /> -->
-                        <label class="form-check-label">{{ shelly }}</label>
+                          [(ngModel)]="shelly.status"
+                          name="{{ shelly.name }}"
+                          [value]="shelly.name"
+                          (change)="showCheckedShellys()"
+                        />
+                        <label class="form-check-label">{{
+                          shelly.name
+                        }}</label>
                       </div>
                     </div>
                   </div>
