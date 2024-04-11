@@ -3,6 +3,7 @@ import { Chart, registerables } from 'chart.js/auto';
 import { RufZaehler } from 'src/app/ludyModel/ruf-zaehler';
 import { DataService } from 'src/app/ludyServices/data.service';
 import * as moment from 'moment';
+import { map } from 'rxjs';
 
 declare var $: any; // jQuery Deklarieren für TypeScript
 type ChartData = {
@@ -133,6 +134,7 @@ export class DashboardComponent implements OnInit {
     this.loadDataFromDatabaseAndCalculate();
     setTimeout(() => {
       this.generateChart();
+      console.log(this.allData)
     }, 2000);
   }
 
@@ -267,6 +269,17 @@ export class DashboardComponent implements OnInit {
       options.zaehlerName = `"${this.shellys[i].chartData.label}"`;
       this.dataService
         .DataFromShelly(options)
+        .pipe(
+          map((dataFromDB) =>
+            dataFromDB.map((item) => {
+              return {
+                _value: item._value / 1000 / 0.25,
+                _time: item._time,
+                phase: item.phase
+              };
+            })
+          )
+        )
         .subscribe((dataFromDB: any[]) => {
           if (dataFromDB.length !== 0)
             if (this.isAverage)
@@ -274,12 +287,21 @@ export class DashboardComponent implements OnInit {
             else this.standardCalculationForShellys(dataFromDB, i);
         });
     }
-    console.log(this.allData);
 
     for (let i = 0; i < this.hauptZaehler.length; i++) {
       options.zaehlerName = `"${this.hauptZaehler[i].chartData.label}"`;
       this.dataService
         .DataFromHauptZaehler(options)
+        .pipe(
+          map((dataFromDB) =>
+            dataFromDB.map((item) => {
+              return {
+                _value: item._value / 0.25,
+                _time: item._time,
+              };
+            })
+          )
+        )
         .subscribe((dataFromDB) => {
           if (dataFromDB.length !== 0)
             if (this.isAverage)
@@ -287,12 +309,10 @@ export class DashboardComponent implements OnInit {
             else this.standardCalculationForHauptZaehler(dataFromDB, i);
         });
     }
-    console.log(this.allData);
-    console.log(this.allData.length);
   }
 
   private standardCalculationForHauptZaehler(dataFromDB: any[], index: number) {
-    console.log(this.hauptZaehler[index].chartData.label);
+    console.log(dataFromDB)
     const data = [];
     const xValues: string[] = [];
 
@@ -309,6 +329,7 @@ export class DashboardComponent implements OnInit {
 
   private standardCalculationForShellys(dataFromDB: any[], index: number) {
     const { dataPts } = this.getShellySumme(dataFromDB);
+    console.log(dataPts)
     this.shellys[index].chartData.data = dataPts;
     this.allData.push(this.shellys[index].chartData);
   }
@@ -321,7 +342,7 @@ export class DashboardComponent implements OnInit {
     const xValues: string[] = [];
     const chartData = this.hauptZaehler[index].chartData;
     chartData.data = [];
-    
+
     const dataDiff: number[] = [];
     for (let i = 0; i < size; i++) {
       const lastEl = dataFromDB[i + 1];

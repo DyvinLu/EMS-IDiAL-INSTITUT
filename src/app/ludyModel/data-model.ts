@@ -1,15 +1,16 @@
-export class DataModel {
-  result!: string;
-  table!: number;
-  _start!: Date;
-  _stop!: Date;
-  _time!: Date;
-  _value!: number;
-  _field!: string;
-  _measurement!: string;
-  device!: string;
-  host!: string;
-  measurement_type!: string;
-  phase!: string;
-  topic!: string;
+
+export type DataModel = {
+  result: string;
+  table: string;
+  _start: string;
+  _stop: string;
+  _time: string;
+  _value: string;
+  _field: string;
+  _measurement: string;
+  device: string;
+  host: string;
+  measurement_type: string;
+  phase: string;
+  topic: string;
 }

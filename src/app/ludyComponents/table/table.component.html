@@ -34,8 +34,8 @@
                     <th>Zähler</th>
                     <th>Zeit</th>
                     <th>Wert</th>
-                    <th>Measurement Type</th>
                     <th>Field</th>
+                    <th>Measurement Type</th>
                     <th>Start</th>
                     <th>Stop</th>
                   </tr>
@@ -43,12 +43,12 @@
                 <tbody>
                   <tr *ngFor="let item of data">
                     <td>{{ item.device }}</td>
-                    <td>{{ item._time | date: 'dd.MM.yyyy  hh:mm' }}</td>
+                    <td>{{ item._time }}</td>
                     <td>{{ item._value }}</td>
-                    <td>{{ item.measurement_type }}</td>
                     <td>{{ item._field }}</td>
-                    <td>{{ item._start | date: 'dd.MM.yyyy' }}</td>
-                    <td>{{ item._stop | date: 'dd.MM.yyyy' }}</td>
+                    <td>{{ item.measurement_type }}</td>
+                    <td>{{ item._start }}</td>
+                    <td>{{ item._stop }}</td>
                   </tr>
                 </tbody>
               </table>

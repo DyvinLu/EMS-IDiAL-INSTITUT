@@ -33,7 +33,7 @@ with the HttpClient for making HTTP requests  */
   that makes an HTTP GET request to the specified endpoint */
 
   getAllDataFromCompteurs() {
-    return this.http.get('http://localhost:5000/api/data/compteurs/live'); // cette ligne permet d'appeler le backend
+    return this.http.get<any[][]>('http://localhost:5000/api/data/compteurs/live'); // cette ligne permet d'appeler le backend
   }
 
   DataFromShelly(ruf: RufZaehler) {
@@ -41,6 +41,8 @@ with the HttpClient for making HTTP requests  */
   }
 
   DataFromHauptZaehler(ruf: RufZaehler) {
-    return this.http.post<any[]>( 'http://localhost:5000/api/data/hauptzaehler', ruf); // cette ligne permet d'appeler le backend
+    const res = this.http.post<any[]>( 'http://localhost:5000/api/data/hauptzaehler', ruf); // cette ligne permet d'appeler le backend
+    res.subscribe((data) => console.log(data))
+    return res;
   }
 }
