@@ -2,22 +2,32 @@ import { Component, OnInit } from '@angular/core';
 import { Chart, registerables } from 'chart.js/auto';
 import { RufZaehler } from 'src/app/ludyModel/ruf-zaehler';
 import { DataService } from 'src/app/ludyServices/data.service';
-// import { NgModel } from '@angular/forms';
-
 import * as moment from 'moment';
 
-declare var $: any; // Deklarieren Sie jQuery, damit TypeScript es verwenden kann
-type chartData = {
+declare var $: any; // jQuery Deklarieren für TypeScript
+type ChartData = {
   label: string;
   backgroundColor: string;
   borderColor: string;
   borderWidth: number;
-  data: number[]; // Hier können Sie Ihre eigenen Daten einfügen
+  data: number[];
 };
-type schalterType = {
-  name: string;
+type ZaehlerType = {
+  chartData: ChartData;
   status: boolean;
-  data: chartData;
+  dataFromDB?: any[];
+};
+type ZaehlerOptions = {
+  name: string;
+  start: Date;
+  end: Date;
+};
+type ZaehlerTable = {
+  name: string;
+  akt_min: number;
+  akt_max: number;
+  hist_min: number;
+  hist_max: number;
 };
 
 @Component({
@@ -26,176 +36,140 @@ type schalterType = {
   styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent implements OnInit {
-  stackedChart: any;
-  isChartLoading = false;
-  timeRange = 5; // en terme d'heure
-  dateEnd: Date = new Date(Date.now());
-  readonly MS_PER_MINUTE = 60 * 60 * 1000;
-  dateStart: Date = new Date(
-    this.dateEnd.getTime() - this.timeRange * this.MS_PER_MINUTE
-  );
+  private stackedChart: any;
+  protected dataVisual!: ZaehlerTable[];
+  private dateEnd: Date;
+  private dateStart: Date;
 
-  dataVisual!: any;
-  allData: any[] = [];
-
-  shellys: schalterType[] = [
-    {
-      name: 'shelly-3em-ohs23-01',
-      status: false,
-      data: {
-        label: '',
-        backgroundColor: '',
-        borderColor: '',
-        borderWidth: 1,
-        data: [],
-      },
-    },
-    {
-      name: 'shelly-3em-ohs23-02',
-      status: false,
-      data: {
-        label: '',
-        backgroundColor: '',
-        borderColor: '',
-        borderWidth: 1,
-        data: [],
-      },
-    },
-    {
-      name: 'shelly-3em-ohs23-03',
-      status: false,
-      data: {
-        label: '',
-        backgroundColor: '',
-        borderColor: '',
-        borderWidth: 1,
-        data: [],
-      },
-    },
-    {
-      name: 'shelly-3em-ohs23-04',
-      status: false,
-      data: {
-        label: '',
-        backgroundColor: '',
-        borderColor: '',
-        borderWidth: 1,
-        data: [],
-      },
-    },
-    {
-      name: 'shelly-3em-ohs23-05',
-      status: false,
-      data: {
-        label: '',
-        backgroundColor: '',
-        borderColor: '',
-        borderWidth: 1,
-        data: [],
-      },
-    },
-  ];
-
-  hauptZaehler: schalterType[] = [
-    {
-      name: 'ITRON',
-      status: false,
-      data: {
-        label: '',
-        backgroundColor: '',
-        borderColor: '',
-        borderWidth: 1,
-        data: [],
-      },
-    },
-    {
-      name: 'EBZDD3',
-      status: false,
-      data: {
-        label: '',
-        backgroundColor: '',
-        borderColor: '',
-        borderWidth: 1,
-        data: [],
-      },
-    },
-  ];
-
-  readonly backgroundColorsShellys = [
-    'rgba(255, 99, 132, 0.2)',
-    'rgba(54, 162, 235, 0.2)',
-    'rgba(255, 206, 86, 0.2)',
-    'rgba(75, 192, 192, 0.2)',
-    'rgba(153, 102, 255, 0.2)',
-  ];
-
-  readonly borderColorsShellys = [
-    'rgba(255, 99, 132, 1)',
-    'rgba(54, 162, 235, 1)',
-    'rgba(255, 206, 86, 1)',
-    'rgba(75, 192, 192, 1)',
-    'rgba(153, 102, 255, 1)',
-  ];
-
-  readonly backgroundColorsHauptzaehler = [
-    'rgba(255, 0, 0, 0.2)',
-    'rgba(0, 255, 0, 0.2)',
-  ];
-
-  private readonly borderColorsHauptzaehler = [
-    'rgba(255, 0, 0, 1)',
-    'rgba(0, 255, 0, 1)',
-  ];
-
+  private allData: ChartData[] = [];
   private xAbscisse: string[] = [];
+  protected isChartLoading: boolean = false;
+  protected isAverage: boolean = false;
 
-  constructor(private dataServ: DataService) {
+  protected readonly shellys: ZaehlerType[] = [
+    {
+      status: false,
+      chartData: {
+        label: 'shelly-3em-ohs23-01',
+        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+        borderColor: 'rgba(255, 99, 132, 1)',
+        borderWidth: 1,
+        data: [],
+      },
+    },
+    {
+      status: false,
+      chartData: {
+        label: 'shelly-3em-ohs23-02',
+        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+        borderColor: 'rgba(54, 162, 235, 1)',
+        borderWidth: 1,
+        data: [],
+      },
+    },
+    {
+      status: false,
+      chartData: {
+        label: 'shelly-3em-ohs23-03',
+        backgroundColor: 'rgba(255, 206, 86, 0.2)',
+        borderColor: 'rgba(255, 206, 86, 1)',
+        borderWidth: 1,
+        data: [],
+      },
+    },
+    {
+      status: false,
+      chartData: {
+        label: 'shelly-3em-ohs23-04',
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 1,
+        data: [],
+      },
+    },
+    {
+      status: false,
+      chartData: {
+        label: 'shelly-3em-ohs23-05',
+        backgroundColor: 'rgba(153, 102, 255, 0.2)',
+        borderColor: 'rgba(153, 102, 255, 1)',
+        borderWidth: 1,
+        data: [],
+      },
+    },
+  ];
+
+  protected readonly hauptZaehler: ZaehlerType[] = [
+    {
+      status: false,
+      chartData: {
+        label: 'EBZDD3',
+        backgroundColor: 'rgba(0, 255, 0, 0.2)',
+        borderColor: 'rgba(0, 255, 0, 1)',
+        borderWidth: 1,
+        data: [],
+      },
+    },
+    {
+      status: false,
+      chartData: {
+        label: 'ITRON',
+        backgroundColor: 'rgba(255, 0, 0, 0.2)',
+        borderColor: 'rgba(255, 0, 0, 1)',
+        borderWidth: 1,
+        data: [],
+      },
+    },
+  ];
+
+  constructor(private dataService: DataService) {
     Chart.register(...registerables);
+    this.dateEnd = new Date(moment().valueOf());
+    this.dateStart = new Date(moment().startOf('day').valueOf());
   }
 
   ngOnInit(): void {
-    this.stackBarChartForAllGraphs();
+    this.generateCalendar();
+    this.loadDataFromDatabaseAndCalculate();
     setTimeout(() => {
       this.generateChart();
     }, 2000);
-    this.generateCalendar();
   }
 
-  private generateCalendar(): void {
-    moment.locale('de');
-    // Initialisierung des Date Range Picker mit deutschem Datumsformat
-    const picker = $('input[name="datetimes"]').daterangepicker({
-      timePicker: true,
-      timePicker24Hour: true, // Aktivieren Sie das 24-Stunden-Zeitformat
-      startDate: moment().startOf('hour'),
-      endDate: moment().startOf('hour').add(1, 'hour'), // Beispiel für eine Start- und Endzeit
-      locale: {
-        format: 'DD.MM.YYYY HH:mm', // Deutsches Datums- und Zeitformat
-        applyLabel: 'Anwenden',
-        cancelLabel: 'Abbrechen',
-        fromLabel: 'Von',
-        toLabel: 'Bis',
-        weekLabel: 'W',
-        customRangeLabel: 'Benutzerdefiniert',
-        daysOfWeek: moment.weekdaysMin(), // Verwenden Sie moment.js, um die Abkürzungen der Wochentage auf Deutsch zu erhalten
-        monthNames: moment.monthsShort(), // Verwenden Sie moment.js, um die Abkürzungen der Monate auf Deutsch zu erhalten
-      },
-      maxDate: moment(),
+  protected showCheckedShellys() {
+    this.clearData();
+    this.hauptZaehler.forEach((item) => {
+      if (item.status) {
+        this.allData.push(item.chartData);
+        this.dataVisual.push({
+          name: item.chartData.label,
+          akt_max: 0,
+          akt_min: 0,
+          hist_max: 0,
+          hist_min: 0,
+        });
+      }
     });
-
-    picker.on('apply.daterangepicker', (ev: any, picker: any) => {
-      // Zugriff auf das ausgewählte Startdatum und Enddatum
-      this.dateStart = new Date(picker.startDate);
-      this.dateEnd = new Date(picker.endDate);
-
-      //update Chart
-      this.allData = [];
-      console.log('allDAta sollte lerr', this.allData);
-      this.stackBarChartForAllGraphs(true);
-      setTimeout(() => {
-        this.updateChart();
-      }, 2000);
+    this.shellys.forEach((item) => {
+      if (item.status) {
+        this.allData.push(item.chartData);
+        this.dataVisual.push({
+          name: item.chartData.label,
+          akt_max: 0,
+          akt_min: 0,
+          hist_max: 0,
+          hist_min: 0,
+        });
+      }
     });
+    this.updateChart();
+    this.dataVisual.sort();
+  }
+
+  protected changeCalculationMode() {
+    this.loadDataFromDatabaseAndCalculate();
+    this.uncheckAllZaehler();
+    this.updateChart();
   }
 
   private generateChart(): void {
@@ -241,164 +215,161 @@ export class DashboardComponent implements OnInit {
     this.isChartLoading = true;
   }
 
-  updateChart() {
-    this.stackedChart.data.labels = this.xAbscisse;
-    this.stackedChart.data.datasets = this.allData;
-    this.stackedChart.update();
+  private updateChart() {
+    setTimeout(() => {
+      this.stackedChart.data.labels = this.xAbscisse;
+      this.stackedChart.data.datasets = this.allData;
+      this.stackedChart.update();
+    }, 2000);
   }
 
-  showCheckedShellys() {
-    this.allData = [];
-    this.hauptZaehler.forEach((item) =>{
-      if(item.status) this.allData.push(item.data)
-    })
-    this.shellys.forEach((item) =>{
-      if(item.status) this.allData.push(item.data)
-    })
-    this.updateChart();
+  private generateCalendar(): void {
+    moment.locale('de');
+    // Initialisierung des Date Range Picker mit deutschem Datumsformat
+    const picker = $('input[name="datetimes"]').daterangepicker({
+      timePicker: true,
+      timePicker24Hour: true,
+      timePickerIncrement: 5,
+      startDate: moment().startOf('day'),
+      endDate: moment(),
+      locale: {
+        format: 'DD.MM.YYYY HH:mm', // Deutsches Datums- und Zeitformat
+        applyLabel: 'Anwenden',
+        cancelLabel: 'Abbrechen',
+        fromLabel: 'Von',
+        toLabel: 'Bis',
+        weekLabel: 'W',
+        customRangeLabel: 'Benutzerdefiniert',
+        daysOfWeek: moment.weekdaysMin(), //Abkürzungen der Wochentage auf Deutsch
+        monthNames: moment.monthsShort(), //Abkürzungen der Monate auf Deutsch
+      },
+      maxDate: moment(),
+    });
 
+    picker.on('apply.daterangepicker', (ev: any, picker: any) => {
+      this.dateStart = new Date(picker.startDate);
+      this.dateEnd = new Date(picker.endDate);
+
+      this.clearData();
+      this.loadDataFromDatabaseAndCalculate();
+      this.uncheckAllZaehler();
+      this.updateChart();
+    });
   }
 
-  private timeDifference(start: string, end: string): number {
-    const startDate = new Date(start);
-    const endDate = new Date(end);
-    const diff = endDate.getTime() - startDate.getTime();
-    const hour = diff / (1000 * 3600);
+  private loadDataFromDatabaseAndCalculate(): void {
+    this.clearData();
+    let options = new RufZaehler();
+    options.dateEnd = this.dateEnd;
+    options.dateStart = this.dateStart;
 
-    return hour;
-  }
-
-  private calculateDiffHauptZaehler(
-    fromApi: any[],
-    hauptZaehlerNamen: string,
-    backgroundColorRGBA: string,
-    borderColorRGBA: string
-  ): chartData {
-    const size = fromApi.length - 1;
-    const xValues: string[] = [];
-    const hauptzaehler: chartData = {
-      label: hauptZaehlerNamen,
-      backgroundColor: backgroundColorRGBA,
-      borderColor: borderColorRGBA,
-      borderWidth: 1,
-      data: [],
-    };
-    if (!(fromApi[size - 1] && fromApi[0])) {
-      console.log(
-        `Für ${hauptZaehlerNamen} haben wir zurzeit keine Daten bekommen`
-      );
-      return hauptzaehler;
+    for (let i = 0; i < this.shellys.length; i++) {
+      options.zaehlerName = `"${this.shellys[i].chartData.label}"`;
+      this.dataService
+        .DataFromShelly(options)
+        .subscribe((dataFromDB: any[]) => {
+          if (dataFromDB.length !== 0)
+            if (this.isAverage)
+              this.averageCalculationForShellys(dataFromDB, i);
+            else this.standardCalculationForShellys(dataFromDB, i);
+        });
     }
-    const diff: number[] = [];
+    console.log(this.allData);
+
+    for (let i = 0; i < this.hauptZaehler.length; i++) {
+      options.zaehlerName = `"${this.hauptZaehler[i].chartData.label}"`;
+      this.dataService
+        .DataFromHauptZaehler(options)
+        .subscribe((dataFromDB) => {
+          if (dataFromDB.length !== 0)
+            if (this.isAverage)
+              this.averageCalculationForHauptZaehler(dataFromDB, i);
+            else this.standardCalculationForHauptZaehler(dataFromDB, i);
+        });
+    }
+    console.log(this.allData);
+    console.log(this.allData.length);
+  }
+
+  private standardCalculationForHauptZaehler(dataFromDB: any[], index: number) {
+    console.log(this.hauptZaehler[index].chartData.label);
+    const data = [];
+    const xValues: string[] = [];
+
+    for (const item of dataFromDB) {
+      data.push(item._value);
+      xValues.push(new Date(item._time).toLocaleString());
+    }
+
+    this.hauptZaehler[index].chartData.data = data;
+
+    this.xAbscisse = xValues;
+    this.allData.push(this.hauptZaehler[index].chartData);
+  }
+
+  private standardCalculationForShellys(dataFromDB: any[], index: number) {
+    const { dataPts } = this.getShellySumme(dataFromDB);
+    this.shellys[index].chartData.data = dataPts;
+    this.allData.push(this.shellys[index].chartData);
+  }
+
+  private averageCalculationForHauptZaehler(
+    dataFromDB: any[],
+    index: number
+  ): void {
+    const size = dataFromDB.length - 1;
+    const xValues: string[] = [];
+    const chartData = this.hauptZaehler[index].chartData;
+    chartData.data = [];
+    
+    const dataDiff: number[] = [];
     for (let i = 0; i < size; i++) {
-      const lastEl = fromApi[i + 1];
-      const firstEl = fromApi[i];
+      const lastEl = dataFromDB[i + 1];
+      const firstEl = dataFromDB[i];
       const tmp = lastEl._value - firstEl._value;
       const hour = this.timeDifference(firstEl._time, lastEl._time);
       const res = tmp / hour;
-      diff.push(res);
+      dataDiff.push(res);
       xValues.push(new Date(firstEl._time).toLocaleString());
     }
-    
-    hauptzaehler.data = diff;
+
+    chartData.data = dataDiff;
     this.xAbscisse = xValues;
-    this.allData.push(hauptzaehler);
-    return hauptzaehler;
+    this.allData.push(chartData);
+    this.hauptZaehler[index].chartData = chartData;
   }
 
-  private calculateDiffShelly(
-    fromApi: any[],
-    shellyName: string,
-    backgroundColorRGBA: string,
-    borderColorRGBA: string
-  ) {
-    const diff: number[] = [];
-    const { dataPts, time } = this.getShellySumme(fromApi);
+  private averageCalculationForShellys(dataFromDB: any[], index: number) {
+    const Datadiff: number[] = [];
+    const { dataPts, time } = this.getShellySumme(dataFromDB);
     const size = dataPts.length - 1;
 
     for (let i = 0; i < size; i++) {
       const tmp = dataPts[i + 1] - dataPts[i];
       const hour = this.timeDifference(time[i], time[i + 1]);
-      const res = tmp / 1;
-      diff.push(res);
+      const res = tmp / hour;
+      Datadiff.push(res);
     }
-    const shelly: chartData = {
-      label: shellyName,
-      backgroundColor: backgroundColorRGBA,
-      borderColor: borderColorRGBA,
-      borderWidth: 1,
-      data: diff,
-    };
+    this.shellys[index].chartData.data = Datadiff;
 
-    this.allData.push(shelly);
-    return shelly;
+    this.allData.push(this.shellys[index].chartData);
   }
 
-  stackBarChartForAllGraphs(diff: boolean = false) {
-    this.allData = [];
-    //debugger
-    let sendToBAck = new RufZaehler();
-    sendToBAck.dateStart = this.dateStart;
-    sendToBAck.dateEnd = this.dateEnd;
-
-    for (let i = 0; i < this.shellys.length; i++) {
-      sendToBAck.zaehlerName = `"${this.shellys[i].name}"`;
-      this.dataServ.DataFromShelly(sendToBAck).subscribe((fromApi: any) => {
-        if (!diff)
-          this.shellys[i].data = this.getShellyDataForStackChart(
-            fromApi,
-            this.shellys[i].name,
-            this.backgroundColorsShellys[i],
-            this.borderColorsShellys[i]
-          );
-        else
-          this.shellys[i].data = this.calculateDiffShelly(
-            fromApi,
-            this.shellys[i].name,
-            this.backgroundColorsShellys[i],
-            this.borderColorsShellys[i]
-          );
-      });
-    }
-
-    for (let i = 0; i < this.hauptZaehler.length; i++) {
-      sendToBAck.zaehlerName = `"${this.hauptZaehler[i].name}"`;
-      this.dataServ
-        .DataFromHauptZaehler(sendToBAck)
-        .subscribe((fromApi: any) => {
-          if (!diff)
-            this.hauptZaehler[i].data = this.getHauptzaehlerDataForStackChart(
-              fromApi,
-              this.hauptZaehler[i].name,
-              this.backgroundColorsHauptzaehler[i],
-              this.borderColorsHauptzaehler[i]
-            );
-          else
-            this.hauptZaehler[i].data = this.calculateDiffHauptZaehler(
-              fromApi,
-              this.hauptZaehler[i].name,
-              this.backgroundColorsHauptzaehler[i],
-              this.borderColorsHauptzaehler[i]
-            );
-        });
-    }
-  }
-
-  private getShellySumme(fromApi: any[]) {
+  private getShellySumme(dataFromDB: any[]) {
     const dataPts: number[] = [];
     const phase0: number[] = [];
     const phase1: number[] = [];
     const phase2: number[] = [];
     const time: string[] = [];
 
-    fromApi.forEach((item) => {
+    dataFromDB.forEach((item) => {
       const value = item._value;
-      if (item.phase == '0') {
+      if (item.phase === '0') {
         phase0.push(value);
         time.push(item._time);
-      } else if (item.phase == '1') {
+      } else if (item.phase === '1') {
         phase1.push(value);
-      } else if (item.phase == '2') {
+      } else if (item.phase === '2') {
         phase2.push(value);
       }
     });
@@ -412,54 +383,68 @@ export class DashboardComponent implements OnInit {
     return { dataPts, time };
   }
 
-  getShellyDataForStackChart(
-    fromApi: any[],
-    shellyName: string,
-    backgroundColorRGBA: string,
-    borderColorRGBA: string
-  ) {
-    const { dataPts } = this.getShellySumme(fromApi);
-
-    const shelly: chartData = {
-      label: shellyName,
-      backgroundColor: backgroundColorRGBA,
-      borderColor: borderColorRGBA,
-      borderWidth: 1,
-      data: dataPts, // Hier können Sie Ihre eigenen Daten einfügen
-    };
-
-    this.allData.push(shelly);
-
-    return shelly;
+  private uncheckAllZaehler() {
+    this.shellys.forEach((item) => (item.status = false));
+    this.hauptZaehler.forEach((item) => (item.status = false));
   }
 
-  getHauptzaehlerDataForStackChart(
-    fromApi: any[],
-    hauptZaehlerNamen: string,
-    backgroundColorRGBA: string,
-    borderColorRGBA: string
-  ) {
+  private clearData() {
+    this.allData = [];
+    this.dataVisual = [];
+  }
+
+  private timeDifference(start: string, end: string): number {
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+    const diff = endDate.getTime() - startDate.getTime();
+    const hour = diff / (1000 * 3600);
+
+    return hour;
+  }
+
+  private stackBarChartForAllGraphs(diff: boolean = false) {
+    this.clearData();
+    let options = new RufZaehler();
+    options.dateEnd = this.dateEnd;
+    options.dateStart = this.dateStart;
+
+    for (let i = 0; i < this.shellys.length; i++) {
+      options.zaehlerName = `"${this.shellys[i].chartData.label}"`;
+      this.dataService.DataFromShelly(options).subscribe((dataFromDB) => {
+        if (dataFromDB)
+          if (diff) this.averageCalculationForShellys(dataFromDB, i);
+          else this.getShellyDataForStackChart(dataFromDB, i);
+      });
+    }
+
+    for (let i = 0; i < this.hauptZaehler.length; i++) {
+      options.zaehlerName = `"${this.hauptZaehler[i].chartData.label}"`;
+      this.dataService.DataFromHauptZaehler(options).subscribe((dataFromDB) => {
+        if (dataFromDB)
+          if (diff) this.averageCalculationForHauptZaehler(dataFromDB, i);
+          else this.getHauptzaehlerDataForStackChart(dataFromDB, i);
+      });
+    }
+  }
+
+  private getShellyDataForStackChart(dataFromDB: any[], index: number) {
+    const { dataPts } = this.getShellySumme(dataFromDB);
+    this.shellys[index].chartData.data = dataPts;
+    this.allData.push(this.shellys[index].chartData);
+  }
+
+  private getHauptzaehlerDataForStackChart(dataFromDB: any[], index: number) {
     let data = [];
     const xValues: string[] = [];
 
-    //debugger
-    for (var item of fromApi) {
-      // parcourir la liste des donnees
+    for (var item of dataFromDB) {
       data.push(item._value);
       xValues.push(new Date(item._time).toLocaleString());
     }
 
-    const hauptzaehler: chartData = {
-      label: hauptZaehlerNamen,
-      backgroundColor: backgroundColorRGBA,
-      borderColor: borderColorRGBA,
-      borderWidth: 1,
-      data,
-    };
+    this.hauptZaehler[index].chartData.data = data;
 
     this.xAbscisse = xValues;
-    this.allData.push(hauptzaehler);
-
-    return hauptzaehler;
+    this.allData.push(this.hauptZaehler[index].chartData);
   }
 }

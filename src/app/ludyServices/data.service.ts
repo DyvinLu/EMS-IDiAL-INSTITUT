@@ -37,10 +37,10 @@ with the HttpClient for making HTTP requests  */
   }
 
   DataFromShelly(ruf: RufZaehler) {
-    return this.http.post('http://localhost:5000/api/data/shelly', ruf); // cette ligne permet d'appeler le backend
+    return this.http.post<any[]>('http://localhost:5000/api/data/shelly', ruf); // cette ligne permet d'appeler le backend
   }
 
   DataFromHauptZaehler(ruf: RufZaehler) {
-    return this.http.post('http://localhost:5000/api/data/hauptzaehler', ruf); // cette ligne permet d'appeler le backend
+    return this.http.post<any[]>( 'http://localhost:5000/api/data/hauptzaehler', ruf); // cette ligne permet d'appeler le backend
   }
 }

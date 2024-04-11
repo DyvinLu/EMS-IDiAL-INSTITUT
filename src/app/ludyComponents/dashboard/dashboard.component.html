@@ -6,20 +6,15 @@
         <div class="col-sm-6">
           <h1 class="m-0">Dashboard</h1>
         </div>
-        <!-- /.col -->
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="#">Home</a></li>
             <li class="breadcrumb-item active">Dashboard</li>
           </ol>
         </div>
-        <!-- /.col -->
       </div>
-      <!-- /.row -->
     </div>
-    <!-- /.container-fluid -->
   </div>
-  <!-- /.content-header -->
 
   <!-- Main content -->
   <div class="content">
@@ -54,15 +49,13 @@
                     </button>
                   </div>
                 </div>
+                <!-- Stacked Bar Chart wird hier gerendert -->
                 <div class="card-body">
                   <div class="chart">
                     <canvas id="stackedBarChart"></canvas>
-                    <!-- Stacked Bar Chart wird hier gerendert -->
                   </div>
                 </div>
-                <!-- /.card-body -->
               </div>
-              <!-- /.card -->
             </div>
           </div>
 
@@ -83,19 +76,50 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr *ngFor="let item of dataVisual"></tr>
+                      <tr *ngFor="let item of dataVisual">
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.akt_min }}</td>
+                        <td>{{ item.hist_min }}</td>
+                        <td>{{ item.akt_max }}</td>
+                        <td>{{ item.hist_max }}</td>
+                      </tr>
                     </tbody>
                   </table>
                 </div>
-                <!-- /.card-body -->
               </div>
             </div>
-            <!-- /.col -->
           </div>
-          <!-- /.row -->
         </div>
 
         <div class="col-md-3">
+          <div class="card card-warning">
+            <div class="card-header" style="background-color: #e0e0e0">
+              <h3 class="card-title" style="color: #1f2d3d; font-weight: bold">
+                Berechnung Mode
+              </h3>
+            </div>
+            <div class="card-body">
+              <form>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="form-group">
+                      <div class="form-check form-switch">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          role="switch"
+                          [(ngModel)]="isAverage"
+                          name="calulationMode"
+                          (change)="changeCalculationMode()"
+                        />
+                        <label class="form-check-label">Durchschnitt</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
           <!-- Zählerauswahl -->
           <div class="card card-warning">
             <div class="card-header" style="background-color: #e0e0e0">
@@ -103,12 +127,10 @@
                 Zählerauswahl
               </h3>
             </div>
-            <!-- /.card-header -->
             <div class="card-body">
               <form>
                 <div class="row">
                   <div class="col-sm-12">
-                    <!-- checkbox -->
                     <div class="form-group">
                       <label>Hauptzähler:</label>
                       <div
@@ -119,12 +141,11 @@
                           class="form-check-input"
                           type="checkbox"
                           [(ngModel)]="zaehler.status"
-                          name="{{ zaehler.name }}"
-                          [value]="zaehler.name"
+                          name="{{ zaehler.chartData.label }}"
                           (change)="showCheckedShellys()"
                         />
                         <label class="form-check-label">{{
-                          zaehler.name
+                          zaehler.chartData.label
                         }}</label>
                       </div>
                     </div>
@@ -140,12 +161,11 @@
                           class="form-check-input"
                           type="checkbox"
                           [(ngModel)]="shelly.status"
-                          name="{{ shelly.name }}"
-                          [value]="shelly.name"
+                          name="{{ shelly.chartData.label }}"
                           (change)="showCheckedShellys()"
                         />
                         <label class="form-check-label">{{
-                          shelly.name
+                          shelly.chartData.label
                         }}</label>
                       </div>
                     </div>
@@ -153,10 +173,7 @@
                 </div>
               </form>
             </div>
-            <!-- /.card-body -->
           </div>
-          <!-- /.card -->
-
           <!-- Kalender mit Datum und Uhrzeit -->
           <div class="card card-warning">
             <div class="card-header" style="background-color: #e0e0e0">
@@ -164,11 +181,9 @@
                 Zeitraumauswahl
               </h3>
             </div>
-            <!-- /.card-header -->
             <div class="card-body">
               <form>
                 <div class="form-group">
-                  <!-- <label>Einheiten wechseln:</label> -->
                   <div
                     class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success"
                   >
@@ -182,19 +197,13 @@
                         text-align: center;
                       "
                     />
-                    <!-- Runde Ecken mit 5px Radius --><!-- Breite des Eingabefeldes anpassen -->
                   </div>
                 </div>
               </form>
             </div>
-            <!-- /.card-body -->
           </div>
-          <!-- /.card -->
         </div>
       </div>
     </div>
-
-    <!-- /.container-fluid -->
   </div>
-  <!-- /.content -->
 </div>
