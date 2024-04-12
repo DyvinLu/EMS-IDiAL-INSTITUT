@@ -28,7 +28,7 @@ type ZaehlerTable = {
 
 @Component({
   selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html'
+  templateUrl: './dashboard.component.html',
 })
 export class DashboardComponent implements OnInit {
   private stackedChart: any;
@@ -39,8 +39,15 @@ export class DashboardComponent implements OnInit {
   private allData: ChartData[] = [];
   private xAbscisse: string[] = [];
   protected isChartLoading: boolean = false;
-  protected isAverage: boolean = false;
+  protected isAverage: boolean = true;
+  protected convert: boolean = true;
 
+  private readonly watt = 0.25;
+  private readonly kwatt = 1000;
+  private shellysConvertion: number;
+  private hauptzaehlerConvertion: number;
+  private readonly message = 'hat keine Daten geliefert';
+  protected zaehlerErrorMessage: string[] = [];
   protected readonly shellys: ZaehlerType[] = [
     {
       status: false,
@@ -121,6 +128,8 @@ export class DashboardComponent implements OnInit {
     Chart.register(...registerables);
     this.dateEnd = new Date(moment().valueOf());
     this.dateStart = new Date(moment().startOf('day').valueOf());
+    this.shellysConvertion = this.watt * this.kwatt;
+    this.hauptzaehlerConvertion = this.watt;
   }
 
   ngOnInit(): void {
@@ -128,7 +137,7 @@ export class DashboardComponent implements OnInit {
     this.loadDataFromDatabaseAndCalculate();
     setTimeout(() => {
       this.generateChart();
-      console.log(this.allData)
+      console.log(this.allData);
     }, 2000);
   }
 
@@ -139,20 +148,21 @@ export class DashboardComponent implements OnInit {
         this.allData.push(item.chartData);
         this.dataVisual.push({
           name: item.chartData.label,
-          akt_max: 0,
-          akt_min: 0,
+          akt_min: item.chartData.data.sort().at(0) || -1,
+          akt_max: item.chartData.data.sort().at(-1) || -1,//Array.at(-1) element à la derniere position de l'array
           hist_max: 0,
           hist_min: 0,
         });
       }
     });
     this.shellys.forEach((item) => {
+      
       if (item.status) {
         this.allData.push(item.chartData);
         this.dataVisual.push({
           name: item.chartData.label,
-          akt_max: 0,
-          akt_min: 0,
+          akt_max: item.chartData.data.sort().at(-1) || -1,
+          akt_min: item.chartData.data.sort().at(0) || -1,
           hist_max: 0,
           hist_min: 0,
         });
@@ -166,6 +176,17 @@ export class DashboardComponent implements OnInit {
     this.loadDataFromDatabaseAndCalculate();
     this.uncheckAllZaehler();
     this.updateChart();
+  }
+
+  protected convertInWattOrkWatt() {
+    if (this.convert) {
+      this.shellysConvertion = this.watt * this.kwatt;
+      this.hauptzaehlerConvertion = this.watt;
+    } else {
+      this.shellysConvertion = this.watt;
+      this.hauptzaehlerConvertion = this.kwatt / this.watt;
+    }
+    this.changeCalculationMode();
   }
 
   private generateChart(): void {
@@ -264,14 +285,14 @@ export class DashboardComponent implements OnInit {
     for (let i = 0; i < this.shellys.length; i++) {
       options.zaehlerName = `"${this.shellys[i].chartData.label}"`;
       this.dataService
-        .DataFromShelly(options)
+        .getShellyFromDB(options)
         .pipe(
           map((dataFromDB) =>
             dataFromDB.map((item) => {
               return {
-                _value: item._value / 1000 / 0.25,
+                _value: item._value / this.shellysConvertion,
                 _time: item._time,
-                phase: item.phase
+                phase: item.phase,
               };
             })
           )
@@ -281,18 +302,22 @@ export class DashboardComponent implements OnInit {
             if (this.isAverage)
               this.averageCalculationForShellys(dataFromDB, i);
             else this.standardCalculationForShellys(dataFromDB, i);
+          else
+            this.zaehlerErrorMessage.push(
+              `${this.shellys[i].chartData.label} ${this.message}`
+            );
         });
     }
 
     for (let i = 0; i < this.hauptZaehler.length; i++) {
       options.zaehlerName = `"${this.hauptZaehler[i].chartData.label}"`;
       this.dataService
-        .DataFromHauptZaehler(options)
+        .getHauptZaehlerFromDB(options)
         .pipe(
           map((dataFromDB) =>
             dataFromDB.map((item) => {
               return {
-                _value: item._value / 0.25,
+                _value: item._value / this.hauptzaehlerConvertion,
                 _time: item._time,
               };
             })
@@ -303,12 +328,16 @@ export class DashboardComponent implements OnInit {
             if (this.isAverage)
               this.averageCalculationForHauptZaehler(dataFromDB, i);
             else this.standardCalculationForHauptZaehler(dataFromDB, i);
+          else
+            this.zaehlerErrorMessage.push(
+              `${this.hauptZaehler[i].chartData.label} ${this.message}`
+            );
         });
     }
   }
 
   private standardCalculationForHauptZaehler(dataFromDB: any[], index: number) {
-    console.log(dataFromDB)
+    console.log(dataFromDB);
     const data = [];
     const xValues: string[] = [];
 
@@ -325,7 +354,7 @@ export class DashboardComponent implements OnInit {
 
   private standardCalculationForShellys(dataFromDB: any[], index: number) {
     const { dataPts } = this.getShellySumme(dataFromDB);
-    console.log(dataPts)
+    console.log(dataPts);
     this.shellys[index].chartData.data = dataPts;
     this.allData.push(this.shellys[index].chartData);
   }
@@ -408,6 +437,7 @@ export class DashboardComponent implements OnInit {
   private clearData() {
     this.allData = [];
     this.dataVisual = [];
+    this.zaehlerErrorMessage = [];
   }
 
   private timeDifference(start: string, end: string): number {

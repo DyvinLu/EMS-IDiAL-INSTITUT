@@ -17,7 +17,7 @@ export class TableComponent {
 
   constructor(private dataServ: DataService) {
     this.dataServ
-      .getAllDataFromCompteurs()
+      .getAllZaehlerFromDB()
       .pipe(
         map((dataFromDB) =>
           dataFromDB.flatMap((item) => item)
