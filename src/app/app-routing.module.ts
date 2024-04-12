@@ -1,26 +1,18 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { DashboardComponent } from './ludyComponents/dashboard/dashboard.component';
-import { TableComponent } from './ludyComponents/table/table.component';
-import { LoginComponent } from './ludyComponents/login/login.component';
-import { AuthGuard } from './_guards/auth.guard';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { TableComponent } from './pages/table/table.component';
 
 const routes: Routes = [
   {
     path: '',
     component: DashboardComponent,
-    //canActivate: [AuthGuard]
   }, // http://localhost:4200
 
   {
     path: 'app-table',
     component: TableComponent,
-    //canActivate: [AuthGuard]
   }, // http://localhost:4200/app-table
-  {
-    path: 'login',
-    component: LoginComponent,
-  }, // http:localhost:4200/login
 ];
 
 @NgModule({
