@@ -38,7 +38,6 @@ export class DashboardComponent implements OnInit {
 
   private allData: ChartData[] = [];
   private xAbscisse: string[] = [];
-  protected isChartLoading: boolean = false;
   protected isAverage: boolean = true;
   protected convert: boolean = true;
 
@@ -47,7 +46,9 @@ export class DashboardComponent implements OnInit {
   private shellysConvertion: number;
   private hauptzaehlerConvertion: number;
   private readonly message = 'hat keine Daten geliefert';
+  private readonly yMessage = 'Leistung in ';
   protected zaehlerErrorMessage: string[] = [];
+  private customYMessage!: string;
   protected readonly shellys: ZaehlerType[] = [
     {
       status: false,
@@ -130,52 +131,72 @@ export class DashboardComponent implements OnInit {
     this.dateStart = new Date(moment().startOf('day').valueOf());
     this.shellysConvertion = this.watt * this.kwatt;
     this.hauptzaehlerConvertion = this.watt;
+    this.getCustomYMessage();
   }
 
   ngOnInit(): void {
+    this.generateChart();
     this.generateCalendar();
     this.loadDataFromDatabaseAndCalculate();
+    this.sort();
+  }
+
+  /**
+   * Damit die darsgestellte Daten in Graph eine vordefinierte Reihenfolge halten,
+   * denn die Daten werden Asynchron aus der Datenbank geholt
+   */
+  private sort() {
     setTimeout(() => {
-      this.generateChart();
-      console.log(this.allData);
+      this.showCheckedShellys();
     }, 2000);
+  }
+
+  private getCustomYMessage() {
+    if (this.isAverage === true)
+      this.customYMessage = `Mittlere ${this.yMessage}`;
+    else this.customYMessage = this.yMessage;
+
+    if (this.convert) this.customYMessage = `${this.customYMessage} Kilowatt`;
+    else this.customYMessage = `${this.customYMessage} Watt`;
   }
 
   protected showCheckedShellys() {
     this.clearData();
-    this.hauptZaehler.forEach((item) => {
-      if (item.status) {
-        this.allData.push(item.chartData);
-        this.dataVisual.push({
-          name: item.chartData.label,
-          akt_min: item.chartData.data.sort().at(0) || -1,
-          akt_max: item.chartData.data.sort().at(-1) || -1,//Array.at(-1) element à la derniere position de l'array
-          hist_max: 0,
-          hist_min: 0,
-        });
-      }
-    });
     this.shellys.forEach((item) => {
-      
-      if (item.status) {
-        this.allData.push(item.chartData);
-        this.dataVisual.push({
-          name: item.chartData.label,
-          akt_max: item.chartData.data.sort().at(-1) || -1,
-          akt_min: item.chartData.data.sort().at(0) || -1,
-          hist_max: 0,
-          hist_min: 0,
-        });
-      }
+      this.getCheckedZaehler(item.status, item.chartData);
     });
+    this.hauptZaehler.forEach((item) => {
+      this.getCheckedZaehler(item.status, item.chartData);
+    });
+    if (this.allData.length === 0) {
+      this.shellys.forEach((item) => {
+        this.allData.push(item.chartData);
+      });
+      this.hauptZaehler.forEach((item) => {
+        this.allData.push(item.chartData);
+      });
+      this.uncheckAllZaehler();
+    }
     this.updateChart();
     this.dataVisual.sort();
   }
 
+  private getCheckedZaehler(status: boolean, chartData: ChartData) {
+    if (!(status === true && chartData.data.length !== 0)) return;
+    this.allData.push(chartData);
+    const tmp = [...chartData.data].sort();
+    this.dataVisual.push({
+      name: chartData.label,
+      akt_max: tmp.at(-1) || -1,
+      akt_min: tmp.at(0) || -1,
+      hist_max: 0,
+      hist_min: 0,
+    });
+  }
+
   protected changeCalculationMode() {
     this.loadDataFromDatabaseAndCalculate();
-    this.uncheckAllZaehler();
-    this.updateChart();
+    this.sort();
   }
 
   protected convertInWattOrkWatt() {
@@ -199,24 +220,13 @@ export class DashboardComponent implements OnInit {
       options: {
         scales: {
           x: {
-            stacked: true, // X-Achse gestapelt
-            // title: {
-            //   display: true,
-            //   text: '15 min Fenster',
-            //   padding: {
-            //     top: 10,
-            //     bottom: 10,
-            //   },
-            //   font: {
-            //     size: 14,
-            //   },
-            // },
+            stacked: true,
           },
           y: {
             stacked: true, // Y-Achse gestapelt
             title: {
               display: true,
-              text: 'Mittlere Leistung Pro Minuten in Kilowatt',
+              text: this.customYMessage,
               padding: {
                 top: 10,
                 bottom: 10,
@@ -229,15 +239,14 @@ export class DashboardComponent implements OnInit {
         },
       },
     });
-    this.isChartLoading = true;
   }
 
   private updateChart() {
-    setTimeout(() => {
-      this.stackedChart.data.labels = this.xAbscisse;
-      this.stackedChart.data.datasets = this.allData;
-      this.stackedChart.update();
-    }, 2000);
+    this.getCustomYMessage();
+    this.stackedChart.data.labels = this.xAbscisse;
+    this.stackedChart.data.datasets = this.allData;
+    this.stackedChart.options.scales.y.title.text = this.customYMessage;
+    this.stackedChart.update();
   }
 
   private generateCalendar(): void {
@@ -267,10 +276,10 @@ export class DashboardComponent implements OnInit {
       this.dateStart = new Date(picker.startDate);
       this.dateEnd = new Date(picker.endDate);
 
-      this.clearData();
       this.loadDataFromDatabaseAndCalculate();
-      this.uncheckAllZaehler();
-      this.updateChart();
+      setTimeout(() => {
+        this.showCheckedShellys();
+      }, 2000);
     });
   }
 
@@ -287,7 +296,7 @@ export class DashboardComponent implements OnInit {
       this.dataService
         .getShellyFromDB(options)
         .pipe(
-          map((dataFromDB) =>
+          map((dataFromDB: any[]) =>
             dataFromDB.map((item) => {
               return {
                 _value: item._value / this.shellysConvertion,

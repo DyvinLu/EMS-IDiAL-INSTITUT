@@ -70,18 +70,18 @@
                       <tr>
                         <th>Zähler</th>
                         <th>akt.Min.[KW/min]</th>
-                        <th>hist.Min.[KW/min]</th>
+                        <!-- <th>hist.Min.[KW/min]</th> -->
                         <th>akt.Max.[KW/min]</th>
-                        <th>hist.Max.[KW/min]</th>
+                        <!-- <th>hist.Max.[KW/min]</th> -->
                       </tr>
                     </thead>
                     <tbody>
                       <tr *ngFor="let item of dataVisual">
                         <td>{{ item.name }}</td>
                         <td>{{ item.akt_min }}</td>
-                        <td>{{ item.hist_min }}</td>
+                        <!-- <td>{{ item.hist_min }}</td> -->
                         <td>{{ item.akt_max }}</td>
-                        <td>{{ item.hist_max }}</td>
+                        <!-- <td>{{ item.hist_max }}</td> -->
                       </tr>
                     </tbody>
                   </table>
@@ -183,7 +183,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="form-group">
+                <!-- <div class="form-group">
                   <label for="customRange1">Fenstergröße:</label>
                   <input type="range" class="custom-range" id="customRange1" />
                 </div>
@@ -194,7 +194,7 @@
                   <div class="col-md-2">6h</div>
                   <div class="col-md-2">8h</div>
                   <div class="col-md-2">10h</div>
-                </div>
+                </div> -->
               </form>
             </div>
             <!-- /.card-body -->
