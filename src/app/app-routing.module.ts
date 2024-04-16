@@ -7,12 +7,12 @@ const routes: Routes = [
   {
     path: '',
     component: DashboardComponent,
-  }, // http://localhost:4200
+  },
 
   {
     path: 'app-table',
     component: TableComponent,
-  }, // http://localhost:4200/app-table
+  }, 
 ];
 
 @NgModule({

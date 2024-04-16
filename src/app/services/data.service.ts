@@ -6,14 +6,13 @@ import { ZaehlerOptions } from '../app.type';
   providedIn: 'root',
 })
 
-//Class Definition:Defines the DataService class
 export class DataService {
   constructor(private http: HttpClient) {}
 
   getAllZaehlerFromDB() {
     return this.http.get<any[][]>(
       'http://localhost:5000/api/data/compteurs/live'
-    ); // cette ligne permet d'appeler le backend
+    );
   }
 
   getShellyFromDB(ruf: ZaehlerOptions) {
@@ -24,6 +23,6 @@ export class DataService {
     return this.http.post<any[]>(
       'http://localhost:5000/api/data/hauptzaehler',
       ruf
-    ); // cette ligne permet d'appeler le backend
+    );
   }
 }

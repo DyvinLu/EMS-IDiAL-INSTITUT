@@ -5,7 +5,7 @@ import * as moment from 'moment';
 import { map } from 'rxjs';
 import { ZaehlerOptions } from 'src/app/app.type';
 
-declare var $: any; // jQuery Deklarieren für TypeScript
+declare var $: any;
 type ChartData = {
   label: string;
   backgroundColor: string;
@@ -223,8 +223,7 @@ export class DashboardComponent implements OnInit {
             stacked: true,
           },
           y: {
-            stacked: true, // Y-Achse gestapelt
-            title: {
+            stacked: true,             title: {
               display: true,
               text: this.customYMessage,
               padding: {
@@ -251,7 +250,6 @@ export class DashboardComponent implements OnInit {
 
   private generateCalendar(): void {
     moment.locale('de');
-    // Initialisierung des Date Range Picker mit deutschem Datumsformat
     const picker = $('input[name="datetimes"]').daterangepicker({
       timePicker: true,
       timePicker24Hour: true,
@@ -259,15 +257,15 @@ export class DashboardComponent implements OnInit {
       startDate: moment().startOf('day'),
       endDate: moment(),
       locale: {
-        format: 'DD.MM.YYYY HH:mm', // Deutsches Datums- und Zeitformat
+        format: 'DD.MM.YYYY HH:mm',
         applyLabel: 'Anwenden',
         cancelLabel: 'Abbrechen',
         fromLabel: 'Von',
         toLabel: 'Bis',
         weekLabel: 'W',
         customRangeLabel: 'Benutzerdefiniert',
-        daysOfWeek: moment.weekdaysMin(), //Abkürzungen der Wochentage auf Deutsch
-        monthNames: moment.monthsShort(), //Abkürzungen der Monate auf Deutsch
+        daysOfWeek: moment.weekdaysMin(),
+        monthNames: moment.monthsShort(), 
       },
       maxDate: moment(),
     });
