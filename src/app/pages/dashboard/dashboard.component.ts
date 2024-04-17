@@ -223,7 +223,8 @@ export class DashboardComponent implements OnInit {
             stacked: true,
           },
           y: {
-            stacked: true,             title: {
+            stacked: true,             
+            title: {
               display: true,
               text: this.customYMessage,
               padding: {

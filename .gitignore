@@ -42,3 +42,5 @@ testem.log
 Thumbs.db
 
 /src/app/services/abc.ts
+/node_modules
+/.vscode
