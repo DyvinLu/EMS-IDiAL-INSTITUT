@@ -182,7 +182,13 @@ export class DashboardComponent implements OnInit {
   }
 
   private getCheckedZaehler(status: boolean, chartData: ChartData) {
-    if (!(status === true && chartData.data.length !== 0)) return;
+    if (chartData.data.length === 0) {
+      console.log(chartData.label);
+      this.zaehlerErrorMessage.push(`${chartData.label} ${this.message}`);
+      return;
+    }
+    if (!status) return;
+
     this.allData.push(chartData);
     const tmp = [...chartData.data].sort();
     this.dataVisual.push({
@@ -223,7 +229,7 @@ export class DashboardComponent implements OnInit {
             stacked: true,
           },
           y: {
-            stacked: true,             
+            stacked: true,
             title: {
               display: true,
               text: this.customYMessage,
@@ -266,7 +272,7 @@ export class DashboardComponent implements OnInit {
         weekLabel: 'W',
         customRangeLabel: 'Benutzerdefiniert',
         daysOfWeek: moment.weekdaysMin(),
-        monthNames: moment.monthsShort(), 
+        monthNames: moment.monthsShort(),
       },
       maxDate: moment(),
     });
@@ -306,14 +312,11 @@ export class DashboardComponent implements OnInit {
           )
         )
         .subscribe((dataFromDB: any[]) => {
-          if (dataFromDB.length !== 0)
+          if (dataFromDB.length !== 0) {
             if (this.isAverage)
               this.averageCalculationForShellys(dataFromDB, i);
             else this.standardCalculationForShellys(dataFromDB, i);
-          else
-            this.zaehlerErrorMessage.push(
-              `${this.shellys[i].chartData.label} ${this.message}`
-            );
+          } else this.shellys[i].chartData.data = [];
         });
     }
 
@@ -332,14 +335,11 @@ export class DashboardComponent implements OnInit {
           )
         )
         .subscribe((dataFromDB) => {
-          if (dataFromDB.length !== 0)
+          if (dataFromDB.length !== 0) {
             if (this.isAverage)
               this.averageCalculationForHauptZaehler(dataFromDB, i);
             else this.standardCalculationForHauptZaehler(dataFromDB, i);
-          else
-            this.zaehlerErrorMessage.push(
-              `${this.hauptZaehler[i].chartData.label} ${this.message}`
-            );
+          } else this.hauptZaehler[i].chartData.data = [];
         });
     }
   }
