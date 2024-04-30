@@ -16,7 +16,6 @@ type ChartData = {
 type ZaehlerType = {
   chartData: ChartData;
   status: boolean;
-  dataFromDB?: any[];
 };
 type ZaehlerTable = {
   name: string;
@@ -133,7 +132,7 @@ export class DashboardComponent implements OnInit {
     this.hauptzaehlerConvertion = this.watt;
     this.getCustomYMessage();
   }
-
+  
   ngOnInit(): void {
     this.generateChart();
     this.generateCalendar();
@@ -146,8 +145,8 @@ export class DashboardComponent implements OnInit {
    * denn die Daten werden Asynchron aus der Datenbank geholt
    */
   private sort() {
-    setTimeout(() => {
-      this.showCheckedShellys();
+    setTimeout(() =>{
+      this.showCheckedShellys()
     }, 2000);
   }
 
@@ -183,7 +182,6 @@ export class DashboardComponent implements OnInit {
 
   private getCheckedZaehler(status: boolean, chartData: ChartData) {
     if (chartData.data.length === 0) {
-      console.log(chartData.label);
       this.zaehlerErrorMessage.push(`${chartData.label} ${this.message}`);
       return;
     }
