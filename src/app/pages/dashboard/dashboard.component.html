@@ -108,7 +108,7 @@
                       type="checkbox"
                       [(ngModel)]="zaehler.status"
                       name="{{ zaehler.chartData.label }}"
-                      (change)="showCheckedShellys()"
+                      (change)="showCheckedZaehler()"
                     />
                     <label class="form-check-label">{{
                       zaehler.chartData.label
@@ -124,7 +124,7 @@
                       type="checkbox"
                       [(ngModel)]="shelly.status"
                       name="{{ shelly.chartData.label }}"
-                      (change)="showCheckedShellys()"
+                      (change)="showCheckedZaehler()"
                     />
                     <label class="form-check-label">{{
                       shelly.chartData.label

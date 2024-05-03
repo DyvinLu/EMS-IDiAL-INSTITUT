@@ -140,80 +140,6 @@ export class DashboardComponent implements OnInit {
     this.sort();
   }
 
-  /**
-   * Damit die darsgestellte Daten in Graph eine vordefinierte Reihenfolge halten,
-   * denn die Daten werden Asynchron aus der Datenbank geholt
-   */
-  private sort() {
-    setTimeout(() =>{
-      this.showCheckedShellys()
-    }, 2000);
-  }
-
-  private getCustomYMessage() {
-    if (this.isAverage === true)
-      this.customYMessage = `Mittlere ${this.yMessage}`;
-    else this.customYMessage = this.yMessage;
-
-    if (this.convert) this.customYMessage = `${this.customYMessage} Kilowatt`;
-    else this.customYMessage = `${this.customYMessage} Watt`;
-  }
-
-  protected showCheckedShellys() {
-    this.clearData();
-    this.shellys.forEach((item) => {
-      this.getCheckedZaehler(item.status, item.chartData);
-    });
-    this.hauptZaehler.forEach((item) => {
-      this.getCheckedZaehler(item.status, item.chartData);
-    });
-    if (this.allData.length === 0) {
-      this.shellys.forEach((item) => {
-        this.allData.push(item.chartData);
-      });
-      this.hauptZaehler.forEach((item) => {
-        this.allData.push(item.chartData);
-      });
-      this.uncheckAllZaehler();
-    }
-    this.updateChart();
-    this.dataVisual.sort();
-  }
-
-  private getCheckedZaehler(status: boolean, chartData: ChartData) {
-    if (chartData.data.length === 0) {
-      this.zaehlerErrorMessage.push(`${chartData.label} ${this.message}`);
-      return;
-    }
-    if (!status) return;
-
-    this.allData.push(chartData);
-    const tmp = [...chartData.data].sort();
-    this.dataVisual.push({
-      name: chartData.label,
-      akt_max: tmp.at(-1) || -1,
-      akt_min: tmp.at(0) || -1,
-      hist_max: 0,
-      hist_min: 0,
-    });
-  }
-
-  protected changeCalculationMode() {
-    this.loadDataFromDatabaseAndCalculate();
-    this.sort();
-  }
-
-  protected convertInWattOrkWatt() {
-    if (this.convert) {
-      this.shellysConvertion = this.watt * this.kwatt;
-      this.hauptzaehlerConvertion = this.watt;
-    } else {
-      this.shellysConvertion = this.watt;
-      this.hauptzaehlerConvertion = this.kwatt / this.watt;
-    }
-    this.changeCalculationMode();
-  }
-
   private generateChart(): void {
     this.stackedChart = new Chart('stackedBarChart', {
       type: 'bar',
@@ -243,6 +169,81 @@ export class DashboardComponent implements OnInit {
         },
       },
     });
+  }
+
+  /**
+   * Damit die darsgestellte Daten in Graph eine vordefinierte Reihenfolge halten,
+   * denn die Daten werden Asynchron aus der Datenbank geholt
+   */
+  private sort() {
+    setTimeout(() =>{
+      this.showCheckedZaehler()
+    }, 2000);
+  }
+
+  private getCustomYMessage() {
+    if (this.isAverage === true)
+      this.customYMessage = `Mittlere ${this.yMessage}`;
+    else this.customYMessage = this.yMessage;
+
+    if (this.convert) this.customYMessage = `${this.customYMessage} Kilowatt`;
+    else this.customYMessage = `${this.customYMessage} Watt`;
+  }
+
+  protected showCheckedZaehler() { 
+    this.clearData();
+    this.shellys.forEach((item) => {
+      this.getCheckedZaehler(item.status, item.chartData);
+    });
+    this.hauptZaehler.forEach((item) => {
+      this.getCheckedZaehler(item.status, item.chartData);
+    });
+    if (this.allData.length === 0) {
+      this.shellys.forEach((item) => {
+        this.allData.push(item.chartData);
+      });
+      this.hauptZaehler.forEach((item) => {
+        this.allData.push(item.chartData);
+      });
+      this.uncheckAllZaehler();
+    }
+    this.updateChart();
+    this.dataVisual.sort();
+  }
+
+  private getCheckedZaehler(status: boolean, chartData: ChartData) {
+    if (!status) return;
+    if (chartData.data.length === 0) {
+      this.zaehlerErrorMessage.push(`${chartData.label} ${this.message}`);
+      return;
+    }
+
+    this.allData.push(chartData);
+    // ab Hier für die Tabelle!
+    const tmp = [...chartData.data].sort();
+    this.dataVisual.push({
+      name: chartData.label,
+      akt_max: tmp.at(-1) || -1,
+      akt_min: tmp.at(0) || -1,
+      hist_max: 0,
+      hist_min: 0,
+    });
+  }
+
+  protected changeCalculationMode() {
+    this.loadDataFromDatabaseAndCalculate();
+    this.sort();
+  }
+
+  protected convertInWattOrkWatt() {
+    if (this.convert) {
+      this.shellysConvertion = this.watt * this.kwatt;
+      this.hauptzaehlerConvertion = this.watt;
+    } else {
+      this.shellysConvertion = this.watt;
+      this.hauptzaehlerConvertion = this.kwatt / this.watt;
+    }
+    this.changeCalculationMode();
   }
 
   private updateChart() {
@@ -281,7 +282,7 @@ export class DashboardComponent implements OnInit {
 
       this.loadDataFromDatabaseAndCalculate();
       setTimeout(() => {
-        this.showCheckedShellys();
+        this.showCheckedZaehler();
       }, 2000);
     });
   }
@@ -341,7 +342,7 @@ export class DashboardComponent implements OnInit {
         });
     }
   }
-
+// Wie die Daten von DB kommen
   private standardCalculationForHauptZaehler(dataFromDB: any[], index: number) {
     console.log(dataFromDB);
     const data = [];
@@ -359,12 +360,13 @@ export class DashboardComponent implements OnInit {
   }
 
   private standardCalculationForShellys(dataFromDB: any[], index: number) {
-    const { dataPts } = this.getShellySumme(dataFromDB);
+    const { dataPts } = this.getShellyPhaseSumme(dataFromDB);
     console.log(dataPts);
     this.shellys[index].chartData.data = dataPts;
     this.allData.push(this.shellys[index].chartData);
   }
 
+  //Durchnitt Rechnung
   private averageCalculationForHauptZaehler(
     dataFromDB: any[],
     index: number
@@ -379,7 +381,7 @@ export class DashboardComponent implements OnInit {
       const lastEl = dataFromDB[i + 1];
       const firstEl = dataFromDB[i];
       const tmp = lastEl._value - firstEl._value;
-      const hour = this.timeDifference(firstEl._time, lastEl._time);
+      const hour = this.timeIntervall(firstEl._time, lastEl._time);
       const res = tmp / hour;
       dataDiff.push(res);
       xValues.push(new Date(firstEl._time).toLocaleString());
@@ -393,12 +395,12 @@ export class DashboardComponent implements OnInit {
 
   private averageCalculationForShellys(dataFromDB: any[], index: number) {
     const Datadiff: number[] = [];
-    const { dataPts, time } = this.getShellySumme(dataFromDB);
+    const { dataPts, time } = this.getShellyPhaseSumme(dataFromDB);
     const size = dataPts.length - 1;
 
     for (let i = 0; i < size; i++) {
       const tmp = dataPts[i + 1] - dataPts[i];
-      const hour = this.timeDifference(time[i], time[i + 1]);
+      const hour = this.timeIntervall(time[i], time[i + 1]);
       const res = tmp / hour;
       Datadiff.push(res);
     }
@@ -407,7 +409,7 @@ export class DashboardComponent implements OnInit {
     this.allData.push(this.shellys[index].chartData);
   }
 
-  private getShellySumme(dataFromDB: any[]) {
+  private getShellyPhaseSumme(dataFromDB: any[]) {
     const dataPts: number[] = [];
     const phase0: number[] = [];
     const phase1: number[] = [];
@@ -446,7 +448,7 @@ export class DashboardComponent implements OnInit {
     this.zaehlerErrorMessage = [];
   }
 
-  private timeDifference(start: string, end: string): number {
+  private timeIntervall(start: string, end: string): number {
     const startDate = new Date(start);
     const endDate = new Date(end);
     const diff = endDate.getTime() - startDate.getTime();
